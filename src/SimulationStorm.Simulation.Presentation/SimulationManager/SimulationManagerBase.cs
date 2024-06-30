@@ -26,8 +26,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
     
     private readonly IBenchmarkingService _benchmarkingService;
 
-    private readonly ISimulationManagerOptions _options;
-    
     private Channel<ScheduledSimulationCommand> _scheduledCommandChannel;
 
     private CancellationTokenSource _commandProcessingCycleCts = new();
@@ -35,6 +33,8 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
     private Task _commandProcessingCycleTask;
 
     private readonly ObservableCollection<SimulationCommand> _scheduledCommands = [];
+    
+    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
     #endregion
 
     protected SimulationManagerBase
@@ -43,7 +43,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         ISimulationManagerOptions options)
     {
         _benchmarkingService = benchmarkingService;
-        _options = options;
         
         _scheduledCommandChannel = Channel.CreateUnbounded<ScheduledSimulationCommand>(new UnboundedChannelOptions
         {
@@ -53,6 +52,8 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         ScheduledCommandQueue = new ReadOnlyObservableCollection<SimulationCommand>(_scheduledCommands);
         
         _commandProcessingCycleTask = ProcessCommandsInCycleAsync(_commandProcessingCycleCts.Token);
+        
+        _commandCompletedEventSynchronizer = new AsyncCountdownEvent(options.CommandExecutedEventHandlerCount);
     }
 
     public override async ValueTask DisposeAsync()
@@ -155,7 +156,7 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
                     .EnterWriteLockAsync(cancellationToken)
                     .ConfigureAwait(false);
                 
-                NotifyCommandExecuting(queuedCommand.Command);
+                NotifyCommandStarting(queuedCommand.Command);
                 var elapsedTime = Measure(() => ExecuteCommand(queuedCommand.Command));
                 
                 _readerWriterLock.Release();
@@ -163,10 +164,9 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
                 _scheduledCommands.RemoveAt(0);
                 queuedCommand.NotifyTaskCompleted();
 
-                await using var eventSynchronizer = new AsyncCountdownEvent(_options.CommandExecutedEventHandlerCount);
-                NotifyCommandExecuted(queuedCommand.Command, elapsedTime, eventSynchronizer);
+                NotifyCommandCompleted(queuedCommand.Command, elapsedTime);
                 
-                await eventSynchronizer
+                await _commandCompletedEventSynchronizer
                     .WaitAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
@@ -181,10 +181,11 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
     private void NotifyCommandScheduled(SimulationCommand command) =>
         CommandScheduled?.Invoke(this, new SimulationCommandEventArgs(command));
     
-    private void NotifyCommandExecuting(SimulationCommand command) =>
+    private void NotifyCommandStarting(SimulationCommand command) =>
         CommandStarting?.Invoke(this, new SimulationCommandEventArgs(command));
 
-    private void NotifyCommandExecuted(SimulationCommand command, TimeSpan elapsedTime, IAsyncEvent synchronizer) =>
-        CommandCompleted?.Invoke(this, new SimulationCommandCompletedEventArgs(command, elapsedTime, synchronizer));
+    private void NotifyCommandCompleted(SimulationCommand command, TimeSpan elapsedTime) =>
+        CommandCompleted?.Invoke(this, new SimulationCommandCompletedEventArgs(
+            command, elapsedTime, _commandCompletedEventSynchronizer));
     #endregion
 }
