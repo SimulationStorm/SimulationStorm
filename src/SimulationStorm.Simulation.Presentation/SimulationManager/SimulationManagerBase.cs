@@ -14,7 +14,7 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
     public ReadOnlyObservableCollection<SimulationCommand> CommandQueue { get; }
     
     #region Events
-    public event EventHandler<SimulationCommandExecutingEventArgs>? CommandExecuting;
+    public event EventHandler<SimulationCommandEventArgs>? CommandStarting;
     
     public event EventHandler<SimulationCommandCompletedEventArgs>? CommandCompleted;
     #endregion
@@ -200,7 +200,7 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
 
     #region Notifying
     private void NotifyCommandExecuting(SimulationCommand command) =>
-        CommandExecuting?.Invoke(this, new SimulationCommandExecutingEventArgs(command));
+        CommandStarting?.Invoke(this, new SimulationCommandEventArgs(command));
 
     private void NotifyCommandExecuted(SimulationCommand command, TimeSpan elapsedTime, IAsyncEvent synchronizer) =>
         CommandCompleted?.Invoke(this, new SimulationCommandCompletedEventArgs(command, elapsedTime, synchronizer));

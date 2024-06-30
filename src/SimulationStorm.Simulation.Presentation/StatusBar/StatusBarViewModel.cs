@@ -118,10 +118,10 @@ public class StatusBarViewModel : DisposableObservableObject
         WithDisposables(disposables =>
         {
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutingEventArgs>, SimulationCommandExecutingEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandEventArgs>, SimulationCommandEventArgs>
                 (
-                    h => simulationManager.CommandExecuting += h,
-                    h => simulationManager.CommandExecuting -= h
+                    h => simulationManager.CommandStarting += h,
+                    h => simulationManager.CommandStarting -= h
                 )
                 .Where(_ => IsCommandProgressVisible)
                 .Select(e => e.EventArgs)

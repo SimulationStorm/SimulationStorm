@@ -11,7 +11,7 @@ public interface ISimulationManager
     /// <summary>
     /// Occurs before the start of the command execution.
     /// </summary>
-    event EventHandler<SimulationCommandExecutingEventArgs>? CommandExecuting;
+    event EventHandler<SimulationCommandEventArgs>? CommandStarting;
 
     /// <summary>
     /// Occurs after the command has been executed.
