@@ -6,8 +6,6 @@ namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
 public interface ISimulationManager
 {
-    ReadOnlyObservableCollection<SimulationCommand> ScheduledCommandQueue { get; }
-
     #region Events
     /// <summary>
     /// Occurs after the command has been scheduled to execution.

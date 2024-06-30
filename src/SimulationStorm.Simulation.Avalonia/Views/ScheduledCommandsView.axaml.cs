@@ -4,12 +4,12 @@ using SimulationStorm.Simulation.Presentation.SimulationManager;
 
 namespace SimulationStorm.Simulation.Avalonia.Views;
 
-public partial class CommandQueueView : Section
+public partial class ScheduledCommandsView : Section
 {
-    public CommandQueueView()
+    public ScheduledCommandsView()
     {
         InitializeComponent();
         
-        this.ResolveViewModelFromDefaultDiContainer<CommandQueueViewModel>();
+        this.ResolveViewModelFromDefaultDiContainer<ScheduledCommandsViewModel>();
     }
 }

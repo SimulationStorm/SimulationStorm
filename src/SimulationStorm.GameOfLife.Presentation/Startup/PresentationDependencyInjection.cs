@@ -200,8 +200,8 @@ public static class PresentationDependencyInjection
         .AddSingleton<AlgorithmViewModel>()
         .AddSingleton<PatternsViewModel>()
         .AddSingleton<RuleViewModel>()
-        .AddSingleton<CommandQueueViewModel>()
-        .AddServiceStateManager<CommandQueueViewModelStateManager>()
+        .AddSingleton<ScheduledCommandsViewModel>()
+        .AddServiceStateManager<ScheduledCommandsViewModelStateManager>()
         //
 
         // Rendering tool panel

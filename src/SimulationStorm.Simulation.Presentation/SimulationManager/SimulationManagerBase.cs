@@ -11,8 +11,6 @@ namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
 public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulationManager
 {
-    public ReadOnlyObservableCollection<SimulationCommand> ScheduledCommandQueue { get; }
-    
     #region Events
     public event EventHandler<SimulationCommandEventArgs>? CommandScheduled;
     
@@ -32,8 +30,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
 
     private Task _commandProcessingCycleTask;
 
-    private readonly ObservableCollection<SimulationCommand> _scheduledCommands = [];
-    
     private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
     #endregion
 
@@ -48,8 +44,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         {
             SingleReader = true
         });
-        
-        ScheduledCommandQueue = new ReadOnlyObservableCollection<SimulationCommand>(_scheduledCommands);
         
         _commandProcessingCycleTask = ProcessCommandsInCycleAsync(_commandProcessingCycleCts.Token);
         
@@ -131,8 +125,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         var scheduledCommand = new ScheduledSimulationCommand(command);
         NotifyCommandScheduled(command);
         
-        _scheduledCommands.Add(command);
-        
         await _scheduledCommandChannel.Writer
             .WriteAsync(scheduledCommand)
             .ConfigureAwait(false);
@@ -161,7 +153,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
                 
                 _readerWriterLock.Release();
 
-                _scheduledCommands.RemoveAt(0);
                 queuedCommand.NotifyTaskCompleted();
 
                 NotifyCommandCompleted(queuedCommand.Command, elapsedTime);
@@ -169,6 +160,8 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
                 await _commandCompletedEventSynchronizer
                     .WaitAsync(cancellationToken)
                     .ConfigureAwait(false);
+
+                _commandCompletedEventSynchronizer.Reset();
             }
         }
         catch (OperationCanceledException _)
