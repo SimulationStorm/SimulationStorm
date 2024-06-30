@@ -1,0 +1,43 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+        xmlns:controls="using:SimulationStorm.Avalonia.Controls">
+
+    <!--  Tool panel section style  -->
+    <Style Selector="Border.section">
+        <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5'}"/>
+        <Setter Property="Background" Value="{actipro:ThemeResource Container3BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius '1'}"/>
+
+        <Style Selector="^ Separator">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1.5'}"/>
+        </Style>
+    </Style>
+    <!--    -->
+
+    <!--  Sections container style  -->
+    <Style Selector=":is(Panel).sections-container > controls|Section:nth-child(n+2) /template/ actipro|ShadowChrome#PART_ShadowChrome">
+        <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,1.5,1.5'}"/>
+    </Style>
+    <!--    -->
+
+    <!--  This style could be generalized. But we need a way to determine is scroll bar visible or not.  -->
+    <!-- <Style Selector="ScrollViewer DockPanel.sections-container.stack-items-vertically > :is(controls|Section)"> -->
+    <!--     <Style Selector="^ /template/ actipro|ShadowChrome#PART_ShadowChrome"> -->
+    <!--         <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,1.5,0,1.5'}"/> -->
+    <!--     </Style> -->
+    <!--     <Style Selector="^:nth-child(n+2) /template/ actipro|ShadowChrome#PART_ShadowChrome"> -->
+    <!--         <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,0,1.5'}"/> -->
+    <!--     </Style> -->
+    <!-- </Style> -->
+
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="Themes/ToolPanelControl.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+</Styles>

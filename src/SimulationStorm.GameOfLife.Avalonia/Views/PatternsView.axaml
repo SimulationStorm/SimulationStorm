@@ -1,0 +1,53 @@
+<controls:Section x:Class="SimulationStorm.GameOfLife.Avalonia.Views.PatternsView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                  xmlns:patterns="using:SimulationStorm.GameOfLife.Presentation.Patterns"
+                  x:DataType="patterns:PatternsViewModel"
+                  Title="{DynamicResource Strings.GameOfLife.Patterns}">
+    <controls:Section.HeaderRightContent>
+        <Panel VerticalAlignment="Bottom">
+            <TextBlock x:DataType="patterns:PatternsViewModel"
+                       Classes="accent"
+                       IsVisible="{Binding CurrentPattern,
+                                           Converter={x:Static ObjectConverters.IsNotNull}}"
+                       Text="{me:DynamicResourceBinding CurrentPattern.Name,
+                                                        StringFormat='Strings.GameOfLife.Pattern.{0}',
+                                                        FallbackValue={x:Null}}"/>
+
+            <TextBlock Classes="danger"
+                       IsVisible="{Binding CurrentPattern,
+                                           Converter={x:Static ObjectConverters.IsNull}}"
+                       Text="{DynamicResource Strings.GameOfLife.PatternNotSelected}"/>
+        </Panel>
+    </controls:Section.HeaderRightContent>
+
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                      Content="{DynamicResource Strings.GameOfLife.PlacePatternWithOverlay}"
+                      IsChecked="{Binding PlacePatternWithOverlay}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <TreeView x:Name="PatternsTreeView"
+                  Classes="has-bottom-margin"
+                  ItemsSource="{x:Static patterns:PredefinedPatternCategories.All}">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="{x:Type patterns:NamedPatternCategory}"
+                                  ItemsSource="{Binding Patterns}">
+                    <TextBlock Text="{me:DynamicResourceBinding Name, StringFormat='Strings.GameOfLife.PatternCategory.{0}'}"/>
+                </TreeDataTemplate>
+                <TreeDataTemplate DataType="{x:Type patterns:NamedPattern}">
+                    <TextBlock Text="{me:DynamicResourceBinding Name, StringFormat='Strings.GameOfLife.Pattern.{0}'}"/>
+                </TreeDataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+
+        <Button helpers:IconHelper.Icon="IconRestore"
+                Classes="danger stretched"
+                Command="{Binding UnselectCommand}"
+                Content="{DynamicResource Strings.GameOfLife.UnselectPattern}"/>
+    </DockPanel>
+</controls:Section>

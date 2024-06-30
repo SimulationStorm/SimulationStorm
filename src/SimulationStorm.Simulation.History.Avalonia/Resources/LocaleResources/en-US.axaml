@@ -1,0 +1,23 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.Simulation.History.ThereAreNoSaves">There are no saves</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.KeepHistory">Keep the simulation history</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.HistoryKeepingDisabled">The simulation history keeping is disabled</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.SavesStorageLocation">Saves storage location</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.IntervalBetweenSaves">Interval between saves</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.MaxSaveCount">Maximum number of saves</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.MoveSaves">Move saves</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.ChangeSavesStorageCapacity">Change saves storage capacity</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.SaveTakingTime">Save taking time</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.PointedSaveTip">You are on this save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.AheadOfPointerSaveTip">This save will be deleted when the simulation is changed</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToFirstSave">Go to the first save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToLastSave">Go to the last save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToPrevSave">Go to the previous save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToNextSave">Go to the next save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.DeleteSave">Delete save</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.DeleteAllSaves">Delete all saves</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.RestoreState">Restore state</sys:String>
+</ResourceDictionary>

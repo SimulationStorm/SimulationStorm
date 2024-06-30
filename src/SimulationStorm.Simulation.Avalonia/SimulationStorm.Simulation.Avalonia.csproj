@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Graphics.Avalonia\SimulationStorm.Graphics.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Primitives.Avalonia\SimulationStorm.Primitives.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.ToolPanels.Avalonia\SimulationStorm.ToolPanels.Avalonia.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Update="Views\StatusBarView.axaml.cs">
+        <DependentUpon>StatusBarView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+    
+</Project>

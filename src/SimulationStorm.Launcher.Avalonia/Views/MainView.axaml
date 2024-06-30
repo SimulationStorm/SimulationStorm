@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SimulationStorm.Launcher.Avalonia.Views.MainView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+             xmlns:viewModels="using:SimulationStorm.Launcher.Presentation.ViewModels"
+             xmlns:views="using:SimulationStorm.Launcher.Avalonia.Views"
+             x:DataType="viewModels:MainViewModel">
+
+    <Border Classes="has-inset-shadow">
+        <Border Background="{actipro:ThemeResource Container2BackgroundBrush}"
+                BorderBrush="{actipro:ThemeResource Container2BorderBrush}"
+                BorderThickness="1"
+                Classes="has-shadow"
+                CornerRadius="{actipro:ScaledCornerRadius 1}"
+                Padding="{actipro:ScaledThickness '9,6'}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel>
+                <views:LogotypeView Classes="has-bottom-margin"/>
+
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Localization.Language}"/>
+                <ComboBox DisplayMemberBinding="{Binding NativeName}"
+                          ItemsSource="{Binding Cultures}"
+                          SelectedItem="{Binding CurrentCulture}"
+                          Margin="{actipro:ScaledThickness '0,0,0,1.5'}"/>
+
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Themes.Theme}"/>
+                <ComboBox ItemsSource="{Binding Themes}"
+                          SelectedItem="{Binding CurrentTheme}"
+                          ItemTemplate="{StaticResource Templates.Themes.UiTheme}"
+                          Margin="{actipro:ScaledThickness '0,0,0,1.5'}"/>
+
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Densities.Density}"/>
+                <ComboBox ItemsSource="{Binding Densities}"
+                          SelectedItem="{Binding CurrentDensity}"
+                          Margin="{actipro:ScaledThickness '0,0,0,1.5'}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{me:DynamicResourceBinding StringFormat='Strings.Densities.{0}'}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Launcher.Simulation}"/>
+                <ComboBox ItemsSource="{Binding SimulationTypes}"
+                          SelectedItem="{Binding SelectedSimulationType}"
+                          Margin="{actipro:ScaledThickness '0,0,0,1.5'}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl helpers:IconHelper.Icon="{me:DynamicResourceBinding StringFormat='Icons.Launcher.SimulationType.{0}'}"
+                                            Content="{me:DynamicResourceBinding StringFormat='Strings.Launcher.SimulationType.{0}'}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Classes="theme-solid accent"
+                        helpers:IconHelper.Icon="IconPower"
+                        Command="{Binding LaunchSimulationCommand}"
+                        Content="{DynamicResource Strings.Launcher.LaunchSimulation}"
+                        IsDefault="True"/>
+            </StackPanel>
+        </Border>
+    </Border>
+</UserControl>

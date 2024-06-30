@@ -1,0 +1,23 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="MenuItem">
+        <Style Selector="^.stays-open-on-click">
+            <Setter Property="StaysOpenOnClick" Value="True"/>
+        </Style>
+        <Style Selector="^.has-check-box">
+            <Setter Property="ToggleType" Value="CheckBox"/>
+            <Setter Property="Icon">
+                <Template>
+                    <CheckBox IsChecked="{Binding $parent[MenuItem].IsChecked,
+                                                  Mode=OneWay}"/>
+                </Template>
+            </Setter>
+        </Style>
+        
+        <!--Todo: pointer over, pressed-->
+        <Style Selector="^.danger">
+            <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDanger}"/>
+        </Style>
+    </Style>
+</Styles>

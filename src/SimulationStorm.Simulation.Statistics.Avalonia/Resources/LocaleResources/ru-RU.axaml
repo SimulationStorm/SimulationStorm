@@ -1,0 +1,25 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <system:String x:Key="Strings.Simulation.Stats.CommandNumber">Номер команды</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ExecutionTime">Время выполнения</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.RenderingTime">Время отрисовки</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.SimulationRenderingStats">Статистика отрисовки симуляции</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepSimulationRenderingStats">Вести статистику отрисовки симуляции</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.CommandExecutionStats">Статистика выполнения команд</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepCommandExecutionStats">Вести статистику выполнения команд симуляции</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ThereAreNoRecords">Нет записей</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.DeleteAllRecords">Удалить все записи</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.MaxRecordCount">Максимальное число записей</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepStats">Вести статистику симуляции</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.StatsKeepingDisabled">Ведение статистики отключено</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.IntervalBetweenRecords">Интервал между записями</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChangeRecordStorageCapacity">Изменить ёмкость хранилища записей</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.SummaryTakingTime">Время сбора статистики</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType">Тип диаграммы</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Line">Линейная диаграмма</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Bar">Столбчатая диаграмма</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Pie">Круговая диаграмма</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Table">Таблица</system:String>
+</ResourceDictionary>

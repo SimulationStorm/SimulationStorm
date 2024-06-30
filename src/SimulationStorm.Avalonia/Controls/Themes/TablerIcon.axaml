@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:ti="using:TablerIcons">
+    <ControlTheme x:Key="{x:Type ti:TablerIcon}"
+                  TargetType="ti:TablerIcon">
+        <Setter Property="Width" Value="{actipro:ThemeResource DefaultFontSizeLarge}"/>
+        <Setter Property="Height" Value="{actipro:ThemeResource DefaultFontSizeLarge}"/>
+        <Setter Property="Brush" Value="{actipro:ThemeResource DefaultForegroundBrush}"/>
+        
+        <Style Selector="^">
+            <Style Selector="^.size-xxl">
+                <Setter Property="Width" Value="{actipro:ScaledDouble 6.75}"/>
+                <Setter Property="Height" Value="{actipro:ScaledDouble 6.75}"/>
+            </Style>
+            
+            <Style Selector="^.size-xl">
+                <Setter Property="Width" Value="{actipro:ScaledDouble 5.25}"/>
+                <Setter Property="Height" Value="{actipro:ScaledDouble 5.25}"/>
+            </Style>
+            
+            <Style Selector="^.accent">
+                <Setter Property="Brush" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccent}"/>
+            </Style>
+            <Style Selector="^.success">
+                <Setter Property="Brush" Value="{actipro:ThemeResource ControlForegroundBrushOutlineSuccess}"/>
+            </Style>
+            <Style Selector="^.danger">
+                <Setter Property="Brush" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDanger}"/>
+            </Style>
+            <Style Selector="^.warning">
+                <Setter Property="Brush" Value="{actipro:ThemeResource ControlForegroundBrushOutlineWarning}"/>
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

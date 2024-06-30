@@ -1,0 +1,40 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+        xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions">
+    <Style Selector="DataValidationErrors">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DockPanel Classes="stack-items-vertically">
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      CornerRadius="{TemplateBinding CornerRadius}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Content="{TemplateBinding Content}"
+                                      Padding="{TemplateBinding Padding}"/>
+                    <ContentControl ContentTemplate="{TemplateBinding ErrorTemplate}"
+                                    DataContext="{TemplateBinding Owner}"
+                                    Content="{Binding (DataValidationErrors.Errors)}"
+                                    IsVisible="{Binding (DataValidationErrors.HasErrors)}"
+                                    Margin="{actipro:ScaledThickness '0,0.5,0,0'}"/>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+        <Setter Property="ErrorTemplate">
+            <DataTemplate x:DataType="{x:Type x:Object}">
+                <ItemsControl ItemsSource="{Binding}"
+                              Foreground="{actipro:ThemeResource ControlForegroundBrushOutlineDanger}"
+                              FontSize="12">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Will resolve appropriate localized string by given key -->
+                            <TextBlock Text="{me:DynamicResourceBinding StringFormat='Strings.Validation.{0}'}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DataTemplate>
+        </Setter>
+    </Style>
+</Styles>

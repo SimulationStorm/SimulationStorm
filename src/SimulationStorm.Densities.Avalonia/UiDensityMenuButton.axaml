@@ -1,0 +1,6 @@
+﻿<Button x:Class="SimulationStorm.Densities.Avalonia.UiDensityMenuButton"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             ToolTip.Tip="{DynamicResource Strings.Densities.Density}"
+             helpers:IconHelper.Icon="IconDimensions"/>

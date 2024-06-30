@@ -1,0 +1,43 @@
+<controls:Section x:Class="SimulationStorm.GameOfLife.Avalonia.Views.AlgorithmView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                  xmlns:viewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"
+                  x:Name="Root"
+                  x:DataType="viewModels:AlgorithmViewModel"
+                  Title="{DynamicResource Strings.GameOfLife.Algorithm}">
+    <controls:Section.HeaderRightContent>
+        <TextBlock x:DataType="viewModels:AlgorithmViewModel"
+                   Classes="accent"
+                   Text="{me:DynamicResourceBinding ActualAlgorithm,
+                                                    StringFormat='Strings.GameOfLife.Algorithm.{0}'}"
+                   VerticalAlignment="Bottom"/>
+    </controls:Section.HeaderRightContent>
+
+    <Grid ColumnDefinitions="*,Auto"
+          RowDefinitions="Auto,Auto">
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.GameOfLife.AvailableAlgorithms}"/>
+        <ComboBox ItemsSource="{Binding Algorithms}"
+                  SelectedItem="{Binding SelectedAlgorithm}"
+                  Grid.Row="1"
+                  Grid.Column="0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{me:DynamicResourceBinding StringFormat='Strings.GameOfLife.Algorithm.{0}'}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button helpers:IconHelper.Icon="IconSettings2"
+                Classes="stretched has-left-margin"
+                Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"
+                Command="{Binding ChangeAlgorithmCommand}"
+                ToolTip.Tip="{DynamicResource Strings.GameOfLife.ChangeAlgorithm}"
+                Grid.Row="1"
+                Grid.Column="1"/>
+    </Grid>
+</controls:Section>

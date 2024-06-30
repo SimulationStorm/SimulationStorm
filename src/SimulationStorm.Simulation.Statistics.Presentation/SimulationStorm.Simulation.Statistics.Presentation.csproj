@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DotNext.Threading" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Collections.Presentation\SimulationStorm.Collections.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Collections\SimulationStorm.Collections.csproj" />
+      <ProjectReference Include="..\SimulationStorm.LiveChartsExtensions\SimulationStorm.LiveChartsExtensions.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History.Presentation\SimulationStorm.Simulation.History.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿<controls:WindowExtended x:Class="SimulationStorm.Launcher.Avalonia.Startup.LoaderWindow"
+                         xmlns="https://github.com/avaloniaui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                         xmlns:navigation="using:SimulationStorm.Avalonia.Navigation"
+                         xmlns:startup="using:SimulationStorm.Launcher.Avalonia.Startup"
+                         Icon="{DynamicResource Icons.Common.SimulationStorm}"
+                         IsFullScreenButtonAllowed="True"
+                         Title="{x:Static startup:AvaloniaConfiguration.ApplicationName}"
+                         WindowStartupLocation="CenterScreen"
+                         Classes="has-minimum-size-hd">
+    <Panel>
+        <navigation:NavigationManager x:Name="InternalNavigationManager"/>
+        <WindowNotificationManager x:Name="InternalNotificationManager"/>
+    </Panel>
+</controls:WindowExtended>

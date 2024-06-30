@@ -1,0 +1,228 @@
+﻿<UserControl x:Class="SimulationStorm.Simulation.Avalonia.Views.StatusBarView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+             xmlns:sys="using:System"
+             xmlns:timeFormatting="using:SimulationStorm.Avalonia.TimeFormatting"
+             xmlns:viewModels="using:SimulationStorm.Simulation.Presentation.StatusBar"
+             x:DataType="viewModels:StatusBarViewModel"
+             Background="{actipro:ThemeResource Container3BackgroundBrush}"
+             BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+             BorderThickness="0,1,0,0"
+             FontSize="12">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <DockPanel>
+            <Button helpers:IconHelper.Icon="IconSettings"
+                    Classes="has-right-margin"
+                    Theme="{actipro:ControlTheme TitleBarButton}"
+                    ToolTip.Tip="{DynamicResource Strings.Simulation.StatusBar.Settings}"
+                    Padding="{actipro:ScaledThickness '1.5,0.5'}">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuItem Classes="stays-open-on-click has-check-box"
+                                  IsChecked="{Binding IsCommandProgressVisible,
+                                                      Mode=TwoWay}">
+                            <MenuItem.Header>
+                                <ContentControl helpers:IconHelper.Icon="IconProgress"
+                                                Content="{DynamicResource Strings.Simulation.StatusBar.CommandExecutionProgress}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Classes="stays-open-on-click has-check-box"
+                                  IsChecked="{Binding IsSimulationRenderingProgressVisible,
+                                                      Mode=TwoWay}">
+                            <MenuItem.Header>
+                                <ContentControl helpers:IconHelper.Icon="IconProgress"
+                                                Content="{DynamicResource Strings.Simulation.StatusBar.SimulationRenderingProgress}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Classes="stays-open-on-click has-check-box"
+                                  IsChecked="{Binding IsCommandTimeVisible,
+                                                      Mode=TwoWay}">
+                            <MenuItem.Header>
+                                <ContentControl helpers:IconHelper.Icon="IconClock"
+                                                Content="{DynamicResource Strings.Simulation.StatusBar.CommandExecutionTime}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Classes="stays-open-on-click has-check-box"
+                                  IsChecked="{Binding IsSimulationRenderingTimeVisible,
+                                                      Mode=TwoWay}">
+                            <MenuItem.Header>
+                                <ContentControl helpers:IconHelper.Icon="IconClock"
+                                                Content="{DynamicResource Strings.Simulation.StatusBar.SimulationRenderingTime}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Classes="stays-open-on-click has-check-box"
+                                  IsChecked="{Binding IsWorldRenderingTimeVisible,
+                                                      Mode=TwoWay}">
+                            <MenuItem.Header>
+                                <ContentControl helpers:IconHelper.Icon="IconClock"
+                                                Content="{DynamicResource Strings.Simulation.StatusBar.WorldRenderingTime}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <Panel>
+                <!-- <controls:ProgressControl Classes="h-align-left has-opacity-transition" -->
+                <!-- Classes.command-executing="{Binding IsCommandExecuting}" -->
+                <!-- Classes.simulation-rendering="{Binding IsSimulationRenderingInProgress}"> -->
+                <!--     <controls:ProgressControl.IsVisible> -->
+                <!--         <MultiBinding Converter="{x:Static BoolConverters.Or}"> -->
+                <!--             <Binding Path="IsCommandProgressVisible"/> -->
+                <!--             <Binding Path="IsSimulationRenderingProgressVisible"/> -->
+                <!--         </MultiBinding> -->
+                <!--     </controls:ProgressControl.IsVisible> -->
+                <!--  -->
+                <!--     <Classes.opaque> -->
+                <!--         <MultiBinding Converter="{x:Static BoolConverters.And}"> -->
+                <!--             <Binding Path="!IsCommandExecuting"/> -->
+                <!--             <Binding Path="!IsSimulationRenderingInProgress"/> -->
+                <!--         </MultiBinding> -->
+                <!--     </Classes.opaque> -->
+                <!--  -->
+                <!--     <controls:ProgressControl.Styles> -->
+                <!--         <Style Selector="controls|ProgressControl"> -->
+                <!--             <Style Selector="^.command-executing"> -->
+                <!--                 <Setter Property="Content"> -->
+                <!--                     <Template> -->
+                <!--                         <TextBlock> -->
+                <!--                             <Run Text="{DynamicResource Strings.Simulation.StatusBar.ExecutingCommand}"/> -->
+                <!-- "<Run Text="{me:DynamicResourceBinding ExecutingCommand.Name, -->
+                <!-- StringFormat='Strings.Simulation.Command.{0}'}"/>" -->
+                <!--                         </TextBlock> -->
+                <!--                     </Template> -->
+                <!--                 </Setter> -->
+                <!--             </Style> -->
+                <!--             <Style Selector="^.simulation-rendering"> -->
+                <!--                 <Setter Property="Content"> -->
+                <!--                     <Template> -->
+                <!--                         <TextBlock> -->
+                <!--                             <Run Text="{DynamicResource Strings.Simulation.StatusBar.SimulationRendering}"/>... -->
+                <!--                         </TextBlock> -->
+                <!--                     </Template> -->
+                <!--                 </Setter> -->
+                <!--             </Style> -->
+                <!--         </Style> -->
+                <!--     </controls:ProgressControl.Styles> -->
+                <!-- </controls:ProgressControl> -->
+
+                <StackPanel Classes="horizontal has-spacing h-align-left">
+                    <controls:ProgressControl Classes="h-align-left has-opacity-transition"
+                                              Classes.opaque="{Binding !IsCommandExecuting}"
+                                              IsVisible="{Binding IsCommandProgressVisible}">
+                        <TextBlock>
+                            <Run Text="{DynamicResource Strings.Simulation.StatusBar.ExecutingCommand}"/>
+                            "<Run Text="{me:DynamicResourceBinding ExecutingCommand.Name,
+                                                                  StringFormat='Strings.Simulation.Command.{0}'}"/>
+                            "</TextBlock>
+                    </controls:ProgressControl>
+
+                    <controls:ProgressControl Classes="h-align-left has-opacity-transition"
+                                              Classes.opaque="{Binding !IsSimulationRenderingInProgress}"
+                                              IsVisible="{Binding IsSimulationRenderingProgressVisible}">
+                        <TextBlock>
+                            <Run Text="{DynamicResource Strings.Simulation.StatusBar.SimulationRendering}"/>
+                            ...</TextBlock>
+                    </controls:ProgressControl>
+                </StackPanel>
+
+                <StackPanel Classes="horizontal h-align-right">
+                    <Border Classes="item">
+                        <Border.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="IsCommandTimeVisible"/>
+                                <Binding Converter="{x:Static ObjectConverters.NotEqual}"
+                                         ConverterParameter="{x:Static sys:TimeSpan.Zero}"
+                                         Path="CommandTime"/>
+                            </MultiBinding>
+                        </Border.IsVisible>
+
+                        <ToolTip.Tip>
+                            <TextBlock>
+                                <Run Text="{DynamicResource Strings.Simulation.StatusBar.LastCommandTook}"/>
+                                <timeFormatting:TimeRun Time="{Binding CommandTime}"/>
+                            </TextBlock>
+                        </ToolTip.Tip>
+
+                        <TextBlock>
+                            <Run Text="{DynamicResource Strings.Simulation.StatusBar.CommandExecution}"/>
+                            :<InlineUIContainer>
+                                <timeFormatting:TimeTextBlock Time="{Binding CommandTime}"/>
+                            </InlineUIContainer>
+                        </TextBlock>
+                    </Border>
+
+                    <Border Classes="item"
+                            IsVisible="{Binding IsSimulationRenderingTimeVisible}">
+                        <ToolTip.Tip>
+                            <TextBlock>
+                                <Run Text="{DynamicResource Strings.Simulation.StatusBar.LastSimulationRenderingTook}"/>
+                                <timeFormatting:TimeRun Time="{Binding SimulationRenderingTime}"/>
+                            </TextBlock>
+                        </ToolTip.Tip>
+
+                        <TextBlock>
+                            <Run Text="{DynamicResource Strings.Simulation.StatusBar.SimulationRendering}"/>
+                            :<InlineUIContainer>
+                                <timeFormatting:TimeTextBlock Time="{Binding SimulationRenderingTime}"/>
+                            </InlineUIContainer>
+                        </TextBlock>
+                    </Border>
+
+                    <Border Classes="item"
+                            IsVisible="{Binding IsWorldRenderingTimeVisible}">
+                        <ToolTip.Tip>
+                            <TextBlock>
+                                <Run Text="{DynamicResource Strings.Simulation.StatusBar.LastWorldRenderingTook}"/>
+                                <timeFormatting:TimeRun Time="{Binding WorldRenderingTime}"/>
+                            </TextBlock>
+                        </ToolTip.Tip>
+
+                        <TextBlock>
+                            <Run Text="{DynamicResource Strings.Simulation.StatusBar.WorldRendering}"/>
+                            :<InlineUIContainer>
+                                <timeFormatting:TimeTextBlock Time="{Binding WorldRenderingTime}"/>
+                            </InlineUIContainer>
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+            </Panel>
+        </DockPanel>
+    </ScrollViewer>
+
+    <UserControl.Styles>
+        <Style Selector="Border.item">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,0'}"/>
+            <Setter Property="BorderBrush" Value="{actipro:ThemeResource TitleBarButtonBackgroundBrushPointerOver}"/>
+
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+            <Style Selector="^:nth-last-child(1)">
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
+            <Setter Property="Background" Value="{actipro:ThemeResource TitleBarBackgroundBrush}"/>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{actipro:ThemeResource TitleBarButtonBackgroundBrushPointerOver}"/>
+            </Style>
+
+            <!--Time text block style-->
+            <Style Selector="^ > TextBlock TextBlock">
+                <Setter Property="Width" Value="99"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="TextAlignment" Value="Right"/>
+            </Style>
+        </Style>
+
+        <Style Selector="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

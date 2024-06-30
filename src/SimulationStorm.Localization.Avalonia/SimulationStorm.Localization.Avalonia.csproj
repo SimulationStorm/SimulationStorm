@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="Resources\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Localization.States\SimulationStorm.Localization.States.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+</Project>

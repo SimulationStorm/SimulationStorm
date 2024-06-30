@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dialogs="using:SimulationStorm.Dialogs.Avalonia">
+    <ControlTheme x:Key="{x:Type dialogs:DialogManager}"
+                  TargetType="dialogs:DialogManager">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel x:Name="PART_ContainerPanel"
+                       IsVisible="{Binding !!$self.Opacity}">
+                    <Rectangle x:Name="PART_BackgroundControl">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="Black"
+                                             Opacity="0.25"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    
+                    <TransitioningContentControl x:Name="PART_DialogContentControl"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"/>
+                    <Panel.Transitions>
+                        <Transitions>
+                            <DoubleTransition Duration="00:00:0.125" Property="Opacity"/>
+                        </Transitions>
+                    </Panel.Transitions>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^">
+            <Style Selector="^ Panel#PART_ContainerPanel">
+                <Setter Property="Opacity" Value="0"/>
+            </Style>
+            <Style Selector="^:dialog-shown Panel#PART_ContainerPanel">
+                <Setter Property="Opacity" Value="1"/>
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

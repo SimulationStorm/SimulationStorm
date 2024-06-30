@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <ControlTheme x:Key="RoundedTitleBarButton"
+                  BasedOn="{StaticResource TitleBarButtonExtended}"
+                  TargetType="Button">
+        <Setter Property="Padding" Value="{actipro:ScaledThickness '0.625,0.5'}"/>
+        <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 0.75}"/>
+    </ControlTheme>
+</ResourceDictionary>

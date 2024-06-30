@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" />
+        <PackageReference Include="ActiproSoftware.Controls.Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Dialogs.Presentation\SimulationStorm.Dialogs.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

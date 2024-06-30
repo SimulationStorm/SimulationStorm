@@ -1,0 +1,56 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <Style Selector=":is(Decorator)">
+        <Style Selector="^.has-left-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,0,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-top-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,1.5,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-right-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,0,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,0,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-left-padding.has-top-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,1.5,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-padding.has-right-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,0,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,0,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-top-padding.has-right-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,1.5,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-top-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,1.5,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-right-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,0,1.5,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-left-padding.has-top-padding.has-right-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,1.5,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-padding.has-top-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,1.5,0,1.5'}"/>
+        </Style>
+        <Style Selector="^.has-left-padding.has-right-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,0,1.5,1.5'}"/>
+        </Style>
+        <Style Selector="^.has-right-padding.has-top-padding.has-bottom-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '0,1.5,1.5,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-padding">
+            <Setter Property="Padding" Value="{actipro:ScaledThickness '1.5,1.5,1.5,1.5'}"/>
+        </Style>
+    </Style>
+</Styles>

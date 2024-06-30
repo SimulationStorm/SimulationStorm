@@ -1,0 +1,10 @@
+﻿<Button xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SimulationStorm.Simulation.Running.Avalonia.Views.AdvanceSimulationButton"
+             xmlns:viewModels="using:SimulationStorm.Simulation.Running.Presentation.ViewModels"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             x:DataType="viewModels:SimulationRunnerViewModel"
+             Command="{Binding AdvanceSimulationCommand}"
+             Classes="accent"
+             ToolTip.Tip="{DynamicResource Strings.Simulation.Running.Advance}"
+             helpers:IconHelper.Icon="IconArrowGuide"/>

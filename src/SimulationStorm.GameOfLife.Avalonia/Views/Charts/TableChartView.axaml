@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="SimulationStorm.GameOfLife.Avalonia.Views.Charts.TableChartView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:behaviors="using:SimulationStorm.Avalonia.Behaviors"
+             xmlns:timeFormatting="using:SimulationStorm.Avalonia.TimeFormatting"
+             xmlns:stats1="using:SimulationStorm.GameOfLife.Presentation.Stats"
+             x:DataType="stats1:TableChartViewModel">
+    <DataGrid ItemsSource="{Binding RecordModels}"
+              SelectionMode="Single">
+        <Interaction.Behaviors>
+            <behaviors:ScrollToLastItemBehavior/>
+        </Interaction.Behaviors>
+        <DataGrid.Columns>
+            <DataGridTextColumn x:DataType="stats1:StatsRecordModel"
+                                Binding="{Binding OrdinalNumber}"
+                                Header="{DynamicResource Strings.Common.OrdinalNumber}"/>
+
+            <DataGridTemplateColumn Header="{DynamicResource Strings.Simulation.Command}">
+                <DataTemplate x:DataType="stats1:StatsRecordModel">
+                    <ContentControl Content="{Binding ExecutedCommand}"
+                                    Classes="has-left-margin has-right-margin"
+                                    ContentTemplate="{StaticResource Templates.Simulation.CommandTemplate}"/>
+                </DataTemplate>
+            </DataGridTemplateColumn>
+            
+            <DataGridTemplateColumn Header="{DynamicResource Strings.Simulation.Stats.SummaryTakingTime}">
+                <DataTemplate x:DataType="stats1:StatsRecordModel">
+                    <timeFormatting:TimeTextBlock Time="{Binding SummarizingTime}"
+                                         Padding="{actipro:ScaledThickness '1.5,0'}"
+                                         VerticalAlignment="Center"/>
+                </DataTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTemplateColumn x:DataType="stats1:StatsRecordModel"
+                                    Header="{DynamicResource Strings.GameOfLife.DeadCellCount}">
+                <DataTemplate x:DataType="stats1:StatsRecordModel">
+                    <TextBlock Text="{Binding DeadCellCount,
+                                              StringFormat=N0}"
+                               Padding="{actipro:ScaledThickness '1.5,0'}"
+                               VerticalAlignment="Center"/>
+                </DataTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTemplateColumn x:DataType="stats1:StatsRecordModel"
+                                    Header="{DynamicResource Strings.GameOfLife.AliveCellCount}">
+                <DataTemplate x:DataType="stats1:StatsRecordModel">
+                    <TextBlock Text="{Binding AliveCellCount,
+                                              StringFormat=N0}"
+                               Padding="{actipro:ScaledThickness '1.5,0'}"
+                               VerticalAlignment="Center"/>
+                </DataTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

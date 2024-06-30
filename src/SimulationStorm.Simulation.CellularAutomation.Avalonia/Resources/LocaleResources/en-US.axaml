@@ -1,0 +1,26 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping">World wrapping</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.WrapHorizontally">Wrap horizontally</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.WrapVertically">Wrap vertically</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.ChangeWorldWrapping">Change world wrapping</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.NoWrap">not wrapped</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Horizontal">horizontally</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Vertical">vertically</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Both">by both sides</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.Title">PHOTOSENSITIVITY WARNING</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.Text">A small percentage of people may experience seizures when exposed to certain lights, patterns or images, even with no history of epilepsy seizures.</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.PressEsсToQuitOrSpaceToContinue">Press Escape to quit or Space to continue</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing">Drawing</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.EnableDrawingMode">Enable drawing mode</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushRadius">Brush radius</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushShape">Brush shape</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushCellState">The state of the cells being drawn</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Circle">Circle</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Square">Square</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Triangle">Triangle</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.ChangeWorldWrapping">Change world wrapping</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.Draw">Draw</sys:String>
+</ResourceDictionary>

@@ -1,0 +1,31 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="using:System">
+    <system:String x:Key="Strings.Times.Days">days</system:String>
+    <system:String x:Key="Strings.Times.Hours">hrs.</system:String>
+    <system:String x:Key="Strings.Times.Minutes">min.</system:String>
+    <system:String x:Key="Strings.Times.Seconds">sec.</system:String>
+    <system:String x:Key="Strings.Times.Milliseconds">ms.</system:String>
+    <system:String x:Key="Strings.Times.Microseconds">mcs.</system:String>
+    <system:String x:Key="Strings.Times.Nanoseconds">ns.</system:String>
+    <system:String x:Key="Strings.Validation.IsRequired">The field is required</system:String>
+    <system:String x:Key="Strings.Validation.ShouldBeDifferent">The value should be different</system:String>
+    <system:String x:Key="Strings.Window.EnterFullScreen">Enter full screen</system:String>
+    <system:String x:Key="Strings.Window.ExitFullScreen">Exit full screen</system:String>
+    <system:String x:Key="Strings.Window.Minimize">Minimize</system:String>
+    <system:String x:Key="Strings.Window.Maximize">Maximize</system:String>
+    <system:String x:Key="Strings.Window.Restore">Restore</system:String>
+    <system:String x:Key="Strings.Window.Close">Close</system:String>
+    <system:String x:Key="Strings.Common.OrdinalNumber">№</system:String>
+    <system:String x:Key="Strings.Common.Date">Date</system:String>
+    <system:String x:Key="Strings.Common.Name">Name</system:String>
+    <system:String x:Key="Strings.Common.Yes">Yes</system:String>
+    <system:String x:Key="Strings.Common.No">No</system:String>
+    <system:String x:Key="Strings.Common.Close">Close</system:String>
+    <system:String x:Key="Strings.Common.ResetToDefault">Reset to default</system:String>
+    <system:String x:Key="Strings.Common.Randomize">Randomize</system:String>
+    <system:String x:Key="Strings.Common.Settings">Settings</system:String>
+    <system:String x:Key="Strings.Common.Loading">Loading…</system:String>
+    <system:String x:Key="Strings.Common.Exiting">Exiting…</system:String>
+</ResourceDictionary>

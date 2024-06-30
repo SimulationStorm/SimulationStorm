@@ -1,0 +1,16 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    
+    <Style Selector="StackPanel">
+        <Style Selector="^.has-spacing">
+            <Setter Property="Spacing" Value="{actipro:ScaledDouble 1.5}"/>
+        </Style>
+        <Style Selector="^.horizontal">
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style Selector="^.vertical">
+            <Setter Property="Orientation" Value="Vertical"/>
+        </Style>
+    </Style>
+</Styles>

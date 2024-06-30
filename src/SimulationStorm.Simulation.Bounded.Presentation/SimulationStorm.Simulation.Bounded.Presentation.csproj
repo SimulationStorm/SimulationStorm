@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Notifications.Presentation\SimulationStorm.Notifications.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History.Presentation\SimulationStorm.Simulation.History.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Running.Presentation\SimulationStorm.Simulation.Running.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

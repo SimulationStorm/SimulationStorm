@@ -1,0 +1,321 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:views="using:SimulationStorm.ToolPanels.Avalonia"
+             xmlns:viewModels="using:SimulationStorm.ToolPanels.Presentation"
+             x:Class="SimulationStorm.ToolPanels.Avalonia.ToolPanelManagerView"
+             x:DataType="viewModels:ToolPanelManagerViewModel"
+             x:Name="Root">
+    
+    <Grid x:Name="RootGrid">
+        <!--Columns: 1) tool panel bar; 2) tool panel; 3) grid splitter; 4) workspace; 5) grid splitter; 6) tool panel; 7) tool panel bar-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <!--Rows: 1) workspace; 2) grid splitter; 3) bottom tool panels.-->
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="150"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!--Work space content-->
+        <ContentControl x:Name="WorkSpaceContentControl"
+                        Content="{Binding #Root.WorkSpaceContent}"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="5"/>
+
+        <!--#region Horizontal tool panels-->
+        <!--Left tool panel bar-->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Classes="tool-panel-bar"
+                BorderThickness="0,0,1,0">
+            <DockPanel>
+                <ItemsControl DockPanel.Dock="Top"
+                              ItemsSource="{Binding TopLeftToolPanels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ToolPanelButton ToolPanel="{Binding .}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl DockPanel.Dock="Bottom"
+                              VerticalAlignment="Bottom"
+                              ItemsSource="{Binding BottomLeftToolPanels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ToolPanelButton ToolPanel="{Binding .}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                <DockPanel.Styles>
+                    <Style Selector="ToggleButton">
+                        <Setter Property="(ToolTip.Placement)" Value="Right"/>
+                    </Style>
+                </DockPanel.Styles>
+            </DockPanel>
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="!!TopLeftToolPanels.Count"/>
+                    <Binding Path="!!BottomLeftToolPanels.Count"/>
+                </MultiBinding>
+            </Border.IsVisible>
+        </Border>
+        
+        <!--Top left tool panel-->
+        <TransitioningContentControl x:Name="TopLeftToolPanelContentControl"
+                                     Grid.Row="0"
+                                     Grid.Column="1">
+            <Classes.has-bottom-neighbor>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="BottomLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    <Binding Path="BottomRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                </MultiBinding>
+            </Classes.has-bottom-neighbor>
+            <TransitioningContentControl.Styles>
+                <Style Selector="views|ToolPanelControl">
+                    <Setter Property="ToolPanel" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).TopLeftToolPanel}"/>
+                </Style>
+                <Style Selector="TransitioningContentControl.has-bottom-neighbor views|ToolPanelControl">
+                    <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.5,0.5,0.25'}"/>
+                </Style>
+            </TransitioningContentControl.Styles>
+        </TransitioningContentControl>
+
+        <!--Top left tool panel grid splitter-->
+        <GridSplitter Grid.Row="0"
+                      Grid.Column="2"
+                      Classes="vertical"
+                      IsVisible="{Binding TopLeftToolPanelViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        
+        <!--Top right tool panel-->
+        <TransitioningContentControl x:Name="TopRightToolPanelContentControl"
+                                     Grid.Row="0"
+                                     Grid.Column="5">
+            <Classes.has-bottom-neighbor>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="BottomLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    <Binding Path="BottomRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                </MultiBinding>
+            </Classes.has-bottom-neighbor>
+            <TransitioningContentControl.Styles>
+                <Style Selector="views|ToolPanelControl">
+                    <Setter Property="ToolPanel" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).TopRightToolPanel}"/>
+                </Style>
+                <Style Selector="TransitioningContentControl.has-bottom-neighbor views|ToolPanelControl">
+                    <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.5,0.5,0.25'}"/>
+                </Style>
+            </TransitioningContentControl.Styles>
+        </TransitioningContentControl>
+        
+        <!--Top right tool panel grid splitter-->
+        <GridSplitter Grid.Row="0"
+                      Grid.Column="4"
+                      Classes="vertical"
+                      IsVisible="{Binding TopRightToolPanelViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+        <!--Right tool panel bar-->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="6"
+                Classes="tool-panel-bar"
+                BorderThickness="1,0,0,0">
+            <DockPanel>
+                <ItemsControl DockPanel.Dock="Top"
+                              ItemsSource="{Binding TopRightToolPanels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ToolPanelButton ToolPanel="{Binding .}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl DockPanel.Dock="Bottom"
+                              VerticalAlignment="Bottom"
+                              ItemsSource="{Binding BottomRightToolPanels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ToolPanelButton ToolPanel="{Binding .}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                <DockPanel.Styles>
+                    <Style Selector="ToggleButton">
+                        <Setter Property="(ToolTip.Placement)" Value="Left"/>
+                    </Style>
+                </DockPanel.Styles>
+            </DockPanel>
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="!!TopRightToolPanels.Count"/>
+                    <Binding Path="!!BottomRightToolPanels.Count"/>
+                </MultiBinding>
+            </Border.IsVisible>
+        </Border>
+        <!--#endregion-->
+        
+        <!--#region Bottom tool panels-->
+        <!--Bottom tool panels horizontal grid splitter-->
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="5"
+                      Classes="horizontal">
+            <GridSplitter.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="BottomLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    <Binding Path="BottomRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                </MultiBinding>
+            </GridSplitter.IsVisible>
+        </GridSplitter>
+        
+        <Grid x:Name="BottomToolPanelsContainer"
+              Grid.Row="2"
+              Grid.Column="1"
+              Grid.ColumnSpan="5"
+              ColumnDefinitions="Auto,Auto,Auto">
+
+            <!--Bottom left tool panel-->
+            <TransitioningContentControl x:Name="BottomLeftToolPanelContentControl"
+                                         Classes.has-right-neighbor="{Binding #BottomToolPanelsGridSplitter.IsVisible}">
+                <Classes.has-top-neighbor>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="TopLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="TopRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Classes.has-top-neighbor>
+                <TransitioningContentControl.Styles>
+                    <Style Selector="TransitioningContentControl">
+                        <Style Selector="^ views|ToolPanelControl">
+                            <Setter Property="ToolPanel" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).BottomLeftToolPanel}"/>
+                        </Style>
+                        <Style Selector="^.has-top-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.25,0.5,0.5'}"/>
+                        </Style>
+                        <Style Selector="^.has-right-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.5,0.25,0.5'}"/>
+                        </Style>
+                        <Style Selector="^.has-top-neighbor.has-right-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.25,0.25,0.5'}"/>
+                        </Style>
+                    </Style>
+                </TransitioningContentControl.Styles>
+            </TransitioningContentControl>
+
+            <!--Bottom tool panels vertical grid splitter-->
+            <GridSplitter x:Name="BottomToolPanelsGridSplitter"
+                          Grid.Column="1"
+                          Classes="vertical">
+                <GridSplitter.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="BottomLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="BottomRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </GridSplitter.IsVisible>
+            </GridSplitter>
+            
+            <!--Bottom right tool panel-->
+            <TransitioningContentControl x:Name="BottomRightToolPanelContentControl"
+                                         Grid.Column="2"
+                                         Classes.has-left-neighbor="{Binding #BottomToolPanelsGridSplitter.IsVisible}">
+                <Classes.has-top-neighbor>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="TopLeftToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="TopRightToolPanelViewModel" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Classes.has-top-neighbor>
+                <TransitioningContentControl.Styles>
+                    <Style Selector="TransitioningContentControl">
+                        <Style Selector="^ views|ToolPanelControl">
+                            <Setter Property="ToolPanel" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).BottomRightToolPanel}"/>
+                        </Style>
+                        <Style Selector="^.has-top-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.5,0.25,0.5,0.5'}"/>
+                        </Style>
+                        <Style Selector="^.has-left-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.25,0.5,0.5,0.5'}"/>
+                        </Style>
+                        <Style Selector="^.has-top-neighbor.has-left-neighbor views|ToolPanelControl">
+                            <Setter Property="Margin" Value="{actipro:ScaledThickness '0.25,0.25,0.5,0.5'}"/>
+                        </Style>
+                    </Style>
+                </TransitioningContentControl.Styles>
+            </TransitioningContentControl>
+        </Grid>
+        <!--#endregion-->
+    </Grid>
+    
+    <UserControl.Styles>
+        <Style Selector="TransitioningContentControl#TopLeftToolPanelContentControl,
+                         TransitioningContentControl#TopRightToolPanelContentControl,
+                         TransitioningContentControl#BottomLeftToolPanelContentControl,
+                         TransitioningContentControl#BottomRightToolPanelContentControl">
+            <Setter Property="PageTransition" Value="{x:Null}"/>
+        </Style>
+        
+        <Style Selector="views|ToolPanelButton">
+            <Setter Property="ToggleCommand" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).ToggleToolPanelCommand}"/>
+            <Setter Property="OpenedToolPanels" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).OpenedToolPanels}"/>
+        </Style>
+        
+        <Style Selector="views|ToolPanelControl">
+            <Setter Property="CloseCommand" Value="{Binding #Root.((viewModels:ToolPanelManagerViewModel)DataContext).CloseToolPanelCommand}"/>
+        </Style>
+        
+        <Style Selector="Border.tool-panel-bar">
+            <Setter Property="Background" Value="{actipro:ThemeResource Container3BackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+        </Style>
+        
+        <Style Selector="GridSplitter">
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+            
+            <Setter Property="(ToolTip.ShowDelay)" Value="1500"/>
+            
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="00:00:0.33"/>
+                </Transitions>
+            </Setter>
+            
+            <Setter Property="Background" Value="Transparent"/>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushEmphasizedAccentPointerOver}"/>
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushEmphasizedAccentPressed}"/>
+            </Style>
+            
+            <Style Selector="^.horizontal">
+                <Setter Property="Height" Value="{actipro:ScaledDouble 0.75}"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="{actipro:ScaledThickness '1,0'}"/>
+                <Setter Property="ResizeDirection" Value="Rows"/>
+            </Style>
+            
+            <Style Selector="^.vertical">
+                <Setter Property="Width" Value="{actipro:ScaledDouble 0.75}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1'}"/>
+                <Setter Property="ResizeDirection" Value="Columns"/>
+            </Style>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

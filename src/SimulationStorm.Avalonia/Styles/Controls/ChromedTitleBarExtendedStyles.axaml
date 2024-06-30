@@ -1,0 +1,53 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <Style Selector="controls|ChromedTitleBarExtended">
+        <Style Selector="^ /template/ Button#PART_FullScreenButton">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.EnterFullScreen}"/>
+        </Style>
+        <Style Selector="^:fullscreen">
+            <Style Selector="^ /template/ Button#PART_FullScreenButton">
+                <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.ExitFullScreen}"/>
+            </Style>
+        </Style>
+        
+        <Style Selector="^ /template/ Button#PART_MinimizeButton">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.Minimize}"/>
+        </Style>
+        
+        <Style Selector="^ /template/ Button#PART_MaximizeButton">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.Maximize}"/>
+        </Style>
+        <Style Selector="^:maximized /template/ Button#PART_MaximizeButton">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.Restore}"/>
+        </Style>
+        
+        <Style Selector="^ /template/ Button#PART_CloseButton">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Window.Close}"/>
+        </Style>
+        
+        <Style Selector="^ Menu > :is(MenuItem)">
+            <Style Selector="^:pointerover /template/ Border#border">
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+            </Style>
+            <Style Selector="^:open /template/ Border#border">
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+            </Style>
+            <Style Selector="^:selected /template/ Border#border">
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+            </Style>
+            <Style Selector="^:focus-within /template/ Border#border">
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+            </Style>
+            <Style Selector="^:focus /template/ Border#border">
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+            </Style>
+        </Style>
+    </Style>
+</Styles>

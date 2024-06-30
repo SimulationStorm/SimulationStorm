@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="SimulationStorm.ToolPanels.Avalonia.ToolPanelButton"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+             x:Name="Root">
+    <ToggleButton x:Name="ToggleButton"
+                  helpers:IconHelper.Icon="{me:DynamicResourceBinding Name,
+                                                                      StringFormat='Icons.ToolPanels.{0}'}"
+                  BorderThickness="0"
+                  Classes.accent="{Binding $self.IsChecked}"
+                  Command="{Binding #Root.ToggleCommand}"
+                  CommandParameter="{Binding}"
+                  DataContext="{Binding #Root.ToolPanel}"
+                  HotKey="{me:DynamicResourceBinding Name,
+                                                     StringFormat='KeyGestures.ToolPanels.{0}'}"
+                  Theme="{DynamicResource TitleBarButtonExtended}"
+                  Padding="{actipro:ScaledThickness 1.5}">
+        <ToolTip.Tip>
+            <StackPanel DataContext="{Binding #Root.ToolPanel}"
+                        Orientation="Horizontal">
+                <TextBlock Text="{me:DynamicResourceBinding Name,
+                                                            StringFormat='Strings.ToolPanels.{0}'}"
+                           Margin="{actipro:ScaledThickness '0,0,1.5,0'}"/>
+                <TextBlock Foreground="{actipro:ThemeResource DefaultForegroundBrushDisabled}"
+                           Text="{Binding #ToggleButton.HotKey}"/>
+            </StackPanel>
+        </ToolTip.Tip>
+
+        <ToggleButton.Styles>
+            <Style Selector="ToggleButton[IsChecked=True]">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccent}"/>
+            </Style>
+        </ToggleButton.Styles>
+    </ToggleButton>
+</UserControl>

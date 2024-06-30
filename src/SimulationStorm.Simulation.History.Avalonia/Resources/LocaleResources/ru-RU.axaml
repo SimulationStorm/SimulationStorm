@@ -1,0 +1,23 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.Simulation.History.ThereAreNoSaves">Нет сохранений</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.KeepHistory">Вести историю симуляции</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.HistoryKeepingDisabled">Ведение истории симуляции отключено</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.SavesStorageLocation">Место хранения сохранений</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.IntervalBetweenSaves">Интервал между сохранениями</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.MaxSaveCount">Максимальное число сохранений</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.MoveSaves">Переместить сохранения</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.ChangeSavesStorageCapacity">Изменить ёмкость хранилища записей</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.SaveTakingTime">Время выполнения сохранения</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.PointedSaveTip">Вы находитесь на этом сохранении</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.AheadOfPointerSaveTip">Это сохранение будет удалено при изменении симуляции</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToFirstSave">Перейти к первому сохранению</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToLastSave">Перейти к последнему сохранению</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToPrevSave">Перейти к предыдущему сохранению</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.GoToNextSave">Перейти к следующему сохранению</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.DeleteSave">Удалить сохранение</sys:String>
+    <sys:String x:Key="Strings.Simulation.History.DeleteAllSaves">Удалить все сохранения</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.RestoreState">Восстановить состояние</sys:String>
+</ResourceDictionary>

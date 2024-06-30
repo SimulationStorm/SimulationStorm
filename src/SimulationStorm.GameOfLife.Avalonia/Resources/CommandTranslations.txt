@@ -1,0 +1,11 @@
+﻿<!--en-US-->
+<sys:String x:Key="Strings.Simulation.Command.ChangeAlgorithm">Change algorithm</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.ChangeRule">Change rule</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.PlacePattern">Place pattern</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.PopulateRandomly">Populate</sys:String>
+
+<!--ru-RU-->
+<sys:String x:Key="Strings.Simulation.Command.ChangeAlgorithm">Изменить алгоритм</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.ChangeRule">Изменить правило</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.PlacePattern">Разместить конфигурацию</sys:String>
+<sys:String x:Key="Strings.Simulation.Command.PopulateRandomly">Заселить</sys:String>

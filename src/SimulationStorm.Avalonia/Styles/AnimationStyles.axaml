@@ -1,0 +1,35 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector=":is(Visual)">
+        <Style Selector="^.blinking">
+            <Style.Animations>
+                <Animation Duration="00:00:03"
+                           IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="Opacity" Value="0.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        
+        <Style Selector="^.rotating">
+            <Style.Animations>
+                <Animation Duration="0:0:0.5"
+                           IterationCount="Infinite">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Style>
+</Styles>

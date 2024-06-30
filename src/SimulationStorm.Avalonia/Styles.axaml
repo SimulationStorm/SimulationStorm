@@ -1,0 +1,65 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Control styles -->
+    <StyleInclude Source="Styles/Controls/WindowStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/InputElementStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/LayoutableStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/DecoratorStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/ContentControlStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/TransitioningContentControlStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/BorderStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/ChromedTitleBarExtendedStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/MenuItemStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/ButtonStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/SeparatorStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/NumericUpDownStyles.axaml"/>
+    <StyleInclude Source="Styles/Controls/ToolTipStyles.axaml"/>
+    <!--  -->
+
+    <!-- Item control styles -->
+    <StyleInclude Source="Styles/ItemControls/DataGridStyles.axaml"/>
+    <StyleInclude Source="Styles/ItemControls/ListBoxStyles.axaml"/>
+    <StyleInclude Source="Styles/ItemControls/TreeViewStyles.axaml"/>
+    <!--  -->
+
+    <!-- Panel styles -->
+    <StyleInclude Source="Styles/Panels/DockPanelStyles.axaml"/>
+    <StyleInclude Source="Styles/Panels/StackPanelStyles.axaml"/>
+    <!--  -->
+
+    <!-- Other styles -->
+    <StyleInclude Source="Styles/VisualStyles.axaml"/>
+    <StyleInclude Source="Styles/DataValidationErrorsStyles.axaml"/>
+    <StyleInclude Source="Styles/AnimationStyles.axaml"/>
+    <StyleInclude Source="Styles/TransitionStyles.axaml"/>
+    <!--  -->
+
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Font -->
+                <ResourceDictionary>
+                    <FontFamily x:Key="NunitoFont">
+                        avares://SimulationStorm.Avalonia/Resources/Fonts#Nunito
+                    </FontFamily>
+                </ResourceDictionary>
+                
+                <MergeResourceInclude Source="Resources/Icons.axaml"/>
+
+                <!-- Control themes -->
+                <MergeResourceInclude Source="Controls/Themes/ChromedTitleBarExtended.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/WindowExtended.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/TitleBarButtonExtended.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/RoundedTitleBarButton.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/Joystick.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/TablerIcon.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/Section.axaml"/>
+                <MergeResourceInclude Source="Controls/Themes/ProgressControl.axaml"/>
+
+                <!-- Navigation themes -->
+                <MergeResourceInclude Source="Navigation/Themes/NavigationManager.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+</Styles>

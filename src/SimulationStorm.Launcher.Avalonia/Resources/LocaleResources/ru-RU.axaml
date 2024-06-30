@@ -1,0 +1,10 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="using:System">
+    <system:String x:Key="Strings.Launcher.SimulationLauncher">Лаунчер симуляций</system:String>
+    <system:String x:Key="Strings.Launcher.Simulation">Симуляция</system:String>
+    <system:String x:Key="Strings.Launcher.SimulationType.GameOfLife">Игра Жизнь</system:String>
+    <system:String x:Key="Strings.Launcher.LaunchSimulation">Запустить симуляцию</system:String>
+    <system:String x:Key="Strings.Launcher.SelectedSimulationIsAlreadyRunning">Другой экземпляр выбранной симуляции уже запущен.</system:String>
+</ResourceDictionary>

@@ -1,0 +1,26 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+        xmlns:helpers="using:SimulationStorm.Avalonia.Helpers">
+    <Style Selector="ToolTip">
+        <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+        <Style Selector="^ /template/ Border">
+            <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+        </Style>
+        
+        <Setter Property="MaxWidth" Value="{actipro:ScaledDouble 120}"/>
+        
+        <Setter Property="(helpers:ToolTipHelper.BackgroundLight)" Value="White"/>
+        <Setter Property="(helpers:ToolTipHelper.BackgroundDark)" Value="#232323"/>
+        
+        <Setter Property="(helpers:ToolTipHelper.BorderBrushLight)" Value="#9fa3ad"/>
+        <Setter Property="(helpers:ToolTipHelper.BorderBrushDark)" Value="#545a6a"/>
+        
+        <Setter Property="(helpers:ToolTipHelper.ForegroundLight)" Value="#2d3037"/>
+        <Setter Property="(helpers:ToolTipHelper.ForegroundDark)" Value="#efeff1"/>
+    </Style>
+    
+    <Style Selector=":is(Visual)">
+        <Setter Property="(ToolTip.ShowDelay)" Value="0"/>
+    </Style>
+</Styles>

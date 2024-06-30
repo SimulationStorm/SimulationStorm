@@ -1,0 +1,11 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector=":is(Window).has-minimum-size-wsvga">
+        <Setter Property="MinWidth" Value="1024"/>
+        <Setter Property="MinHeight" Value="576"/>
+    </Style>
+    <Style Selector=":is(Window).has-minimum-size-hd">
+        <Setter Property="MinWidth" Value="1280"/>
+        <Setter Property="MinHeight" Value="720"/>
+    </Style>
+</Styles>

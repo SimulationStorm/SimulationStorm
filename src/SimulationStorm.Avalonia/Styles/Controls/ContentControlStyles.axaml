@@ -1,0 +1,38 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+        xmlns:ti="using:TablerIcons">
+
+    <!-- Used with IconHelper -->
+    <Style Selector=":is(ContentControl).has-icon">
+        <Setter Property="ContentTemplate">
+            <DataTemplate>
+                <StackPanel Classes="has-spacing horizontal">
+                    <ti:TablerIcon Brush="{Binding #ContentPresenter.Foreground}"
+                                   Icon="{Binding $parent[ContentControl].(helpers:IconHelper.Icon)}"
+                                   IsVisible="{Binding $parent[ContentControl].(helpers:IconHelper.Icon),
+                                                       Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    <ContentPresenter x:Name="ContentPresenter"
+                                      Content="{Binding $parent[ContentControl].Content}"
+                                      IsVisible="{Binding $parent[ContentControl].Content,
+                                                          Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </StackPanel>
+            </DataTemplate>
+        </Setter>
+    </Style>
+
+    <!-- Used with ContentHelper -->
+    <Style Selector=":is(ContentControl).has-disabled-content">
+        <Setter Property="ContentTemplate">
+            <DataTemplate>
+                <Panel>
+                    <ContentPresenter Content="{Binding $parent[ContentControl].Content}"
+                                      IsVisible="{Binding $parent[ContentControl].IsEffectivelyEnabled}"/>
+
+                    <ContentPresenter Content="{Binding $parent[ContentControl].(helpers:ContentHelper.DisabledContent)}"
+                                      IsVisible="{Binding !$parent[ContentControl].IsEffectivelyEnabled}"/>
+                </Panel>
+            </DataTemplate>
+        </Setter>
+    </Style>
+</Styles>

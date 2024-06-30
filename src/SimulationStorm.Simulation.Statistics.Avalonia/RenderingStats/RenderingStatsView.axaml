@@ -1,0 +1,73 @@
+﻿<controls:Section x:Class="SimulationStorm.Simulation.Statistics.Avalonia.RenderingStats.RenderingStatsView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:ti="using:TablerIcons"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.Statistics.Presentation.RenderingStats.ViewModels"
+                  x:DataType="viewModels:RenderingStatsViewModel"
+                  Title="{DynamicResource Strings.Simulation.Stats.SimulationRenderingStats}">
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                      Content="{DynamicResource Strings.Simulation.Stats.KeepSimulationRenderingStats}"
+                      IsChecked="{Binding IsSavingEnabled}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <Panel IsVisible="{Binding IsSavingEnabled}"
+               Height="{actipro:ScaledDouble 45}">
+            <TextBlock Classes="has-opacity-transition"
+                       Classes.opaque="{Binding AreThereRecords}"
+                       Text="{DynamicResource Strings.Simulation.Stats.ThereAreNoRecords}"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"/>
+
+            <ContentControl x:Name="ChartContentControl"
+                            Classes="has-opacity-transition"
+                            Classes.opaque="{Binding !AreThereRecords}"/>
+        </Panel>
+    </DockPanel>
+
+    <controls:Section.HeaderRightContent>
+        <Button helpers:IconHelper.Icon="IconSettings"
+                Classes="theme-link"
+                IsVisible="{Binding IsSavingEnabled}"
+                ToolTip.Tip="{DynamicResource Strings.Common.Settings}">
+            <Button.Flyout>
+                <Flyout>
+                    <DockPanel Classes="stack-items-vertically has-margin">
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Simulation.Stats.ChartType}"/>
+                        <ComboBox Classes="has-bottom-margin"
+                                  ItemTemplate="{StaticResource Templates.ChartTypeTemplate}"
+                                  ItemsSource="{Binding ChartTypes}"
+                                  SelectedItem="{Binding CurrentChartType}"/>
+
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Simulation.Stats.MaxRecordCount}"/>
+                        <NumericUpDown FormatString="0"
+                                       Maximum="{Binding CapacityRange.Maximum,
+                                                         Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                       Minimum="{Binding CapacityRange.Minimum,
+                                                         Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                       Value="{Binding Capacity,
+                                                       Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}">
+                            <NumericUpDown.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding ResetSavingIntervalCommand}"
+                                              Header="{DynamicResource Strings.Common.ResetToDefault}">
+                                        <MenuItem.Icon>
+                                            <ti:TablerIcon Icon="IconRestore"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </NumericUpDown.ContextMenu>
+                        </NumericUpDown>
+                    </DockPanel>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+    </controls:Section.HeaderRightContent>
+</controls:Section>

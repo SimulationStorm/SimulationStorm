@@ -1,0 +1,10 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:String x:Key="Strings.Notifications.Notification">Уведомление</sys:String>
+    <sys:String x:Key="Strings.Notifications.Information">Информация</sys:String>
+    <sys:String x:Key="Strings.Notifications.Success">Успех</sys:String>
+    <sys:String x:Key="Strings.Notifications.Warning">Предупреждение</sys:String>
+    <sys:String x:Key="Strings.Notifications.Error">Ошибка</sys:String>
+</ResourceDictionary>

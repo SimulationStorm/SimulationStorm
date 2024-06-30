@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="SimulationStorm.Simulation.Avalonia.Views.SimulationRenderingSettingsView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+             xmlns:ti="using:TablerIcons"
+             xmlns:viewModels="using:SimulationStorm.Simulation.Presentation.SimulationRenderer"
+             x:DataType="viewModels:SimulationRenderingSettingsViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                      Content="{DynamicResource Strings.Simulation.Rendering.EnableSimulationRendering}"
+                      IsChecked="{Binding IsRenderingEnabled}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <DockPanel Classes="stack-items-vertically"
+                   IsVisible="{Binding IsRenderingEnabled}">
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Simulation.Rendering.RenderingInterval}"/>
+            <NumericUpDown FormatString="0"
+                           Maximum="{Binding RenderingIntervalRange.Maximum,
+                                             Mode=OneTime}"
+                           Minimum="{Binding RenderingIntervalRange.Minimum,
+                                             Mode=OneTime}"
+                           Value="{Binding RenderingInterval,
+                                           Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}">
+                <NumericUpDown.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding ResetRenderingIntervalCommand}"
+                                  Header="{DynamicResource Strings.Common.ResetToDefault}">
+                            <MenuItem.Icon>
+                                <ti:TablerIcon Icon="IconRestore"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </NumericUpDown.ContextMenu>
+            </NumericUpDown>
+        </DockPanel>
+    </DockPanel>
+</UserControl>

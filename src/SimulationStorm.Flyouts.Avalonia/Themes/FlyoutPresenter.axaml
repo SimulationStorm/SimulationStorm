@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:local="using:SimulationStorm.Flyouts.Avalonia">
+    <ControlTheme x:Key="{x:Type FlyoutPresenter}"
+                  TargetType="FlyoutPresenter"
+                  BasedOn="{StaticResource {x:Type FlyoutPresenter}}">
+        <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+        <Setter Property="(local:FlyoutHelper.IsAppearanceAnimated)" Value="True"/>
+        <Setter Property="(local:FlyoutHelper.AppearanceAnimationDuration)" Value="00:00:0.125"/>
+    </ControlTheme>
+</ResourceDictionary>

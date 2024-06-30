@@ -1,0 +1,10 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="using:System">
+    <system:String x:Key="Strings.ToolPanels.ToolPanels">Tool panels</system:String>
+    <system:String x:Key="Strings.ToolPanels.HideAllToolPanels">Hide all</system:String>
+    <system:String x:Key="Strings.ToolPanels.HideToolPanel">Hide</system:String>
+    <system:String x:Key="Strings.ToolPanels.ShowSettings">Show settings</system:String>
+    <system:String x:Key="Strings.ToolPanels.HideSettings">Hide settings</system:String>
+</ResourceDictionary>

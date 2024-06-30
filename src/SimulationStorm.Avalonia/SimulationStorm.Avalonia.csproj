@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" />
+        <PackageReference Include="Avalonia.ReactiveUI" />
+      <PackageReference Include="Avalonia.Controls.ColorPicker" />
+      <PackageReference Include="Avalonia.Controls.DataGrid" />
+      <PackageReference Include="Avalonia.Labs.Panels" />
+      <PackageReference Include="Avalonia.Xaml.Behaviors" />
+      <PackageReference Include="Avalonia.Diagnostics" />
+        
+      <PackageReference Include="ActiproSoftware.Controls.Avalonia" />
+      <PackageReference Include="ActiproSoftware.Controls.Avalonia.Themes.ColorPicker" />
+      <PackageReference Include="ActiproSoftware.Controls.Avalonia.Themes.DataGrid" />
+        
+      <PackageReference Include="TablerIcons.Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Densities.Presentation\SimulationStorm.Densities.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Graphics.Avalonia\SimulationStorm.Graphics.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Presentation\SimulationStorm.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+    </ItemGroup>
+
+</Project>

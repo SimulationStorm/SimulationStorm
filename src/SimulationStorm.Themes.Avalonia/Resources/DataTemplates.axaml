@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:themes="using:SimulationStorm.Themes.Presentation"
+                    xmlns:ti="using:TablerIcons"
+                    xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions">
+    <DataTemplate DataType="themes:UiTheme" x:Key="Templates.Themes.UiTheme">
+        <StackPanel Classes="has-spacing horizontal">
+            <ti:TablerIcon Icon="{me:DynamicResourceBinding StringFormat='Icons.Themes.{0}'}"/>
+            <TextBlock Text="{me:DynamicResourceBinding StringFormat='Strings.Themes.{0}'}"/>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,0 +1,26 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping">Зацикленность мира</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.WrapHorizontally">Зациклить по горизонтали</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.WrapVertically">Зациклить  по вертикали</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.ChangeWorldWrapping">Изменить зацикленность мира</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.NoWrap">не зациклен</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Horizontal">по горизонтали</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Vertical">по вертикали</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.WorldWrapping.Both">по обеим сторонам</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.Title">ПРЕДУПРЕЖДЕНИЕ ОБ ЭПИЛЕПСИИ</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.Text">У некоторых людей могут возникать приступы под воздействием вспышек света и мелькающих изображений, даже если им никогда не ставили диагноз "эпилепися".</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Warning.PressEsсToQuitOrSpaceToContinue">Нажмите Escape для выхода или Пробел для продолжения</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing">Рисование</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.EnableDrawingMode">Включить режим рисования</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushRadius">Радиус кисти</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushShape">Форма кисти</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.Drawing.BrushCellState">Состояние рисуемых клеток</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Circle">Круг</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Square">Квадрат</sys:String>
+    <sys:String x:Key="Strings.Simulation.CellularAutomation.DrawingShape.Triangle">Треугольник</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.ChangeWorldWrapping">Изменить зацикленность мира</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.Draw">Нарисовать</sys:String>
+</ResourceDictionary>

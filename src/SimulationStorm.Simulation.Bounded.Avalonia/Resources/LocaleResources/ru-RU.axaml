@@ -1,0 +1,12 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:String x:Key="Strings.Simulation.Bounded.WorldSize">Размер мира</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.KeepAspectRatio">Сохранять соотношение сторон</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.Width">Ширина</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.Height">Высота</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.ChangeWorldSize">Изменить размер мира</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.BackgroundColor">Фоновый цвет</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.ChangeWorldSize">Изменить размер мира</sys:String>
+</ResourceDictionary>

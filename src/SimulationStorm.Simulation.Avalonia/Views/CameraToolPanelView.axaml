@@ -1,0 +1,254 @@
+﻿<toolPanels:ToolPanelControl x:Class="SimulationStorm.Simulation.Avalonia.Views.CameraToolPanelView"
+                           xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                           xmlns:camera="using:SimulationStorm.Simulation.Presentation.Camera"
+                           xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                           xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+                           xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                           xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
+                           xmlns:ti="using:TablerIcons"
+                           x:DataType="camera:CameraSettingsViewModel"
+                           MinWidth="{actipro:ScaledDouble 54}"
+                           MaxWidth="{actipro:ScaledDouble 60}">
+    <ScrollViewer>
+        <DockPanel Classes="stack-items-vertically sections-container"
+                   VerticalAlignment="Top">
+            <controls:Section Title="{DynamicResource Strings.Simulation.Camera.Zooming}">
+                <controls:Section.HeaderRightContent>
+                    <Button helpers:IconHelper.Icon="IconSettings"
+                            Classes="theme-link"
+                            ToolTip.Tip="{DynamicResource Strings.Common.Settings}"
+                            HorizontalAlignment="Right">
+                        <Button.Flyout>
+                            <Flyout>
+                                <DockPanel Classes="has-margin stack-items-vertically">
+                                    <TextBlock Classes="theme-form-control-label"
+                                               Text="{DynamicResource Strings.Simulation.Camera.ZoomingStep}"/>
+                                    <NumericUpDown FormatString="P0"
+                                                   Increment="{Binding ZoomChangeRange.Minimum,
+                                                                       Mode=OneTime}"
+                                                   Maximum="{Binding ZoomChangeRange.Maximum,
+                                                                     Mode=OneTime}"
+                                                   Minimum="{Binding ZoomChangeRange.Minimum,
+                                                                     Mode=OneTime}"
+                                                   Value="{Binding ZoomChange,
+                                                                   Converter={x:Static converters:TypeConverters.FloatToDecimalConverter}}">
+                                        <NumericUpDown.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{DynamicResource Strings.Common.ResetToDefault}"
+                                                          Command="{Binding ResetZoomChangeCommand}">
+                                                    <MenuItem.Icon>
+                                                        <ti:TablerIcon Icon="IconRestore"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </NumericUpDown.ContextMenu>
+                                    </NumericUpDown>
+                                </DockPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </controls:Section.HeaderRightContent>
+                
+                <DockPanel Classes="stack-items-vertically">
+                    <DockPanel Classes="stack-items-vertically has-bottom-margin">
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Simulation.Camera.Zoom}"/>
+                        <NumericUpDown FormatString="P0"
+                                       Increment="{Binding ZoomChange}"
+                                       Maximum="{Binding ZoomRange.Maximum,
+                                                         Mode=OneTime}"
+                                       Minimum="{Binding ZoomRange.Minimum,
+                                                         Mode=OneTime}"
+                                       Value="{Binding Zoom,
+                                                       Converter={x:Static converters:TypeConverters.FloatToDecimalConverter}}"/>
+                    </DockPanel>
+
+                    <Button helpers:IconHelper.Icon="IconZoomReset"
+                            Command="{Binding ResetZoomCommand}"
+                            Content="{DynamicResource Strings.Simulation.Camera.ResetZoom}"
+                            Classes="stretched"/>
+                </DockPanel>
+            </controls:Section>
+
+            <controls:Section Title="{DynamicResource Strings.Simulation.Camera.Positioning}">
+                <controls:Section.HeaderRightContent>
+                    <Button helpers:IconHelper.Icon="IconSettings"
+                            Classes="theme-link"
+                            ToolTip.Tip="{DynamicResource Strings.Common.Settings}"
+                            HorizontalAlignment="Right">
+                        <Button.Flyout>
+                            <Flyout>
+                                <DockPanel Classes="has-margin stack-items-vertically">
+                                    <TextBlock Classes="theme-form-control-label"
+                                               Text="{DynamicResource Strings.Simulation.Camera.TranslationStep}"/>
+                                    <NumericUpDown Increment="{Binding TranslationChangeRange.Minimum,
+                                                                       Mode=OneTime}"
+                                                   Maximum="{Binding TranslationChangeRange.Maximum,
+                                                                     Mode=OneTime}"
+                                                   Minimum="{Binding TranslationChangeRange.Minimum,
+                                                                     Mode=OneTime}"
+                                                   Value="{Binding TranslationChange,
+                                                                   Converter={x:Static converters:TypeConverters.FloatToDecimalConverter}}">
+                                        <NumericUpDown.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{DynamicResource Strings.Common.ResetToDefault}"
+                                                          Command="{Binding ResetTranslationChangeCommand}">
+                                                    <MenuItem.Icon>
+                                                        <ti:TablerIcon Icon="IconRestore"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </NumericUpDown.ContextMenu>
+                                    </NumericUpDown>
+                                </DockPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </controls:Section.HeaderRightContent>
+                
+                <DockPanel Classes="stack-items-vertically">
+                    <Grid Classes="has-bottom-margin">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="{actipro:ScaledGridLength 1.5}"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DockPanel Classes="stack-items-vertically">
+                            <TextBlock Classes="theme-form-control-label"
+                                       Text="{DynamicResource Strings.Simulation.Camera.HorizontalPosition}"/>
+                            <NumericUpDown Increment="{Binding TranslationChange}"
+                                           Maximum="{Binding TranslationRange.Maximum.X,
+                                                             Mode=OneTime}"
+                                           Minimum="{Binding TranslationRange.Minimum.X,
+                                                             Mode=OneTime}"
+                                           Value="{Binding HorizontalTranslation,
+                                                           Converter={x:Static converters:TypeConverters.FloatToDecimalConverter}}"/>
+                        </DockPanel>
+                        <DockPanel Classes="stack-items-vertically"
+                                   Grid.Column="2">
+                            <TextBlock Classes="theme-form-control-label"
+                                       Text="{DynamicResource Strings.Simulation.Camera.VerticalPosition}"/>
+                            <NumericUpDown Increment="{Binding TranslationChange}"
+                                           Maximum="{Binding TranslationRange.Maximum.Y,
+                                                             Mode=OneTime}"
+                                           Minimum="{Binding TranslationRange.Minimum.Y,
+                                                             Mode=OneTime}"
+                                           Value="{Binding VerticalTranslation,
+                                                           Converter={x:Static converters:TypeConverters.FloatToDecimalConverter}}"/>
+                        </DockPanel>
+                    </Grid>
+
+                    <Button helpers:IconHelper.Icon="IconRestore"
+                            Command="{Binding ResetTranslationCommand}"
+                            Classes="stretched"
+                            Content="{DynamicResource Strings.Simulation.Camera.ResetPosition}"/>
+                </DockPanel>
+            </controls:Section>
+
+            <controls:Section Title="{DynamicResource Strings.Simulation.Camera.Movement}">
+                <DockPanel Classes="stack-items-vertically">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <LayoutTransformControl>
+                            <UniformGrid Columns="2">
+                                <Button helpers:IconHelper.Icon="IconPlaystationCircle"
+                                        CommandParameter="{x:Static camera:CameraMovingMethod.Joystick}"
+                                        Content="{DynamicResource Strings.Simulation.Camera.Joystick}"
+                                        CornerRadius="4,0,0,4"/>
+                                <Button helpers:IconHelper.Icon="IconDialpad"
+                                        CommandParameter="{x:Static camera:CameraMovingMethod.Buttons}"
+                                        Content="{DynamicResource Strings.Simulation.Camera.Buttons}"
+                                        CornerRadius="0,4,4,0"/>
+
+                                <UniformGrid.Styles>
+                                    <Style Selector="Button">
+                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        <Setter Property="Command" Value="{Binding ChangeMovingMethodCommand}"/>
+                                    </Style>
+                                </UniformGrid.Styles>
+                            </UniformGrid>
+
+                            <LayoutTransformControl.LayoutTransform>
+                                <RotateTransform Angle="-90"/>
+                            </LayoutTransformControl.LayoutTransform>
+                        </LayoutTransformControl>
+
+                        <StackPanel IsVisible="{Binding MovingMethod,
+                                                        Converter={x:Static ObjectConverters.Equal},
+                                                        ConverterParameter={x:Static camera:CameraMovingMethod.Buttons},
+                                                        Mode=OneWay}"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                            <StackPanel Classes="has-bottom-margin">
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowUpLeft"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.TopLeft}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveTopLeft}"/>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowUp"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.Top}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveTop}"/>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowUpRight"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.TopRight}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveTopRight}"/>
+                            </StackPanel>
+                            <Panel Classes="has-bottom-margin">
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowLeft"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.Left}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveLeft}"
+                                              HorizontalAlignment="Left"/>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowRight"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.Right}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveRight}"
+                                              HorizontalAlignment="Right"/>
+                            </Panel>
+                            <StackPanel>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowDownLeft"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.BottomLeft}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveBottomLeft}"/>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowDown"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.Bottom}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveBottom}"/>
+                                <RepeatButton helpers:IconHelper.Icon="IconArrowDownRight"
+                                              CommandParameter="{x:Static camera:CameraTranslationDirection.BottomRight}"
+                                              ToolTip.Tip="{DynamicResource Strings.Simulation.Camera.MoveBottomRight}"/>
+                            </StackPanel>
+
+                            <StackPanel.Styles>
+                                <Style Selector="StackPanel StackPanel">
+                                    <Setter Property="Spacing" Value="{actipro:ScaledDouble 1.5}"/>
+                                    <Setter Property="Orientation" Value="Horizontal"/>
+                                </Style>
+                                <Style Selector="RepeatButton">
+                                    <Setter Property="Command" Value="{Binding TranslateInDirectionCommand}"/>
+                                    <Setter Property="Delay" Value="0"/>
+                                    <Setter Property="Interval" Value="10"/>
+                                    <Setter Property="Padding" Value="{actipro:ScaledThickness 2.25}"/>
+                                </Style>
+                            </StackPanel.Styles>
+                        </StackPanel>
+
+                        <controls:RepeatJoystick x:Name="Joystick"
+                                                 Delay="0"
+                                                 Interval="10"
+                                                 IsVisible="{Binding MovingMethod,
+                                                                     Converter={x:Static ObjectConverters.Equal},
+                                                                     ConverterParameter={x:Static camera:CameraMovingMethod.Joystick},
+                                                                     Mode=OneWay}"
+                                                 Grid.Column="1"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"/>
+                    </Grid>
+                </DockPanel>
+            </controls:Section>
+        </DockPanel>
+    </ScrollViewer>
+
+    <toolPanels:ToolPanelControl.Styles>
+        <Style Selector="NumericUpDown">
+            <Setter Property="FormatString" Value="0"/>
+        </Style>
+    </toolPanels:ToolPanelControl.Styles>
+</toolPanels:ToolPanelControl>

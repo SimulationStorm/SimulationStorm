@@ -1,0 +1,81 @@
+﻿<controls:Section x:Class="SimulationStorm.Simulation.Running.Avalonia.Views.SimulationRunnerSettingsView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:models="using:SimulationStorm.Simulation.Running.Presentation.Models"
+                  xmlns:timeFormatting="using:SimulationStorm.Avalonia.TimeFormatting"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.Running.Presentation.ViewModels"
+                  x:DataType="viewModels:SimulationRunnerViewModel"
+                  Title="{DynamicResource Strings.Simulation.Running.Advancement}">
+    <controls:Section.HeaderRightContent>
+        <TextBlock Classes.danger="{Binding SimulationRunningState,
+                                            Converter={x:Static ObjectConverters.Equal},
+                                            ConverterParameter={x:Static models:SimulationRunningState.Paused}}"
+                   Classes.success="{Binding SimulationRunningState,
+                                             Converter={x:Static ObjectConverters.Equal},
+                                             ConverterParameter={x:Static models:SimulationRunningState.Running}}"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom">
+            <TextBlock.Styles>
+                <Style Selector="TextBlock.danger">
+                    <Setter Property="Text" Value="{DynamicResource Strings.Simulation.Running.AdvancementPaused}"/>
+                </Style>
+                <Style Selector="TextBlock.success">
+                    <Setter Property="Text" Value="{DynamicResource Strings.Simulation.Running.AdvancementStarted}"/>
+                </Style>
+            </TextBlock.Styles>
+        </TextBlock>
+    </controls:Section.HeaderRightContent>
+
+    <DockPanel Classes="stack-items-vertically">
+        <Panel>
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Simulation.Running.MaxStepsPerSecond}"/>
+            <TextBlock Classes="accent"
+                       Text="{Binding MaxStepsPerSecond}"
+                       HorizontalAlignment="Right"/>
+        </Panel>
+        <Slider Classes="has-bottom-margin"
+                Maximum="{Binding MaxStepsPerSecondRange.Maximum,
+                                  Mode=OneTime}"
+                Minimum="{Binding MaxStepsPerSecondRange.Minimum,
+                                  Mode=OneTime}"
+                Value="{Binding MaxStepsPerSecond}"/>
+
+        <Panel IsVisible="{Binding SimulationRunningState,
+                                   Converter={x:Static ObjectConverters.Equal},
+                                   ConverterParameter={x:Static models:SimulationRunningState.Running}}">
+            <TextBlock>
+                <Run Text="{DynamicResource Strings.Simulation.Running.StepExecutionTime}"/>:
+            </TextBlock>
+            
+            <timeFormatting:TimeTextBlock Classes="accent"
+                                          Time="{Binding StepExecutionTime}"
+                                          HorizontalAlignment="Right"/>
+        </Panel>
+
+        <!-- <TextBlock Classes="theme-form-control-label" -->
+        <!-- Text="{DynamicResource Strings.Simulation.Running.MaxStepsPerSecond}"/> -->
+        <!--  -->
+        <!-- <NumericUpDown FormatString="0" -->
+        <!-- Maximum="{Binding MaxStepsPerSecondRange.Maximum, -->
+        <!-- Converter={x:Static converters:TypeConverters.IntToDecimalConverter}, -->
+        <!-- Mode=OneTime}" -->
+        <!-- Minimum="{Binding MaxStepsPerSecondRange.Minimum, -->
+        <!-- Converter={x:Static converters:TypeConverters.IntToDecimalConverter}, -->
+        <!-- Mode=OneTime}" -->
+        <!-- Value="{Binding MaxStepsPerSecond, -->
+        <!-- Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"> -->
+        <!--     <NumericUpDown.ContextMenu> -->
+        <!--         <ContextMenu> -->
+        <!-- <MenuItem Header="{DynamicResource Strings.Common.ResetToDefault}" -->
+        <!-- Command="{Binding ResetMaxStepsPerSecondCommand}"> -->
+        <!--                 <MenuItem.Icon> -->
+        <!--                     <ti:TablerIcon Icon="IconRestore"/> -->
+        <!--                 </MenuItem.Icon> -->
+        <!--             </MenuItem> -->
+        <!--         </ContextMenu> -->
+        <!--     </NumericUpDown.ContextMenu> -->
+        <!-- </NumericUpDown> -->
+    </DockPanel>
+</controls:Section>

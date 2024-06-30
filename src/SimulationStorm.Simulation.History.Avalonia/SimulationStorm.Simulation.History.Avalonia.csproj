@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <AvaloniaResource Include="Resources\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History.Presentation\SimulationStorm.Simulation.History.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.ToolPanels.Avalonia\SimulationStorm.ToolPanels.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Collections.Avalonia\SimulationStorm.Collections.Avalonia.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <system:String x:Key="Strings.Simulation.Stats.CommandNumber">Command number</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ExecutionTime">Execution time</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.RenderingTime">Rendering time</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.SimulationRenderingStats">Simulation rendering statistics</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepSimulationRenderingStats">Keep the simulation rendering statistics</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.CommandExecutionStats">Command execution statistics</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepCommandExecutionStats">Keep the simulation command execution statistics</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ThereAreNoRecords">There are no records</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.DeleteAllRecords">Delete all records</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.MaxRecordCount">Maximum number of records</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.KeepStats">Keep the simulation statistics</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.StatsKeepingDisabled">The statistics keeping is disabled</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.IntervalBetweenRecords">Interval between records</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChangeRecordStorageCapacity">Change record storage capacity</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.SummaryTakingTime">Summary taking time</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType">Chart type</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Line">Linear chart</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Bar">Bar chart</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Pie">Pie chart</system:String>
+    <system:String x:Key="Strings.Simulation.Stats.ChartType.Table">Table</system:String>
+</ResourceDictionary>

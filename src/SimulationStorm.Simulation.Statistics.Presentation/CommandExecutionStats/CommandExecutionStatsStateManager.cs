@@ -1,0 +1,7 @@
+﻿using SimulationStorm.Collections.Presentation;
+using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.DataTypes;
+
+namespace SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats;
+
+public class CommandExecutionStatsStateManager(ICommandExecutionStatsManager commandExecutionStatsManager)
+    : CollectionStateManagerBase<CommandExecutionResultRecord, CommandExecutionStatsState>(commandExecutionStatsManager);

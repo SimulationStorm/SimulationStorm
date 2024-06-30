@@ -1,0 +1,104 @@
+<controls:Section x:Class="SimulationStorm.Simulation.CellularAutomation.Avalonia.Views.DrawingSettingsView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:labs="using:Avalonia.Labs.Panels"
+                  xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.CellularAutomation.Presentation.ViewModels"
+                  x:Name="Root"
+                  x:DataType="viewModels:IDrawingSettingsViewModel"
+                  Title="{DynamicResource Strings.Simulation.CellularAutomation.Drawing}">
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid"
+                      Content="{DynamicResource Strings.Simulation.CellularAutomation.Drawing.EnableDrawingMode}"
+                      IsChecked="{Binding IsDrawingModeEnabled}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <DockPanel Classes=" stack-items-vertically has-top-margin"
+                   IsVisible="{Binding IsDrawingModeEnabled}">
+            <DockPanel Classes="has-bottom-margin stack-items-vertically">
+                <Panel>
+                    <TextBlock Classes="theme-form-control-label"
+                               Text="{DynamicResource Strings.Simulation.CellularAutomation.Drawing.BrushRadius}"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <TextBlock Classes="accent">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="BrushRadius"/>
+                                    <DynamicResourceExtension ResourceKey="Strings.Simulation.Cellular.MeasureUnits.Cells"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </Panel>
+                <Slider Maximum="{Binding BrushRadiusRange.Maximum,
+                                          Mode=OneWay}"
+                        Minimum="{Binding BrushRadiusRange.Minimum,
+                                          Mode=OneWay}"
+                        Value="{Binding BrushRadius,
+                                        Converter={x:Static converters:TypeConverters.IntToDoubleConverter},
+                                        Mode=TwoWay}"/>
+            </DockPanel>
+
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Simulation.CellularAutomation.Drawing.BrushShape}"/>
+            <ItemsControl ItemsSource="{Binding BrushShapes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button helpers:IconHelper.Icon="{me:DynamicResourceBinding StringFormat='Icons.DrawingShape.{0}'}"
+                                Classes="has-bottom-margin"
+                                Classes.accent="{Binding !$self.IsEffectivelyEnabled}"
+                                Classes.theme-solid="{Binding !$self.IsEffectivelyEnabled}"
+                                Command="{Binding #Root.((viewModels:IDrawingSettingsViewModel)DataContext).ChangeBrushShapeCommand}"
+                                Content="{me:DynamicResourceBinding StringFormat='Strings.Simulation.CellularAutomation.DrawingShape.{0}'}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Simulation.CellularAutomation.Drawing.BrushCellState}"/>
+            <ItemsControl ItemsSource="{Binding BrushCellStates}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Classes.accent="{Binding !$self.IsEffectivelyEnabled}"
+                                Classes.theme-solid="{Binding !$self.IsEffectivelyEnabled}"
+                                Content="{Binding}"
+                                ContentTemplate="{Binding #Root.CellStateTemplate}"
+                                Loaded="OnCellStateButtonLoaded"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <DockPanel.Styles>
+                <Style Selector="ItemsControl">
+                    <Style Selector="^ > ContentPresenter">
+                        <Setter Property="(labs:Flex.Grow)" Value="1"/>
+
+                        <!-- This is needed to fix absence of the right border -->
+                        <Style Selector="^:nth-last-child(1)">
+                            <Setter Property="Margin" Value="0,0,1,0"/>
+                        </Style>
+                    </Style>
+
+                    <Style Selector="^ Button">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="CommandParameter" Value="{Binding}"/>
+                    </Style>
+
+                    <Setter Property="ItemsPanel">
+                        <ItemsPanelTemplate>
+                            <labs:FlexPanel ColumnSpacing="{actipro:ScaledDouble '1.5'}"
+                                            JustifyContent="SpaceBetween"/>
+                        </ItemsPanelTemplate>
+                    </Setter>
+                </Style>
+            </DockPanel.Styles>
+        </DockPanel>
+    </DockPanel>
+</controls:Section>

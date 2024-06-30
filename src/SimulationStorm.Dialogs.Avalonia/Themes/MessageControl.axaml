@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:SimulationStorm.Dialogs.Avalonia">
+    <ControlTheme x:Key="{x:Type local:MessageControl}"
+                  TargetType="local:MessageControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DockPanel Classes="stack-items-vertically has-margin">
+                    <TextBlock Text="{TemplateBinding Title}"
+                               Classes="has-bottom-margin"/>
+                    
+                    <TextBlock Text="{TemplateBinding Message}"
+                               Classes="has-bottom-margin"/>
+                    
+                    <!--Todo: localize OK-->
+                    <Button Content="OK"/>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

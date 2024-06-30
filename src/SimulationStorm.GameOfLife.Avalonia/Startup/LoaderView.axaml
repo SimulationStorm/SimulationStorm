@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="SimulationStorm.GameOfLife.Avalonia.Startup.LoaderView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="using:SimulationStorm.Simulation.Avalonia"
+             xmlns:lifeViews="using:SimulationStorm.GameOfLife.Avalonia.Views"
+             xmlns:history="using:SimulationStorm.Simulation.History.Avalonia"
+             xmlns:stats="using:SimulationStorm.Simulation.Statistics.Avalonia"
+             xmlns:appStates="using:SimulationStorm.AppStates.Avalonia"
+             xmlns:drawing="using:SimulationStorm.GameOfLife.Presentation.Drawing"
+             xmlns:dialogs="using:SimulationStorm.Dialogs.Avalonia"
+             xmlns:lifeViewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"
+             xmlns:stats1="using:SimulationStorm.GameOfLife.Presentation.Stats"
+             xmlns:charts="using:SimulationStorm.GameOfLife.Avalonia.Views.Charts">
+    <Panel>
+        <TransitioningContentControl x:Name="ContentControl"/>
+        <dialogs:DialogManager x:Name="DialogManager"/>
+        <WindowNotificationManager x:Name="NotificationManager"/>
+    </Panel>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="../Resources/Icons.axaml"/>
+                <MergeResourceInclude Source="../Resources/ToolPanelIcons.axaml"/>
+                <MergeResourceInclude Source="../Resources/ToolPanelKeyGestures.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <StyleInclude Source="avares://SimulationStorm.Flyouts.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.ToolPanels.Avalonia/Styles.axaml"/>
+        
+        <StyleInclude Source="avares://SimulationStorm.Simulation.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.Bounded.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.Running.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.Resetting.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.History.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.Statistics.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Simulation.CellularAutomation.Avalonia/Styles.axaml"/>
+    </UserControl.Styles>
+
+    <UserControl.DataTemplates>
+        <appStates:ViewLocator/>
+        <common:ViewLocator/>
+        <history:ViewLocator/>
+        <stats:ViewLocator/>
+        
+        <DataTemplate DataType="lifeViewModels:SimulationToolPanelViewModel">
+            <lifeViews:SimulationToolPanelView/>
+        </DataTemplate>
+        <DataTemplate DataType="lifeViewModels:RenderingToolPanelViewModel">
+            <lifeViews:RenderingToolPanelView/>
+        </DataTemplate>
+        <DataTemplate DataType="drawing:DrawingToolPanelViewModel">
+            <lifeViews:DrawingToolPanelView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="stats1:TableChartViewModel">
+            <charts:TableChartView/>
+        </DataTemplate>
+        <DataTemplate DataType="stats1:PieChartViewModel">
+            <charts:PieChartView/>
+        </DataTemplate>
+        <DataTemplate DataType="stats1:BarChartViewModel">
+            <charts:BarChartView/>
+        </DataTemplate>
+        <DataTemplate DataType="stats1:LineChartViewModel">
+            <charts:LineChartView/>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+</UserControl>

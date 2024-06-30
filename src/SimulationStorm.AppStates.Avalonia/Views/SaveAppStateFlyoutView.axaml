@@ -1,0 +1,41 @@
+﻿<flyouts:FlyoutControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SimulationStorm.AppStates.Avalonia.Views.SaveAppStateFlyoutView"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:viewModels="using:SimulationStorm.AppStates.Presentation.ViewModels"
+             xmlns:flyouts="using:SimulationStorm.Flyouts.Avalonia"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+             x:DataType="viewModels:SaveAppStateFlyoutViewModel"
+             Title="{DynamicResource Strings.AppStates.CreatingSave}"
+             Width="{actipro:ScaledDouble 45}">
+    <DockPanel Classes="stack-items-vertically">
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.Common.Name}"/>
+        <TextBox Classes="has-bottom-margin"
+                 Text="{Binding AppStateName}"
+                 helpers:TextBoxHelper.IsPastingDisabled="True"
+                 ContextFlyout="{x:Null}"
+                 Watermark="{DynamicResource Strings.AppStates.NewSave}"
+                 IsEnabled="{Binding !IsSavingInProgress}"
+                 MaxLength="{Binding AppStateNameLengthRange.Maximum, Mode=OneTime}"/>
+
+        <Button Classes="theme-solid accent stretched"
+                Classes.saving-in-progress="{Binding IsSavingInProgress}"
+                Command="{Binding SaveAppStateCommand}">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Content" Value="{DynamicResource Strings.AppStates.Save}"/>
+                    <Style Selector="^.saving-in-progress">
+                        <Setter Property="Content">
+                            <Template>
+                                <controls:ProgressControl Content="{DynamicResource Strings.AppStates.AppSaving}"
+                                                          ProgressForeground="{Binding $parent[Button].Foreground}"/>
+                            </Template>
+                        </Setter>
+                    </Style>
+                </Style>
+            </Button.Styles>
+        </Button>
+    </DockPanel>
+</flyouts:FlyoutControl>

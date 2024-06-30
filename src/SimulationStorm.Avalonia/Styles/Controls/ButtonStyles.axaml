@@ -1,0 +1,15 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Border.has-shadow">
+        <Setter Property="BoxShadow" Value="0 0 10.5 -4.5 Black"/>
+    </Style>
+    
+    <Style Selector="Border.has-inset-shadow">
+        <Setter Property="BoxShadow" Value="inset 0 0 10.5 -4.5 Black"/>
+    </Style>
+
+    <Style Selector=":is(Button).stretched">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+</Styles>

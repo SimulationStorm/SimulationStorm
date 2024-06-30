@@ -1,0 +1,31 @@
+﻿<Button x:Class="SimulationStorm.Simulation.Running.Avalonia.Views.ToggleRunningButton"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="using:SimulationStorm.Simulation.Running.Presentation.Models"
+        xmlns:viewModels="using:SimulationStorm.Simulation.Running.Presentation.ViewModels"
+        xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+        x:DataType="viewModels:SimulationRunnerViewModel"
+        Classes.paused="{Binding SimulationRunningState,
+                                Converter={x:Static ObjectConverters.Equal},
+                                ConverterParameter={x:Static models:SimulationRunningState.Paused}}"
+        Classes.success="{Binding SimulationRunningState,
+                                Converter={x:Static ObjectConverters.Equal},
+                                ConverterParameter={x:Static models:SimulationRunningState.Paused}}"
+        Classes.running="{Binding SimulationRunningState,
+                                Converter={x:Static ObjectConverters.Equal},
+                                ConverterParameter={x:Static models:SimulationRunningState.Running}}"
+        Classes.danger="{Binding SimulationRunningState,
+                                Converter={x:Static ObjectConverters.Equal},
+                                ConverterParameter={x:Static models:SimulationRunningState.Running}}"
+        Command="{Binding ToggleSimulationRunningCommand}">
+    <Button.Styles>
+        <Style Selector=":is(Button).paused">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Simulation.Running.StartAdvancement}"/>
+            <Setter Property="(helpers:IconHelper.Icon)" Value="IconPlayerPlay"/>
+        </Style>
+        <Style Selector=":is(Button).running">
+            <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Simulation.Running.PauseAdvancement}"/>
+            <Setter Property="(helpers:IconHelper.Icon)" Value="IconPlayerPause"/>
+        </Style>
+    </Button.Styles>
+</Button>

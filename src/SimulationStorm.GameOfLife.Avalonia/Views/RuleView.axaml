@@ -1,0 +1,96 @@
+<controls:Section x:Class="SimulationStorm.GameOfLife.Avalonia.Views.RuleView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:avaLabsPanels="using:Avalonia.Labs.Panels"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:rules="using:SimulationStorm.GameOfLife.Presentation.Rules"
+                  xmlns:dataTypes="using:SimulationStorm.GameOfLife.DataTypes"
+                  xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                  x:DataType="rules:RuleViewModel"
+                  Title="{DynamicResource Strings.GameOfLife.Rule}">
+    <controls:Section.HeaderRightContent>
+        <TextBlock Classes.accent="{Binding ActualRule,
+                                            Converter={x:Static ObjectConverters.NotEqual},
+                                            ConverterParameter={x:Static dataTypes:GameOfLifeRule.Empty}}"
+                   Classes.danger="{Binding ActualRule,
+                                            Converter={x:Static ObjectConverters.Equal},
+                                            ConverterParameter={x:Static dataTypes:GameOfLifeRule.Empty}}"
+                   Text="{Binding ActualRule}"
+                   VerticalAlignment="Bottom"/>
+    </controls:Section.HeaderRightContent>
+
+    <DockPanel Classes="stack-items-vertically">
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.GameOfLife.CellBirthCondition}"/>
+        <avaLabsPanels:FlexPanel x:Name="BornNeighborCountButtonsPanel"
+                                 Classes="has-bottom-margin"/>
+
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.GameOfLife.CellSurvivalCondition}"/>
+        <avaLabsPanels:FlexPanel x:Name="SurviveNeighborCountButtonsPanel"
+                                 Classes="has-bottom-margin"/>
+
+        <Grid Classes="has-bottom-margin">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{actipro:ScaledGridLength 1.5}"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button helpers:IconHelper.Icon="IconArrowsShuffle"
+                    Classes="stretched"
+                    Command="{Binding RandomizeEditingRuleCommand}"
+                    Content="{DynamicResource Strings.GameOfLife.RandomizeRule}"/>
+            <Button helpers:IconHelper.Icon="IconRestore"
+                    Classes="danger stretched"
+                    Command="{Binding ResetEditingRuleCommand}"
+                    Content="{DynamicResource Strings.GameOfLife.ResetRule}"
+                    Grid.Column="2"/>
+        </Grid>
+
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.GameOfLife.WellKnownRules}"/>
+        <TreeView x:Name="PredefinedRulesTreeView"
+                  Classes="has-bottom-margin"
+                  ItemsSource="{x:Static rules:PredefinedRuleCategories.All}">
+            <TreeView.DataTemplates>
+                <TreeDataTemplate DataType="{x:Type rules:NamedRuleCategory}"
+                                  ItemsSource="{Binding Rules}">
+                    <TextBlock Text="{me:DynamicResourceBinding Name, StringFormat='Strings.GameOfLife.RuleCategory.{0}'}"/>
+                </TreeDataTemplate>
+                <TreeDataTemplate DataType="{x:Type rules:NamedRule}">
+                    <Panel>
+                        <TextBlock Text="{me:DynamicResourceBinding Name, StringFormat='Strings.GameOfLife.Rule.{0}'}"/>
+                        <TextBlock Text="{Binding Rule}"
+                                   HorizontalAlignment="Right"/>
+                    </Panel>
+                </TreeDataTemplate>
+            </TreeView.DataTemplates>
+        </TreeView>
+
+        <Button helpers:IconHelper.Icon="IconEdit"
+                Command="{Binding ApplyRuleCommand}"
+                Content="{DynamicResource Strings.GameOfLife.ChangeRule}"
+                Classes="stretched"
+                Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"/>
+    </DockPanel>
+
+    <controls:Section.Styles>
+        <Style Selector="avaLabsPanels|FlexPanel">
+            <Setter Property="ColumnSpacing" Value="{actipro:ScaledDouble 1}"/>
+            <Setter Property="JustifyContent" Value="SpaceBetween"/>
+
+            <Style Selector="^ > ToggleButton">
+                <Setter Property="(avaLabsPanels:Flex.Grow)" Value="1"/>
+
+                <!--  This is needed to fix absence of the button right border  -->
+                <Style Selector="^:nth-last-child(1)">
+                    <Setter Property="Margin" Value="0,0,1,0"/>
+                </Style>
+            </Style>
+        </Style>
+    </controls:Section.Styles>
+</controls:Section>

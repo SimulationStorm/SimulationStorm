@@ -1,0 +1,9 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="using:System">
+    <system:String x:Key="Strings.Densities.Density">Interface density</system:String>
+    <system:String x:Key="Strings.Densities.Compact">Compact</system:String>
+    <system:String x:Key="Strings.Densities.Normal">Normal</system:String>
+    <system:String x:Key="Strings.Densities.Spacious">Spacious</system:String>
+</ResourceDictionary>

@@ -1,0 +1,9 @@
+﻿<Button x:Class="SimulationStorm.Simulation.History.Avalonia.Views.GoForwardInHistoryButton"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+        xmlns:viewModels="using:SimulationStorm.Simulation.History.Presentation.ViewModels"
+        x:DataType="viewModels:IHistoryViewModel"
+        helpers:IconHelper.Icon="IconArrowForward"
+        Command="{Binding GoToNextSaveCommand}"
+        ToolTip.Tip="{DynamicResource Strings.Simulation.History.GoToNextSave}"/>

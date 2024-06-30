@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DotNext" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Simulation.Running\SimulationStorm.Simulation.Running.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Resetting\SimulationStorm.Simulation.Resetting.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.CellularAutomation\SimulationStorm.Simulation.CellularAutomation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History\SimulationStorm.Simulation.History.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Bounded\SimulationStorm.Simulation.Bounded.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Statistics\SimulationStorm.Simulation.Statistics.csproj" />
+    </ItemGroup>
+
+</Project>

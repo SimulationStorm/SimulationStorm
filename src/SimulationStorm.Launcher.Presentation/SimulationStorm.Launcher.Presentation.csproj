@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Densities.Presentation\SimulationStorm.Densities.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Presentation\SimulationStorm.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

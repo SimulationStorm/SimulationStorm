@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Primitives\SimulationStorm.Primitives.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SkiaSharp" />
+    </ItemGroup>
+
+</Project>

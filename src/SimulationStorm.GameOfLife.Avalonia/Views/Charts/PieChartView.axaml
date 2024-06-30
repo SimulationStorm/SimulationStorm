@@ -1,0 +1,15 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:stats="using:SimulationStorm.GameOfLife.Presentation.Stats"
+             x:Class="SimulationStorm.GameOfLife.Avalonia.Views.Charts.PieChartView"
+             x:DataType="stats:PieChartViewModel">
+    <Border Background="{actipro:ThemeResource Container3BackgroundBrush}"
+            BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+            Classes="has-thickness rounded has-padding">
+        <lvc:PieChart Series="{Binding Series}"
+                      x:Name="ChartControl"
+                      LegendPosition="Left"/>
+    </Border>
+</UserControl>

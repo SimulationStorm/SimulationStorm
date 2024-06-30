@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:sys="using:System">
+    <ControlTheme x:Key="{x:Type controls:ProgressControl}"
+                  TargetType="controls:ProgressControl">
+        <Setter Property="ProgressForeground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccent}"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Classes="horizontal has-spacing"
+                            Opacity="{TemplateBinding Opacity}">
+                    <actipro:RingSlice EndAngle="270"
+                                       StrokeLineCap="Round"
+                                       Radius="7.5"
+                                       StrokeThickness="3"
+                                       Stroke="{TemplateBinding ProgressForeground}">
+                        <Classes.rotating>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <TemplateBinding Property="IsVisible"/>
+                                <TemplateBinding Property="Opacity" Converter="{x:Static ObjectConverters.NotEqual}">
+                                    <TemplateBinding.ConverterParameter>
+                                        <sys:Double>0</sys:Double>
+                                    </TemplateBinding.ConverterParameter>
+                                </TemplateBinding>
+                            </MultiBinding>
+                        </Classes.rotating>
+                    </actipro:RingSlice>
+                    
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Mvvm" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+      <PackageReference Include="ReactiveUI" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Primitives\SimulationStorm.Primitives.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Graphics\SimulationStorm.Graphics.csproj" />
+    </ItemGroup>
+
+</Project>

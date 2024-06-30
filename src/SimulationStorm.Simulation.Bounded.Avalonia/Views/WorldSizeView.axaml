@@ -1,0 +1,85 @@
+﻿<controls:Section x:Class="SimulationStorm.Simulation.Bounded.Avalonia.Views.WorldSizeView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:primitives="using:SimulationStorm.Primitives.Avalonia.Converters"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.Bounded.Presentation.ViewModels"
+                  x:Name="Root"
+                  x:DataType="viewModels:IWorldSizeViewModel"
+                  Title="{DynamicResource Strings.Simulation.Bounded.WorldSize}">
+    <controls:Section.HeaderRightContent>
+        <StackPanel Orientation="Horizontal"
+                    Spacing="{actipro:ScaledDouble 0.5}">
+            <TextBlock Classes="accent"
+                       VerticalAlignment="Bottom">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Converter="{x:Static primitives:PrimitivesConverters.SizeToStringConverter}"
+                                 Path="ActualWorldSize"/>
+                        <Binding ElementName="Root"
+                                 Path="MeasureUnitText"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+    </controls:Section.HeaderRightContent>
+
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                      Content="{DynamicResource Strings.Simulation.Bounded.KeepAspectRatio}"
+                      IsChecked="{Binding KeepAspectRatio}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <Grid Classes="has-bottom-margin">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{actipro:ScaledGridLength 1.5}"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Classes="stack-items-vertically">
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Simulation.Bounded.Width}"/>
+                <NumericUpDown Maximum="{Binding WorldSizeRange.Maximum.Width,
+                                                 Converter={x:Static converters:TypeConverters.IntToDecimalConverter},
+                                                 Mode=OneTime}"
+                               Minimum="{Binding WorldSizeRange.Minimum.Width,
+                                                 Converter={x:Static converters:TypeConverters.IntToDecimalConverter},
+                                                 Mode=OneTime}"
+                               Value="{Binding EditingWorldWidth,
+                                               Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"/>
+            </DockPanel>
+
+            <DockPanel Classes="stack-items-vertically"
+                       Grid.Column="2">
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.Simulation.Bounded.Height}"/>
+                <NumericUpDown Maximum="{Binding WorldSizeRange.Maximum.Height,
+                                                 Converter={x:Static converters:TypeConverters.IntToDecimalConverter},
+                                                 Mode=OneTime}"
+                               Minimum="{Binding WorldSizeRange.Minimum.Height,
+                                                 Converter={x:Static converters:TypeConverters.IntToDecimalConverter},
+                                                 Mode=OneTime}"
+                               Value="{Binding EditingWorldHeight,
+                                               Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"/>
+            </DockPanel>
+        </Grid>
+
+        <Button helpers:IconHelper.Icon="IconResize"
+                Classes="stretched"
+                Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"
+                Command="{Binding ChangeWorldSizeCommand}"
+                Content="{DynamicResource Strings.Simulation.Bounded.ChangeWorldSize}"/>
+    </DockPanel>
+
+    <controls:Section.Styles>
+        <Style Selector="NumericUpDown">
+            <Setter Property="FormatString" Value="0"/>
+        </Style>
+    </controls:Section.Styles>
+</controls:Section>

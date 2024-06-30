@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ti="using:TablerIcons">
+    <ti:Icons x:Key="Icons.Simulation.Stats.ChartType.Pie">IconChartPie</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Stats.ChartType.Bar">IconChartBar</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Stats.ChartType.Line">IconChartLine</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Stats.ChartType.Table">IconColumns</ti:Icons>
+</ResourceDictionary>

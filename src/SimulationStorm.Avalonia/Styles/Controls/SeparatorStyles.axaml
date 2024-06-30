@@ -1,0 +1,7 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Separator.vertical">
+        <Setter Property="Height" Value="{Binding $parent[Control].Height}"/>
+        <Setter Property="Width" Value="1"/>
+    </Style>
+</Styles>

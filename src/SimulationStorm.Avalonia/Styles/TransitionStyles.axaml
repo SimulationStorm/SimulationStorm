@@ -1,0 +1,11 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector=":is(Visual).has-opacity-transition">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Duration="00:00:0.125"
+                                  Property="Opacity"/>
+            </Transitions>
+        </Setter>
+    </Style>
+</Styles>

@@ -1,0 +1,12 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <Style Selector=":is(Border)">
+        <Style Selector="^.has-thickness">
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="^.rounded">
+            <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+        </Style>
+    </Style>
+</Styles>

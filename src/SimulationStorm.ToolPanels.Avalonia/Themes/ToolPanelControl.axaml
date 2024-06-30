@@ -1,0 +1,118 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                    xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                    xmlns:local="using:SimulationStorm.ToolPanels.Avalonia">
+    <ControlTheme x:Key="{x:Type local:ToolPanelControl}"
+                  TargetType="local:ToolPanelControl">
+        <Setter Property="Margin" Value="{actipro:ScaledThickness 0.5}"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="PART_Border"
+                        BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+                        BorderThickness="1"
+                        Classes="has-shadow"
+                        CornerRadius="{actipro:ScaledCornerRadius 1}"
+                        Margin="{TemplateBinding Margin}">
+                    <Grid actipro:BorderChildClipConverter.ClipToContainingBorder="True"
+                          Background="{actipro:ThemeResource Container2BackgroundBrush}"
+                          RowDefinitions="Auto,*">
+                        <Border Background="{actipro:ThemeResource Container3BackgroundBrush}"
+                                BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+                                BorderThickness="0,0,0,1">
+                            <Panel Margin="{actipro:ScaledThickness 0.5}">
+                                <TextBlock Margin="{actipro:ScaledThickness '1,0,1.5,0'}"
+                                           DataContext="{TemplateBinding ToolPanel}"
+                                           Text="{me:DynamicResourceBinding Name, StringFormat='Strings.ToolPanels.{0}'}"
+                                           VerticalAlignment="Center"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Spacing="{actipro:ScaledDouble 1.5}">
+                                    <ToggleButton IsVisible="{TemplateBinding SettingsContent, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                  helpers:IconHelper.Icon="IconSettings"
+                                                  IsChecked="{TemplateBinding IsSettingsContentVisible, Mode=TwoWay}"
+                                                  Theme="{DynamicResource RoundedTitleBarButton}"
+                                                  Classes.accent="{Binding $self.IsChecked}"
+                                                  BorderThickness="0">
+                                        <ToggleButton.Styles>
+                                            <Style Selector="ToggleButton">
+                                                <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.ToolPanels.ShowSettings}"/>
+                                                <Style Selector="^[IsChecked=True]">
+                                                    <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccent}"/>
+                                                    <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.ToolPanels.HideSettings}"/>
+                                                </Style>
+                                            </Style>
+                                        </ToggleButton.Styles>
+                                    </ToggleButton>
+
+                                    <Button helpers:IconHelper.Icon="IconMinus"
+                                            Command="{TemplateBinding CloseCommand}"
+                                            CommandParameter="{TemplateBinding ToolPanel}"
+                                            Theme="{DynamicResource RoundedTitleBarButton}"
+                                            ToolTip.Tip="{DynamicResource Strings.ToolPanels.HideToolPanel}"/>
+                                </StackPanel>
+                            </Panel>
+                        </Border>
+
+                        <Grid x:Name="PART_ContentGrid"
+                              ColumnDefinitions="*,Auto,Auto"
+                              Grid.Row="1">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+
+                            <GridSplitter Grid.Column="1">
+                                <GridSplitter.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <TemplateBinding Property="IsSettingsContentVisible"/>
+                                        <TemplateBinding Property="SettingsContent" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                                    </MultiBinding>
+                                </GridSplitter.IsVisible>
+                            </GridSplitter>
+
+                            <ContentPresenter Content="{TemplateBinding SettingsContent}"
+                                              Grid.Column="2">
+                                <ContentPresenter.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <TemplateBinding Property="IsSettingsContentVisible"/>
+                                        <TemplateBinding Property="SettingsContent" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                                    </MultiBinding>
+                                </ContentPresenter.IsVisible>
+                            </ContentPresenter>
+
+                            <Grid.Styles>
+                                <Style Selector="GridSplitter">
+                                    <Setter Property="MinWidth" Value="0"/>
+                                    <Setter Property="MinHeight" Value="0"/>
+                                    <Setter Property="CornerRadius" Value="{actipro:ScaledCornerRadius 1}"/>
+            
+                                    <Setter Property="Width" Value="{actipro:ScaledDouble 0.75}"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                                    <Setter Property="Margin" Value="{actipro:ScaledThickness '0.25,1.5'}"/>
+                                    <Setter Property="ResizeDirection" Value="Columns"/>
+            
+                                    <Setter Property="(ToolTip.ShowDelay)" Value="1500"/>
+            
+                                    <Setter Property="Transitions">
+                                        <Transitions>
+                                            <BrushTransition Property="Background" Duration="00:00:0.33"/>
+                                        </Transitions>
+                                    </Setter>
+            
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style Selector="^:pointerover">
+                                        <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushEmphasizedAccentPointerOver}"/>
+                                    </Style>
+                                    <Style Selector="^:pressed">
+                                        <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushEmphasizedAccentPressed}"/>
+                                    </Style>
+                                </Style>
+                            </Grid.Styles>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="DotNext.Threading"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Bounded.Presentation\SimulationStorm.Simulation.Bounded.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+    </ItemGroup>
+
+</Project>

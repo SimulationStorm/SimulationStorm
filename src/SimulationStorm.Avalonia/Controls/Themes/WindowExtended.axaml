@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:controls="using:SimulationStorm.Avalonia.Controls">
+    <ControlTheme x:Key="{x:Type controls:WindowExtended}"
+                  TargetType="controls:WindowExtended"
+                  BasedOn="{actipro:ControlTheme Window}">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel x:Name="PART_RootPanel">
+                    <Border x:Name="PART_TransparencyFallback"
+                            IsHitTestVisible="False" />
+                    
+                    <Border Background="{TemplateBinding Background}"
+                            IsHitTestVisible="False" />
+                    
+                    <Panel Background="Transparent"
+                           Margin="{TemplateBinding WindowDecorationMargin}" />
+                    
+                    <VisualLayerManager>
+                        <VisualLayerManager.ChromeOverlayLayer>
+                            <TitleBar />
+                        </VisualLayerManager.ChromeOverlayLayer>
+                        
+                        <Grid RowDefinitions="Auto,*"
+                              Margin="{TemplateBinding OffScreenMargin}">
+                            <controls:ChromedTitleBarExtended x:Name="TitleBar"
+                                                              IsVisible="{TemplateBinding IsTitleBarVisible}"
+                                                              Title="{TemplateBinding Title}"
+                                                              Icon="{TemplateBinding Icon}"
+                                                              IsFullScreenButtonAllowed="{TemplateBinding IsFullScreenButtonAllowed}"
+                                                              IsMinimizeButtonAllowed="{TemplateBinding IsMinimizeButtonAllowed}"
+                                                              IsMaximizeButtonAllowed="{TemplateBinding IsMaximizeButtonAllowed}"
+                                                              IsCloseButtonAllowed="{TemplateBinding IsCloseButtonAllowed}"/>
+                            
+                            <ContentPresenter x:Name="PART_ContentPresenter"
+                                              Grid.Row="1"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Content="{TemplateBinding Content}"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </VisualLayerManager>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

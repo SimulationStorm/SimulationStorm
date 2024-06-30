@@ -1,0 +1,39 @@
+<controls:Section x:Class="SimulationStorm.Simulation.CellularAutomation.Avalonia.Views.WorldWrappingView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.CellularAutomation.Presentation.ViewModels"
+                  x:DataType="viewModels:IWorldWrappingViewModel"
+                  Title="{DynamicResource Strings.Simulation.CellularAutomation.WorldWrapping}">
+    <controls:Section.HeaderRightContent>
+        <TextBlock x:DataType="viewModels:IWorldWrappingViewModel"
+                   Classes="accent"
+                   Text="{me:DynamicResourceBinding ActualWorldWrapping,
+                                                    StringFormat='Strings.Simulation.CellularAutomation.WorldWrapping.{0}'}"
+                   VerticalAlignment="Bottom"/>
+    </controls:Section.HeaderRightContent>
+
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="has-bottom-margin theme-solid"
+                      Content="{DynamicResource Strings.Simulation.CellularAutomation.WorldWrapping.WrapHorizontally}"
+                      IsChecked="{Binding IsWrappedHorizontally}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <ToggleSwitch Classes="has-bottom-margin theme-solid"
+                      Content="{DynamicResource Strings.Simulation.CellularAutomation.WorldWrapping.WrapVertically}"
+                      IsChecked="{Binding IsWrappedVertically}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <Button helpers:IconHelper.Icon="IconMarquee2"
+                Classes="stretched"
+                Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"
+                Command="{Binding ChangeWorldWrappingCommand}"
+                Content="{DynamicResource Strings.Simulation.CellularAutomation.WorldWrapping.ChangeWorldWrapping}"/>
+    </DockPanel>
+</controls:Section>

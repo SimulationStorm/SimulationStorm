@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <ControlTheme x:Key="TitleBarButtonExtended"
+                  BasedOn="{actipro:ControlTheme TitleBarButton}"
+                  TargetType="Button">
+        <Setter Property="Padding" Value="{actipro:ScaledThickness '2,1'}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Style Selector="^">
+            <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ButtonForegroundBrushDisabled}"/>
+            </Style>
+            
+            <Style Selector="^.accent /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccent}"/>
+            </Style>
+            <Style Selector="^.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccentPointerOver}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleAccentPointerOver}"/>
+            </Style>
+            <Style Selector="^.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccentPressed}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleAccentPressed}"/>
+            </Style>
+            <Style Selector="^.accent:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineAccentDisabled}"/>
+            </Style>
+            
+            <Style Selector="^.success /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineSuccess}"/>
+            </Style>
+            <Style Selector="^.success:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineSuccessPointerOver}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleSuccessPointerOver}"/>
+            </Style>
+            <Style Selector="^.success:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineSuccessPressed}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleSuccessPressed}"/>
+            </Style>
+            <Style Selector="^.success:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineSuccessDisabled}"/>
+            </Style>
+            
+            <Style Selector="^.danger /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDanger}"/>
+            </Style>
+            <Style Selector="^.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDangerPointerOver}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleDangerPointerOver}"/>
+            </Style>
+            <Style Selector="^.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDangerPressed}"/>
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSubtleDangerPressed}"/>
+            </Style>
+            <Style Selector="^.danger:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushOutlineDangerDisabled}"/>
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

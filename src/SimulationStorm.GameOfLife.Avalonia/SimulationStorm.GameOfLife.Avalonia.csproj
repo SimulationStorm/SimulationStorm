@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\SimulationStorm.AppStates.Avalonia\SimulationStorm.AppStates.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Densities.Avalonia\SimulationStorm.Densities.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Densities.Presentation\SimulationStorm.Densities.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Exceptions.Avalonia\SimulationStorm.Exceptions.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Notifications.Avalonia\SimulationStorm.Notifications.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Themes.Avalonia\SimulationStorm.Themes.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Threading.Avalonia\SimulationStorm.Threading.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.ToolPanels.Avalonia\SimulationStorm.ToolPanels.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Dialogs.Presentation\SimulationStorm.Dialogs.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.GameOfLife.Presentation\SimulationStorm.GameOfLife.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Localization.Avalonia\SimulationStorm.Localization.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.Running.Avalonia\SimulationStorm.Simulation.Running.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.Resetting.Avalonia\SimulationStorm.Simulation.Resetting.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.CellularAutomation.Avalonia\SimulationStorm.Simulation.CellularAutomation.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.Cellular.Avalonia\SimulationStorm.Simulation.Cellular.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.History.Avalonia\SimulationStorm.Simulation.History.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.History.Avalonia\SimulationStorm.Simulation.History.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.Statistics.Avalonia\SimulationStorm.Simulation.Statistics.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Simulation.Bounded.Avalonia\SimulationStorm.Simulation.Bounded.Avalonia.csproj" />
+    </ItemGroup>
+</Project>

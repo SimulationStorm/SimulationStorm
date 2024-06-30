@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="SimulationStorm.Simulation.CellularAutomation.Avalonia.Views.WarningScreen"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root"
+             Focusable="True">
+    <Grid RowDefinitions="0.66*,0.33*">
+        <DockPanel Classes="stack-items-vertically"
+                   Grid.RowSpan="2"
+                   VerticalAlignment="Center">
+            <TextBlock Classes="theme-text-heading size-xl danger has-bottom-margin"
+                       Text="{DynamicResource Strings.Simulation.CellularAutomation.Warning.Title}"/>
+
+            <Grid ColumnDefinitions="*,3*,*">
+                <TextBlock Classes="size-xl"
+                           Text="{DynamicResource Strings.Simulation.CellularAutomation.Warning.Text}"
+                           TextAlignment="Center"
+                           Grid.Column="1"/>
+            </Grid>
+        </DockPanel>
+
+        <TextBlock Classes="blinking"
+                   Text="{DynamicResource Strings.Simulation.CellularAutomation.Warning.PressEsсToQuitOrSpaceToContinue}"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"/>
+    </Grid>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

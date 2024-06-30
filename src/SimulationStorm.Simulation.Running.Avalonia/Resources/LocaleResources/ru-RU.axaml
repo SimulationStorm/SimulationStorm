@@ -1,0 +1,17 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.Simulation.Running.Advance">Выполнить шаг симуляции</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.Advancement">Продвижение</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.StartAdvancement">Начать продвижение симуляции</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.AdvancementStarted">запущено</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.AdvancementStartedMessage">Продвижение симуляции запущено.</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.PauseAdvancement">Остановить продвижение симуляции</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.AdvancementPaused">остановлено</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.AdvancementPausedMessage">Продвижение симуляции остановлено.</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.MaxStepsPerSecond">Максимальное число шагов в секунду</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.StepExecutionTime">Время выполнения шага</sys:String>
+    <sys:String x:Key="Strings.Simulation.Running.ActualStepsPerSecond">Фактическое число шагов в секунду</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.Advance">Продвинуть</sys:String>
+</ResourceDictionary>

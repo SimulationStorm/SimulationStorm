@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Simulation\SimulationStorm.Simulation.csproj" />
+    </ItemGroup>
+
+</Project>

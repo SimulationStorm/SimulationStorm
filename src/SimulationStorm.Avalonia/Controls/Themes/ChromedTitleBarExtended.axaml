@@ -1,0 +1,152 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                    xmlns:ti="using:TablerIcons"
+                    xmlns:helpers="using:SimulationStorm.Avalonia.Helpers">
+    <ControlTheme x:Key="{x:Type controls:ChromedTitleBarExtended}"
+                  TargetType="controls:ChromedTitleBarExtended"
+                  BasedOn="{StaticResource {x:Type actipro:ChromedTitleBar}}">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Panel x:Name="PART_MouseTracker"
+                           Background="Transparent"/>
+                    <Border x:Name="PART_Background"/>
+                    
+                    <Panel x:Name="PART_Container">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ti:TablerIcon Icon="{TemplateBinding Icon}"
+                                               Classes="has-left-margin"
+                                               IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                <ContentControl Content="{TemplateBinding Title}"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{TemplateBinding Title, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                Classes="has-left-margin"/>
+                            </StackPanel>
+                            
+                            <ContentControl Content="{TemplateBinding LeftContent}"
+                                            Classes="has-left-margin"
+                                            IsVisible="{TemplateBinding LeftContent, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                        </StackPanel>
+                        
+                        <ContentControl Content="{TemplateBinding Content}"
+                                        HorizontalAlignment="Center"/>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ContentControl Content="{TemplateBinding RightContent}"/>
+                            
+                            <StackPanel x:Name="PART_CaptionButtons" Orientation="Horizontal">
+                                <Button x:Name="PART_FullScreenButton"
+                                       helpers:IconHelper.Icon="IconArrowsMaximize"/>
+                                
+                                <Button x:Name="PART_MinimizeButton"
+                                       helpers:IconHelper.Icon="IconMinus"/>
+                                
+                                <Button x:Name="PART_MaximizeButton"
+                                       helpers:IconHelper.Icon="IconMaximize"/>
+                                
+                                <Button x:Name="PART_CloseButton"
+                                       helpers:IconHelper.Icon="IconX">
+                                    
+                                    <Button.Styles>
+                                        <Style Selector="Button">
+                                            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSolidDangerPointerOver}"/>
+                                                <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBackgroundBrushSolidDangerPointerOver}"/>
+                                                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushSolidDanger}"/>
+                                            </Style>
+                                            <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                                                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSolidDangerPressed}"/>
+                                                <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBackgroundBrushSolidDangerPressed}"/>
+                                                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushSolidDanger}"/>
+                                            </Style>
+                                        </Style>
+                                    </Button.Styles>
+                                </Button>
+                                
+                                <StackPanel.Styles>
+                                    <Style Selector="Button">
+                                        <Setter Property="Theme" Value="{DynamicResource TitleBarButtonExtended}"/>
+                                    </Style>
+                                </StackPanel.Styles>
+                            </StackPanel>
+                        </StackPanel>
+                    </Panel>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        
+        <Style Selector="^">
+            <Style Selector="^ /template/ Border#PART_Background">
+                <Setter Property="Background" Value="{actipro:ThemeResource Container3BackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container3BorderBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            </Style>
+            
+            <Style Selector="^[DoesBelongToWindow=True]">
+                <Style Selector="^[IsFullScreenButtonAllowed=False] Button#PART_FullScreenButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                <Style Selector="^[IsMinimizeButtonAllowed=False] Button#PART_MinimizeButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                <Style Selector="^[IsMaximizeButtonAllowed=False] Button#PART_MaximizeButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                
+                <Style Selector="^[IsCloseButtonAlwaysVisible=False][IsCloseButtonAllowed=False] Button#PART_CloseButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+            </Style>
+            
+            <Style Selector="^[DoesBelongToWindow=False]">
+                <Style Selector="^ Button#PART_FullScreenButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                <Style Selector="^ Button#PART_MinimizeButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                <Style Selector="^ Button#PART_MaximizeButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                
+                <Style Selector="^[IsCloseButtonAlwaysVisible=False] Button#PART_CloseButton">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+            </Style>
+        </Style>
+        
+        <Style Selector="^:normal">
+            <Style Selector="^ /template/ Button#PART_FullScreenButton">
+                <Setter Property="(helpers:IconHelper.Icon)" Value="IconArrowsMaximize"/>
+            </Style>
+            <Style Selector="^ /template/ Button#PART_MaximizeButton">
+                <Setter Property="(helpers:IconHelper.Icon)" Value="IconMaximize"/>
+            </Style>
+        </Style>
+            
+        <Style Selector="^:maximized">
+            <Style Selector="^ /template/ Button#PART_FullScreenButton">
+                <Setter Property="IsVisible" Value="False"/>
+            </Style>
+            <Style Selector="^ /template/ Button#PART_MaximizeButton">
+                <Setter Property="(helpers:IconHelper.Icon)" Value="IconMinimize"/>
+            </Style>
+        </Style>
+            
+        <Style Selector="^:fullscreen">
+            <Style Selector="^ /template/ Button#PART_FullScreenButton">
+                <Setter Property="(helpers:IconHelper.Icon)" Value="IconArrowsMinimize"/>
+            </Style>
+            <Style Selector="^ /template/ Button#PART_MinimizeButton">
+                <Setter Property="IsVisible" Value="False"/>
+            </Style>
+            <Style Selector="^ /template/ Button#PART_MaximizeButton">
+                <Setter Property="IsVisible" Value="False"/>
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

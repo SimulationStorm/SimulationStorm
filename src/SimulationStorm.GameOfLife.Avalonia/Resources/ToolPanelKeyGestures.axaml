@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <KeyGesture x:Key="KeyGestures.ToolPanels.SimulationToolPanel">Alt+D1</KeyGesture>
+    <KeyGesture x:Key="KeyGestures.ToolPanels.DrawingToolPanel">Alt+D2</KeyGesture>
+    <KeyGesture x:Key="KeyGestures.ToolPanels.RenderingToolPanel">Alt+D3</KeyGesture>
+    <KeyGesture x:Key="KeyGestures.ToolPanels.CameraToolPanel">Alt+D4</KeyGesture>
+    <KeyGesture x:Key="KeyGestures.ToolPanels.StatisticsToolPanel">Alt+D5</KeyGesture>
+    <KeyGesture x:Key="KeyGestures.ToolPanels.HistoryToolPanel">Alt+D6</KeyGesture>
+</ResourceDictionary>

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Densities.Avalonia\SimulationStorm.Densities.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Densities.Presentation\SimulationStorm.Densities.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.GameOfLife.Avalonia\SimulationStorm.GameOfLife.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Launcher.Presentation\SimulationStorm.Launcher.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Launcher.Presentation\SimulationStorm.Launcher.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.Avalonia\SimulationStorm.Localization.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Avalonia\SimulationStorm.Themes.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+    </ItemGroup>
+    
+</Project>

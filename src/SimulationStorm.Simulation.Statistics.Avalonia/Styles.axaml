@@ -1,0 +1,24 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+        xmlns:lvcHelpers="using:SimulationStorm.LiveChartsExtensions.Avalonia.Helpers"
+        xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
+
+    <StyleInclude Source="avares://SimulationStorm.Collections.Avalonia/Styles.axaml"/>
+    
+    <Style Selector="lvc|CartesianChart, lvc|PieChart, lvc|PolarChart">
+        <!-- <Setter Property="(helpers:ChartHelper.ObserveThemeChanges)" Value="True"/> -->
+        <Setter Property="(lvcHelpers:ChartHelper.LegendTextBrush)" Value="{actipro:ThemeResource DefaultForegroundBrush}"/>
+        <Setter Property="(lvcHelpers:ChartHelper.TooltipTextBrush)" Value="{actipro:ThemeResource DefaultForegroundBrush}"/>
+        <Setter Property="(lvcHelpers:ChartHelper.TooltipBackgroundBrush)" Value="{actipro:ThemeResource Container3BackgroundBrush}"/>
+    </Style>
+    
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="Resources/Icons.axaml"/>
+                <MergeResourceInclude Source="Resources/DataTemplates.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+</Styles>

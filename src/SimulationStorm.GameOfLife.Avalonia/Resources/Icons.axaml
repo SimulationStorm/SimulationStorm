@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ti="using:TablerIcons">
+    <ti:Icons x:Key="Icons.Simulation.Command.ChangeAlgorithm">IconSettings2</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Command.ChangeRule">IconEdit</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Command.PlacePattern">IconStepInto</ti:Icons>
+    <ti:Icons x:Key="Icons.Simulation.Command.PopulateRandomly">IconGrain</ti:Icons>
+</ResourceDictionary>

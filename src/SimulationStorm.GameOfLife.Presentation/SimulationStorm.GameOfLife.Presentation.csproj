@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Collections.Presentation\SimulationStorm.Collections.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Densities.Presentation\SimulationStorm.Densities.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
+      <ProjectReference Include="..\SimulationStorm.LiveChartsExtensions\SimulationStorm.LiveChartsExtensions.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.States\SimulationStorm.Localization.States.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Notifications.Presentation\SimulationStorm.Notifications.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Running.Presentation\SimulationStorm.Simulation.Running.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Resetting.Presentation\SimulationStorm.Simulation.Resetting.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History.Presentation\SimulationStorm.Simulation.History.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Bounded.Presentation\SimulationStorm.Simulation.Bounded.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Statistics.Presentation\SimulationStorm.Simulation.Statistics.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Graphics.Skia\SimulationStorm.Graphics.Skia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.GameOfLife\SimulationStorm.GameOfLife.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.CellularAutomation.Presentation\SimulationStorm.Simulation.CellularAutomation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.ToolPanels.Presentation\SimulationStorm.ToolPanels.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Logging\SimulationStorm.Logging.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Exceptions\SimulationStorm.Exceptions.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Exceptions.Logging\SimulationStorm.Exceptions.Logging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LiveChartsCore" />
+      <PackageReference Include="LiveChartsCore.SkiaSharpView" />
+    </ItemGroup>
+
+</Project>

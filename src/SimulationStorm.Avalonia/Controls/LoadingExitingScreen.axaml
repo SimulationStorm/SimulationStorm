@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="SimulationStorm.Avalonia.Controls.LoadingExitingScreen"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+             x:Name="Root"
+             Background="{actipro:ThemeResource Container1BackgroundBrush}">
+    <Grid RowDefinitions="*,*,*">
+        <ContentControl Content="{Binding #Root.Logotype}"
+                        Grid.Row="1"/>
+
+        <StackPanel Classes.hidden="{Binding !#Root.IsProgressVisible}"
+                    Classes="horizontal"
+                    Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+            <controls:ProgressControl Classes.exiting="{Binding #Root.IsExiting}">
+                <controls:ProgressControl.Styles>
+                    <Style Selector="controls|ProgressControl">
+                        <Setter Property="Content" Value="{DynamicResource Strings.Common.Loading}"/>
+                        <Style Selector="^.exiting">
+                            <Setter Property="Content" Value="{DynamicResource Strings.Common.Exiting}"/>
+                        </Style>
+                    </Style>
+                </controls:ProgressControl.Styles>
+            </controls:ProgressControl>
+
+            <StackPanel.Transitions>
+                <Transitions>
+                    <DoubleTransition Duration="{Binding #Root.ProgressTransitionDuration}"
+                                      Property="Opacity"/>
+                </Transitions>
+            </StackPanel.Transitions>
+            
+            <StackPanel.Styles>
+                <Style Selector="StackPanel.hidden">
+                    <Setter Property="Opacity" Value="0"/>
+                </Style>
+            </StackPanel.Styles>
+        </StackPanel>
+    </Grid>
+</UserControl>

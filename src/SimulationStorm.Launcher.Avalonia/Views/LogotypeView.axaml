@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:ti="using:TablerIcons"
+             xmlns:startup="using:SimulationStorm.Launcher.Avalonia.Startup"
+             x:Class="SimulationStorm.Launcher.Avalonia.Views.LogotypeView">
+    <StackPanel Orientation="Horizontal">
+        <ti:TablerIcon Icon="{DynamicResource Icons.Common.SimulationStorm}"
+                       Classes="size-xl has-right-margin"
+                       VerticalAlignment="Center">
+            <ti:TablerIcon.RenderTransform>
+                <TranslateTransform Y="{actipro:ScaledDouble -0.375}"/>
+            </ti:TablerIcon.RenderTransform>
+        </ti:TablerIcon>
+                
+        <TextBlock Text="{x:Static startup:AvaloniaConfiguration.ApplicationName}"
+                   Classes="theme-text-heading size-xl"/>
+    </StackPanel>
+</UserControl>

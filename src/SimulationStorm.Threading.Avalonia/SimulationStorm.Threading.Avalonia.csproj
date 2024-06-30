@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" />
+      <PackageReference Include="Avalonia.ReactiveUI" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+      <PackageReference Include="System.Reactive" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

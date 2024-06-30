@@ -1,0 +1,300 @@
+﻿<toolPanels:ToolPanelControl x:Class="SimulationStorm.Simulation.History.Avalonia.Views.HistoryToolPanelView"
+                             xmlns="https://github.com/avaloniaui"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                             xmlns:behaviors="using:SimulationStorm.Avalonia.Behaviors"
+                             xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                             xmlns:converters="using:SimulationStorm.Avalonia.Converters"
+                             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                             xmlns:models="using:SimulationStorm.Simulation.History.Presentation.Models"
+                             xmlns:ti="using:TablerIcons"
+                             xmlns:timeFormatting="using:SimulationStorm.Avalonia.TimeFormatting"
+                             xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
+                             xmlns:viewModels="using:SimulationStorm.Simulation.History.Presentation.ViewModels"
+                             x:Name="Root"
+                             x:DataType="viewModels:IHistoryViewModel"
+                             ContentMinWidth="{actipro:ScaledDouble 9}"
+                             SettingsContentMinWidth="{actipro:ScaledDouble 51}"
+                             MinWidth="{actipro:ScaledDouble 60}">
+    <actipro:ShadowChrome Classes="has-margin"
+                          Elevation="4">
+        <Border Classes="rounded">
+            <Panel>
+                <DataGrid x:Name="RecordsDataGrid"
+                          ItemsSource="{Binding RecordModels}"
+                          LoadingRow="OnRecordsDataGridLoadingRow"
+                          SelectionMode="Single">
+                    <DataGrid.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsSavingEnabled"/>
+                            <Binding Path="AreThereRecords"/>
+                        </MultiBinding>
+                    </DataGrid.IsVisible>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:DataType="models:HistoryRecordModel"
+                                            Binding="{Binding OrdinalNumber}"
+                                            Header="{DynamicResource Strings.Common.OrdinalNumber}"/>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Strings.Simulation.Command}">
+                            <DataTemplate x:DataType="models:HistoryRecordModel">
+                                <ContentControl Classes="has-left-margin has-right-margin"
+                                                Content="{Binding ExecutedCommand}"
+                                                ContentTemplate="{StaticResource Templates.Simulation.CommandTemplate}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="{DynamicResource Strings.Simulation.History.SaveTakingTime}">
+                            <DataTemplate x:DataType="models:HistoryRecordModel">
+                                <timeFormatting:TimeTextBlock Classes="has-left-margin has-right-margin"
+                                                              Time="{Binding SavingTime}"
+                                                              VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn>
+                            <DataTemplate x:DataType="models:HistoryRecordModel">
+                                <TextBlock Classes="has-left-margin has-right-margin"
+                                           Classes.ahead-of-pointer="{Binding Position,
+                                                                              Converter={x:Static ObjectConverters.Equal},
+                                                                              ConverterParameter={x:Static models:HistoryRecordPosition.AheadOfPointer}}"
+                                           Classes.pointed="{Binding Position,
+                                                                     Converter={x:Static ObjectConverters.Equal},
+                                                                     ConverterParameter={x:Static models:HistoryRecordPosition.Pointed}}"
+                                           VerticalAlignment="Center">
+                                    <TextBlock.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Style Selector="^.pointed">
+                                                <Setter Property="Text" Value="{DynamicResource Strings.Simulation.History.PointedSaveTip}"/>
+                                            </Style>
+                                            <Style Selector="^.ahead-of-pointer">
+                                                <Setter Property="Text" Value="{DynamicResource Strings.Simulation.History.AheadOfPointerSaveTip}"/>
+                                            </Style>
+                                        </Style>
+                                    </TextBlock.Styles>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                    <Interaction.Behaviors>
+                        <behaviors:ScrollToSelectedItemBehavior/>
+                    </Interaction.Behaviors>
+
+                    <!-- <DataGrid.ContextMenu> -->
+                    <!--     <ContextMenu> -->
+                    <!--         <ContextMenu.IsVisible> -->
+                    <!--             <MultiBinding Converter="{x:Static BoolConverters.Or}"> -->
+                    <!-- <Binding ElementName="GoToFirstSaveMenuItem" -->
+                    <!-- Path="IsEffectivelyEnabled"/> -->
+                    <!-- <Binding ElementName="GoToLastSaveMenuItem" -->
+                    <!-- Path="IsEffectivelyEnabled"/> -->
+                    <!--             </MultiBinding> -->
+                    <!--         </ContextMenu.IsVisible> -->
+                    <!--  -->
+                    <!-- <MenuItem x:Name="GoToFirstSaveMenuItem" -->
+                    <!-- Classes="hidden-when-disabled" -->
+                    <!-- Command="{Binding GoToFirstSaveCommand}" -->
+                    <!-- Header="{DynamicResource Strings.Simulation.History.GoToFirstSave}" -->
+                    <!-- Icon="{ti:TablerIcon IconArrowUp}"/> -->
+                    <!--  -->
+                    <!-- <MenuItem x:Name="GoToLastSaveMenuItem" -->
+                    <!-- Classes="hidden-when-disabled" -->
+                    <!-- Command="{Binding GoToLastSaveCommand}" -->
+                    <!-- Header="{DynamicResource Strings.Simulation.History.GoToLastSave}" -->
+                    <!-- Icon="{ti:TablerIcon IconArrowDown}"/> -->
+                    <!--     </ContextMenu> -->
+                    <!-- </DataGrid.ContextMenu> -->
+
+                    <DataGrid.Styles>
+                        <Style Selector="DataGridRow">
+                            <!-- [NOTE] Transform to flyout? -->
+                            <Setter Property="ContextMenu">
+                                <ContextMenu x:DataType="models:HistoryRecordModel">
+                                    <MenuItem Classes="hidden-when-disabled"
+                                              Command="{Binding #Root.((viewModels:IHistoryViewModel)DataContext).GoToFirstSaveCommand}"
+                                              Header="{DynamicResource Strings.Simulation.History.GoToFirstSave}"
+                                              Icon="{ti:TablerIcon IconArrowUp}"/>
+
+                                    <MenuItem Classes="hidden-when-disabled"
+                                              Command="{Binding #Root.((viewModels:IHistoryViewModel)DataContext).GoToLastSaveCommand}"
+                                              Header="{DynamicResource Strings.Simulation.History.GoToLastSave}"
+                                              Icon="{ti:TablerIcon IconArrowDown}"/>
+
+                                    <MenuItem Command="{Binding #Root.((viewModels:IHistoryViewModel)DataContext).DeleteSaveCommand}"
+                                              CommandParameter="{Binding Index}"
+                                              Header="{DynamicResource Strings.Simulation.History.DeleteSave}"
+                                              Icon="{ti:TablerIcon IconX}"/>
+                                </ContextMenu>
+                            </Setter>
+
+                            <!-- For now, even setting big show delay makes flickering... -->
+                            <!-- [WORKAROUND] This is needed to fix a strange tool tip flickering before open -->
+                            <!-- <Setter Property="(ToolTip.ShowDelay)" Value="1000"/> -->
+
+                            <Style Selector="^.is-pointed">
+                                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushSoftSuccess}"/>
+                                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftSuccess}"/>
+                                <Style Selector="^:pointerover /template/ Border#border">
+                                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftSuccessPointerOver}"/>
+                                </Style>
+                                <Style Selector="^:selected /template/ Border#border">
+                                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftSuccessPressed}"/>
+                                </Style>
+
+                                <!-- <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Simulation.History.PointedSaveTip}"/> -->
+                            </Style>
+
+                            <Style Selector="^.is-ahead-of-pointer">
+                                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushSoftDanger}"/>
+                                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftDanger}"/>
+                                <Style Selector="^:pointerover /template/ Border#border">
+                                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftDangerPointerOver}"/>
+                                </Style>
+                                <Style Selector="^:selected /template/ Border#border">
+                                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSoftDangerPressed}"/>
+                                </Style>
+
+                                <!-- <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.Simulation.History.AheadOfPointerSaveTip}"/> -->
+                            </Style>
+                        </Style>
+                    </DataGrid.Styles>
+                </DataGrid>
+
+                <Border Background="{actipro:ThemeResource Container3BackgroundBrush}"
+                        BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+                        Classes="rounded has-thickness has-padding">
+                    <Border.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                            <Binding Converter="{x:Static BoolConverters.Not}"
+                                     Path="IsSavingEnabled"/>
+                            <Binding Converter="{x:Static BoolConverters.Not}"
+                                     Path="AreThereRecords"/>
+                        </MultiBinding>
+                    </Border.IsVisible>
+
+                    <TextBlock Classes.saving-disabled="{Binding !IsSavingEnabled}"
+                               Classes.there-are-no-records="{Binding !AreThereRecords}"
+                               TextAlignment="Center"
+                               VerticalAlignment="Center">
+                        <TextBlock.Styles>
+                            <Style Selector="TextBlock">
+                                <Style Selector="^.there-are-no-records">
+                                    <Setter Property="Text" Value="{DynamicResource Strings.Simulation.History.ThereAreNoSaves}"/>
+                                </Style>
+                                <Style Selector="^.saving-disabled">
+                                    <Setter Property="Text" Value="{DynamicResource Strings.Simulation.History.HistoryKeepingDisabled}"/>
+                                </Style>
+                            </Style>
+                        </TextBlock.Styles>
+                    </TextBlock>
+                </Border>
+            </Panel>
+        </Border>
+    </actipro:ShadowChrome>
+
+    <toolPanels:ToolPanelControl.SettingsContent>
+        <ScrollViewer>
+            <controls:Section Title="{DynamicResource Strings.Common.Settings}">
+                <DockPanel Classes="stack-items-vertically">
+                    <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                                  Content="{DynamicResource Strings.Simulation.History.KeepHistory}"
+                                  IsChecked="{Binding IsSavingEnabled}"
+                                  OffContent="{DynamicResource Strings.Common.No}"
+                                  OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+                    <DockPanel Classes="stack-items-vertically"
+                               IsVisible="{Binding IsSavingEnabled}">
+                        <Grid Classes="has-bottom-margin"
+                              ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto">
+                            <TextBlock Classes="theme-form-control-label"
+                                       Text="{DynamicResource Strings.Simulation.History.SavesStorageLocation}"/>
+                            <ComboBox Classes="has-right-margin"
+                                      ItemTemplate="{StaticResource Templates.CollectionStorageLocationTemplate}"
+                                      ItemsSource="{Binding StorageLocations}"
+                                      SelectedItem="{Binding EditingStorageLocation}"
+                                      Grid.Row="1"
+                                      Grid.Column="0"/>
+
+                            <Button helpers:IconHelper.Icon="IconReplace"
+                                    Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                                    Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"
+                                    Command="{Binding ChangeStorageLocationCommand}"
+                                    ToolTip.Tip="{DynamicResource Strings.Simulation.History.MoveSaves}"
+                                    Grid.Row="1"
+                                    Grid.Column="1"/>
+                        </Grid>
+
+                        <Grid Classes="has-bottom-margin"
+                              ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto">
+                            <TextBlock Classes="theme-form-control-label"
+                                       Text="{DynamicResource Strings.Simulation.History.MaxSaveCount}"/>
+                            <NumericUpDown Maximum="{Binding CapacityRange.Maximum,
+                                                             Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                           Minimum="{Binding CapacityRange.Minimum,
+                                                             Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                           Value="{Binding EditingCapacity,
+                                                           Converter={x:Static converters:TypeConverters.IntToDecimalConverter},
+                                                           Mode=TwoWay}"
+                                           Grid.Row="1"
+                                           Grid.Column="0">
+                                <NumericUpDown.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="{Binding ResetEditingCapacityCommand}"
+                                                  Header="{DynamicResource Strings.Common.ResetToDefault}">
+                                            <MenuItem.Icon>
+                                                <ti:TablerIcon Icon="IconRestore"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </NumericUpDown.ContextMenu>
+                            </NumericUpDown>
+
+                            <Button helpers:IconHelper.Icon="IconEdit"
+                                    Classes="has-left-margin"
+                                    Classes.accent="{Binding $self.IsEffectivelyEnabled}"
+                                    Classes.theme-solid="{Binding $self.IsEffectivelyEnabled}"
+                                    Command="{Binding ChangeCapacityCommand}"
+                                    ToolTip.Tip="{DynamicResource Strings.Simulation.History.ChangeSavesStorageCapacity}"
+                                    Grid.Row="1"
+                                    Grid.Column="1"/>
+                        </Grid>
+
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Simulation.History.IntervalBetweenSaves}"/>
+                        <NumericUpDown Maximum="{Binding SavingIntervalRange.Maximum,
+                                                         Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                       Minimum="{Binding SavingIntervalRange.Minimum,
+                                                         Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}"
+                                       Value="{Binding SavingInterval,
+                                                       Converter={x:Static converters:TypeConverters.IntToDecimalConverter}}">
+                            <NumericUpDown.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding ResetSavingIntervalCommand}"
+                                              Header="{DynamicResource Strings.Common.ResetToDefault}">
+                                        <MenuItem.Icon>
+                                            <ti:TablerIcon Icon="IconRestore"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </NumericUpDown.ContextMenu>
+                        </NumericUpDown>
+
+                        <Button helpers:IconHelper.Icon="IconX"
+                                Classes="theme-subtle danger stretched has-top-margin hidden-when-disabled"
+                                Command="{Binding ClearCommand}"
+                                Content="{DynamicResource Strings.Simulation.History.DeleteAllSaves}"/>
+                    </DockPanel>
+                </DockPanel>
+            </controls:Section>
+        </ScrollViewer>
+    </toolPanels:ToolPanelControl.SettingsContent>
+
+    <toolPanels:ToolPanelControl.Styles>
+        <Style Selector="NumericUpDown">
+            <Setter Property="FormatString" Value="0"/>
+        </Style>
+    </toolPanels:ToolPanelControl.Styles>
+</toolPanels:ToolPanelControl>

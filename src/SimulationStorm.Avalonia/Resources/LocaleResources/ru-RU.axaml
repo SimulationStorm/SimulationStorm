@@ -1,0 +1,31 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="using:System">
+    <system:String x:Key="Strings.Times.Days">дней</system:String>
+    <system:String x:Key="Strings.Times.Hours">часов</system:String>
+    <system:String x:Key="Strings.Times.Minutes">мин.</system:String>
+    <system:String x:Key="Strings.Times.Seconds">сек.</system:String>
+    <system:String x:Key="Strings.Times.Milliseconds">мс.</system:String>
+    <system:String x:Key="Strings.Times.Microseconds">мкс.</system:String>
+    <system:String x:Key="Strings.Times.Nanoseconds">нс.</system:String>
+    <system:String x:Key="Strings.Validation.IsRequired">Поле обязательно к заполнению</system:String>
+    <system:String x:Key="Strings.Validation.ShouldBeDifferent">Значение должно отличаться</system:String>
+    <system:String x:Key="Strings.Window.EnterFullScreen">Растянуть на весь экран</system:String>
+    <system:String x:Key="Strings.Window.ExitFullScreen">Выйти из полноэкранного режима</system:String>
+    <system:String x:Key="Strings.Window.Minimize">Свернуть</system:String>
+    <system:String x:Key="Strings.Window.Maximize">Развернуть</system:String>
+    <system:String x:Key="Strings.Window.Restore">Восстановить</system:String>
+    <system:String x:Key="Strings.Window.Close">Закрыть</system:String>
+    <system:String x:Key="Strings.Common.OrdinalNumber">№</system:String>
+    <system:String x:Key="Strings.Common.Date">Дата</system:String>
+    <system:String x:Key="Strings.Common.Name">Название</system:String>
+    <system:String x:Key="Strings.Common.Yes">Да</system:String>
+    <system:String x:Key="Strings.Common.No">Нет</system:String>
+    <system:String x:Key="Strings.Common.Close">Закрыть</system:String>
+    <system:String x:Key="Strings.Common.ResetToDefault">Вернуть исходное значение</system:String>
+    <system:String x:Key="Strings.Common.Randomize">Случайное значение</system:String>
+    <system:String x:Key="Strings.Common.Settings">Настройки</system:String>
+    <system:String x:Key="Strings.Common.Loading">Загрузка…</system:String>
+    <system:String x:Key="Strings.Common.Exiting">Выход…</system:String>
+</ResourceDictionary>

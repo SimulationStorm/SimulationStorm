@@ -1,0 +1,11 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector=":is(Visual)">
+        <Style Selector="^.non-opaque">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+        <Style Selector="^.opaque">
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+    </Style>
+</Styles>

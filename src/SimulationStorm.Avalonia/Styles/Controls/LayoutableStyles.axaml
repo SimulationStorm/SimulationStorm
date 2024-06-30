@@ -1,0 +1,82 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui">
+    <Style Selector=":is(Layoutable)">
+        <Style Selector="^.has-left-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-top-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1.5,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-right-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,0,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,0,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-left-margin.has-top-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,1.5,0,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-margin.has-right-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-top-margin.has-right-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1.5,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-top-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1.5,0,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-right-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,0,1.5,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-left-margin.has-top-margin.has-right-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,1.5,1.5,0'}"/>
+        </Style>
+        <Style Selector="^.has-left-margin.has-top-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,1.5,0,1.5'}"/>
+        </Style>
+        <Style Selector="^.has-left-margin.has-right-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,0,1.5,1.5'}"/>
+        </Style>
+        <Style Selector="^.has-right-margin.has-top-margin.has-bottom-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '0,1.5,1.5,1.5'}"/>
+        </Style>
+
+        <Style Selector="^.has-margin">
+            <Setter Property="Margin" Value="{actipro:ScaledThickness '1.5,1.5,1.5,1.5'}"/>
+        </Style>
+        
+        <Style Selector="^.h-align-left">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style Selector="^.h-align-center">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="^.h-align-right">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style Selector="^.h-align-stretch">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
+        <Style Selector="^.v-align-top">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        <Style Selector="^.v-align-center">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="^.v-align-bottom">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+        <Style Selector="^.v-align-stretch">
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+    </Style>
+</Styles>

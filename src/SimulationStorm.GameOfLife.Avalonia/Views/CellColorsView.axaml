@@ -1,0 +1,91 @@
+<UserControl x:Class="SimulationStorm.GameOfLife.Avalonia.Views.CellColorsView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:graphics="using:SimulationStorm.Graphics.Avalonia.Converters"
+             xmlns:life="using:SimulationStorm.GameOfLife"
+             xmlns:ti="using:TablerIcons"
+             xmlns:viewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:dataTypes="using:SimulationStorm.GameOfLife.DataTypes"
+             x:DataType="viewModels:CellColorsViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <Grid Classes="has-bottom-margin">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{actipro:ScaledGridLength 1.5}"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Classes="stack-items-vertically">
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.GameOfLife.DeadCellColor}"/>
+                <ColorPicker Color="{Binding DeadCellColor,
+                                             Converter={x:Static graphics:GraphicsConverters.ColorToAvaloniaConverter}}">
+                    <ColorPicker.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding RandomizeCellColorCommand}"
+                                      CommandParameter="{x:Static dataTypes:GameOfLifeCellState.Dead}"
+                                      Header="{DynamicResource Strings.Common.Randomize}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconArrowsShuffle"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ResetCellColorCommand}"
+                                      CommandParameter="{x:Static dataTypes:GameOfLifeCellState.Dead}"
+                                      Header="{DynamicResource Strings.Common.ResetToDefault}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconRestore"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding SwapCellColorsCommand}"
+                                      Header="{DynamicResource Strings.GameOfLife.SwapCellColors}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconReplace"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ColorPicker.ContextMenu>
+                </ColorPicker>
+            </DockPanel>
+
+            <DockPanel Classes="stack-items-vertically"
+                       Grid.Column="2">
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.GameOfLife.AliveCellColor}"/>
+                <ColorPicker Color="{Binding AliveCellColor,
+                                             Converter={x:Static graphics:GraphicsConverters.ColorToAvaloniaConverter}}">
+                    <ColorPicker.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding RandomizeCellColorCommand}"
+                                      CommandParameter="{x:Static dataTypes:GameOfLifeCellState.Alive}"
+                                      Header="{DynamicResource Strings.Common.Randomize}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconArrowsShuffle"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ResetCellColorCommand}"
+                                      CommandParameter="{x:Static dataTypes:GameOfLifeCellState.Alive}"
+                                      Header="{DynamicResource Strings.Common.ResetToDefault}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconRestore"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding SwapCellColorsCommand}"
+                                      Header="{DynamicResource Strings.GameOfLife.SwapCellColors}">
+                                <MenuItem.Icon>
+                                    <ti:TablerIcon Icon="IconReplace"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ColorPicker.ContextMenu>
+                </ColorPicker>
+            </DockPanel>
+        </Grid>
+
+        <Button helpers:IconHelper.Icon="IconArrowsShuffle"
+                Classes="stretched"
+                Command="{Binding RandomizeCellColorsCommand}"
+                Content="{DynamicResource Strings.GameOfLife.RandomizeCellColors}"/>
+    </DockPanel>
+</UserControl>

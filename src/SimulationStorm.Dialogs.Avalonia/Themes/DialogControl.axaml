@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:avalonia="using:SimulationStorm.Dialogs.Avalonia"
+                    xmlns:helpers="using:SimulationStorm.Avalonia.Helpers">
+    <ControlTheme x:Key="{x:Type avalonia:DialogControl}"
+                  TargetType="avalonia:DialogControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <actipro:ShadowChrome Elevation="4"
+                                      Margin="{Binding $self.ShadowThickness}">
+                    <Border BorderBrush="{actipro:ThemeResource Container5BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="{actipro:ScaledCornerRadius 1.5}"
+                            Margin="{TemplateBinding Margin}">
+                        <DockPanel Classes="stack-items-vertically"
+                                   actipro:BorderChildClipConverter.ClipToContainingBorder="True"
+                                   Background="{actipro:ThemeResource Container2BackgroundBrush}">
+                            <Border Background="{actipro:ThemeResource Container3BackgroundBrush}"
+                                    BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+                                    BorderThickness="0,0,0,1">
+                                <DockPanel Margin="{actipro:ScaledThickness 0.5}">
+                                    <TextBlock Margin="{actipro:ScaledThickness '1,0,1.5,0'}"
+                                               Text="{TemplateBinding Title}"
+                                               VerticalAlignment="Center"/>
+
+                                    <Button DockPanel.Dock="Right"
+                                            HorizontalAlignment="Right"
+                                            helpers:IconHelper.Icon="IconX"
+                                            Command="{TemplateBinding CloseCommand}"
+                                            Theme="{DynamicResource RoundedTitleBarButton}"
+                                            ToolTip.Tip="{DynamicResource Strings.Common.Close}"/>
+                                </DockPanel>
+                            </Border>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              Padding="{actipro:ScaledThickness 1.5}"/>
+                        </DockPanel>
+                    </Border>
+                </actipro:ShadowChrome>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

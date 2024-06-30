@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" />
+        <PackageReference Include="ActiproSoftware.Controls.Avalonia" />
+        <PackageReference Include="TablerIcons.Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
+      <ProjectReference Include="..\SimulationStorm.ToolPanels.Presentation\SimulationStorm.ToolPanels.Presentation.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="Resources\LocaleResources\LocalizationHelper.xlsm" />
+    </ItemGroup>
+
+</Project>

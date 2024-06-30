@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+      <PackageReference Include="ReactiveUI" />
+      <PackageReference Include="System.Reactive" />
+      <PackageReference Include="Avalonia" />
+      <PackageReference Include="LiveChartsCore" />
+      <PackageReference Include="LiveChartsCore.SkiaSharpView" />
+      <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Presentation\SimulationStorm.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Presentation\SimulationStorm.Themes.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Include="Avalonia\Resources\Fonts\Nunito-Regular.ttf" />
+      <EmbeddedResource Include="Avalonia\Resources\Fonts\Nunito-SemiBold.ttf" />
+    </ItemGroup>
+
+</Project>

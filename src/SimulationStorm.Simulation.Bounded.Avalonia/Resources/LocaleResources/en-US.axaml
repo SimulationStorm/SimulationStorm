@@ -1,0 +1,12 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System">
+    <sys:String x:Key="Strings.Simulation.Bounded.WorldSize">World size</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.KeepAspectRatio">Keep the aspect ratio</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.Width">Width</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.Height">Height</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.ChangeWorldSize">Change world size</sys:String>
+    <sys:String x:Key="Strings.Simulation.Bounded.BackgroundColor">Background color</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.ChangeWorldSize">Change world size</sys:String>
+</ResourceDictionary>

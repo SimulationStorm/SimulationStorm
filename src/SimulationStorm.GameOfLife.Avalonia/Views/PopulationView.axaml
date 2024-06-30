@@ -1,0 +1,31 @@
+<controls:Section x:Class="SimulationStorm.GameOfLife.Avalonia.Views.PopulationView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                  xmlns:population="using:SimulationStorm.GameOfLife.Presentation.Population"
+                  x:DataType="population:PopulationViewModel"
+                  Title="{DynamicResource Strings.GameOfLife.WorldPopulation}">
+    <DockPanel Classes="stack-items-vertically">
+        <DockPanel Classes="has-bottom-margin stack-items-vertically">
+            <Panel>
+                <TextBlock Classes="theme-form-control-label"
+                           Text="{DynamicResource Strings.GameOfLife.CellBirthProbability}"/>
+                <TextBlock Classes="accent"
+                           Text="{Binding CellBirthProbability,
+                                          StringFormat='P0'}"
+                           HorizontalAlignment="Right"/>
+            </Panel>
+            <Slider Maximum="{Binding CellBirthProbabilityRange.Maximum,
+                                      Mode=OneTime}"
+                    Minimum="{Binding CellBirthProbabilityRange.Minimum,
+                                      Mode=OneTime}"
+                    Value="{Binding CellBirthProbability}"/>
+        </DockPanel>
+
+        <Button helpers:IconHelper.Icon="IconGrain"
+                Classes="stretched"
+                Command="{Binding PopulateCommand}"
+                Content="{DynamicResource Strings.GameOfLife.PopulateRandomly}"/>
+    </DockPanel>
+</controls:Section>

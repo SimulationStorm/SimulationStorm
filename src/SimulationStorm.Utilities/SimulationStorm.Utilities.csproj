@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="DotNext" />
+      <PackageReference Include="DynamicData" />
+      <PackageReference Include="System.Reactive" />
+      <PackageReference Include="CommunityToolkit.Mvvm" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Dialogs.Avalonia\SimulationStorm.Dialogs.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Exceptions.Logging\SimulationStorm.Exceptions.Logging.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Exceptions\SimulationStorm.Exceptions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" />
+      <PackageReference Include="Ben.Demystifier" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+</Project>

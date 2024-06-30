@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="SimulationStorm.Simulation.Cellular.Avalonia.Views.WorldGridLinesView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:graphics="using:SimulationStorm.Graphics.Avalonia.Converters"
+             xmlns:ti="using:TablerIcons"
+             xmlns:viewModels="using:SimulationStorm.Simulation.Cellular.Presentation.ViewModels"
+             x:DataType="viewModels:WorldGridLinesViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch Classes="theme-solid has-bottom-margin"
+                      Content="{DynamicResource Strings.Simulation.Cellular.ShowGridLines}"
+                      IsChecked="{Binding IsGridLinesVisible}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <DockPanel Classes="stack-items-vertically"
+                   IsVisible="{Binding IsGridLinesVisible}">
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Simulation.Cellular.GridLinesColor}"
+                       VerticalAlignment="Center"/>
+            <ColorPicker Color="{Binding GridLinesColor,
+                                         Converter={x:Static graphics:GraphicsConverters.ColorToAvaloniaConverter}}">
+                <ColorPicker.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{DynamicResource Strings.Common.Randomize}"
+                                  Command="{Binding RandomizeGridLinesColorCommand}">
+                            <MenuItem.Icon>
+                                <ti:TablerIcon Icon="IconArrowsShuffle"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{DynamicResource Strings.Common.ResetToDefault}"
+                                  Command="{Binding ResetGridLinesColorCommand}">
+                            <MenuItem.Icon>
+                                <ti:TablerIcon Icon="IconRestore"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ColorPicker.ContextMenu>
+            </ColorPicker>
+        </DockPanel>
+    </DockPanel>
+</UserControl>

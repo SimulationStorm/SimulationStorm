@@ -1,0 +1,14 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="using:SimulationStorm.Avalonia.Helpers">
+    <Style Selector="NumericUpDown">
+        <Setter Property="ClipValueToMinMax" Value="True"/>
+    </Style>
+    
+    <!--Does missing bindings-->
+    <Style Selector="NumericUpDown /template/ TextBox#PART_TextBox">
+        <Setter Property="ContextFlyout" Value="{Binding $parent[NumericUpDown].ContextFlyout}"/>
+        <Setter Property="ContextMenu" Value="{Binding $parent[NumericUpDown].ContextMenu}"/>
+        <Setter Property="(helpers:TextBoxHelper.IsPastingDisabled)" Value="True"/>
+    </Style>
+</Styles>

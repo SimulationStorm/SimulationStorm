@@ -1,0 +1,80 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:controls="using:SimulationStorm.Avalonia.Controls">
+    
+    <actipro:ScaledDouble x:Key="JoystickSize" Expression="24"/>
+    <actipro:ScaledDouble x:Key="JoystickThumbSize" Expression="6"/>
+    <!--Joystick padding size must be a half of the JoystickThumbSize-->
+    <actipro:ScaledThickness x:Key="JoystickPadding" Expression="3"/>
+    
+    <Thickness x:Key="JoystickBorderThickness">1</Thickness>
+    <CornerRadius x:Key="JoystickCornerRadius">9999</CornerRadius>
+    
+    <SolidColorBrush x:Key="JoystickThumbBrush">#FF545A6A</SolidColorBrush>
+    <SolidColorBrush x:Key="JoystickThumbBrushPointerOver">#FF4A505E</SolidColorBrush>
+    <SolidColorBrush x:Key="JoystickThumbBrushPointerPressed">#FF3F4451</SolidColorBrush>
+    
+    <!-- <actipro:ThemeResource x:Key="JoystickBackgroundBrush" ResourceKind="ControlBackgroundBrushOutline"/> -->
+    <!-- <SolidColorBrush x:Key="JoystickBackgroundBrush">White</SolidColorBrush> -->
+    <!-- <actipro:ThemeResource x:Key="JoystickBackgroundBrushPointerOver" ResourceKind="ControlBackgroundBrushOutlinePointerOver"/> -->
+    <!-- <SolidColorBrush x:Key="JoystickBackgroundBrushPointerOver">#FFF8F8F9</SolidColorBrush> -->
+    
+    <SolidColorBrush x:Key="JoystickBorderBrush">#FFB7BAC1</SolidColorBrush>
+    <SolidColorBrush x:Key="JoystickBorderBrushPointerOver">#FF9FA3AD</SolidColorBrush>
+    <SolidColorBrush x:Key="JoystickBorderBrushPointerPressed">#888d99</SolidColorBrush>
+
+    <ControlTheme x:Key="{x:Type controls:Joystick}"
+                  TargetType="controls:Joystick">
+        <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushOutline}"/>
+        <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBorderBrushOutline}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource JoystickBorderThickness}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource JoystickCornerRadius}"/>
+        <Setter Property="Foreground" Value="{actipro:ThemeResource DefaultForegroundBrush}"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border x:Name="PART_Border"
+                            Width="{DynamicResource JoystickSize}"
+                            Height="{DynamicResource JoystickSize}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Margin="{DynamicResource JoystickPadding}">
+                        <Ellipse x:Name="PART_Thumb"
+                                 Width="{DynamicResource JoystickThumbSize}"
+                                 Height="{DynamicResource JoystickThumbSize}"
+                                 Fill="{TemplateBinding Foreground}"/>
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        
+        <Style Selector="^">
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushOutlinePointerOver}"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBorderBrushOutlinePointerOver}"/>
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushOutlinePressed}"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBorderBrushOutlinePressed}"/>
+            </Style>
+            
+            <Style Selector="^.theme-solid">
+                <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSolid}"/>
+                <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBackgroundBrushSolid}"/>
+                <Setter Property="Foreground" Value="{actipro:ThemeResource ControlForegroundBrushSolid}"/>
+                
+                <Style Selector="^:pointerover">
+                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSolidPointerOver}"/>
+                    <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBackgroundBrushSolidPointerOver}"/>
+                </Style>
+                <Style Selector="^:pressed">
+                    <Setter Property="Background" Value="{actipro:ThemeResource ControlBackgroundBrushSolidPressed}"/>
+                    <Setter Property="BorderBrush" Value="{actipro:ThemeResource ControlBackgroundBrushSolidPressed}"/>
+                </Style>
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

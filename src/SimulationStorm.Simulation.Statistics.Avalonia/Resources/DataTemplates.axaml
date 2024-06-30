@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dataTypes="using:SimulationStorm.Simulation.Statistics.Presentation.Charts"
+                    xmlns:me="using:SimulationStorm.Avalonia.MarkupExtensions"
+                    xmlns:ti="using:TablerIcons">
+    <DataTemplate x:Key="Templates.ChartTypeTemplate"
+                  DataType="dataTypes:ChartType">
+        <StackPanel Classes="has-spacing"
+                    Orientation="Horizontal">
+            <ti:TablerIcon Icon="{me:DynamicResourceBinding StringFormat='Icons.Simulation.Stats.ChartType.{0}'}"/>
+            <TextBlock Text="{me:DynamicResourceBinding StringFormat='Strings.Simulation.Stats.ChartType.{0}'}"/>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

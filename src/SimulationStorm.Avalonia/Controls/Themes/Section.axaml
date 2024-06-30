@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                    xmlns:controls="using:SimulationStorm.Avalonia.Controls">
+    <ControlTheme x:Key="{x:Type controls:Section}"
+                  TargetType="controls:Section">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <actipro:ShadowChrome x:Name="PART_ShadowChrome"
+                                      Elevation="4"
+                                      Margin="{actipro:ScaledThickness 1.5}">
+                    <Border Background="{actipro:ThemeResource Container3BackgroundBrush}"
+                            BorderBrush="{actipro:ThemeResource Container3BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="{actipro:ScaledCornerRadius 1}"
+                            Padding="{actipro:ScaledThickness 1.5}">
+                        <Grid RowDefinitions="Auto,Auto,Auto">
+                            <Panel>
+                                <TextBlock Classes="theme-text-heading size-sm"
+                                           Text="{TemplateBinding Title}"
+                                           VerticalAlignment="Bottom"/>
+                                <ContentPresenter Content="{TemplateBinding HeaderRightContent}"
+                                                  HorizontalAlignment="Right"/>
+                            </Panel>
+                            <Separator Grid.Row="1"
+                                       Margin="{actipro:ScaledThickness '0,0.5,0,1'}"/>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Grid.Row="2"/>
+                        </Grid>
+                    </Border>
+                </actipro:ShadowChrome>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

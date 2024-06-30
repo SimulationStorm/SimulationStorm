@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ti="using:TablerIcons">
+    <ti:Icons x:Key="Icons.GameOfLife">IconGrain</ti:Icons>
+    
+    <ti:Icons x:Key="Icons.ToolPanels.SimulationToolPanel">IconGrain</ti:Icons>
+    <ti:Icons x:Key="Icons.ToolPanels.HistoryToolPanel">IconHistory</ti:Icons>
+    <ti:Icons x:Key="Icons.ToolPanels.StatisticsToolPanel">IconChartDots</ti:Icons>
+    <ti:Icons x:Key="Icons.ToolPanels.CameraToolPanel">IconFocusCentered</ti:Icons>
+    <ti:Icons x:Key="Icons.ToolPanels.RenderingToolPanel">IconPaint</ti:Icons>
+    <ti:Icons x:Key="Icons.ToolPanels.DrawingToolPanel">IconScribble</ti:Icons>
+</ResourceDictionary>
