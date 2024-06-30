@@ -2,4 +2,4 @@
 
 namespace SimulationStorm.Simulation;
 
-public interface ISimulation : IProgressReporter;
+public abstract class SimulationBase : ProgressReporterBase, ISimulation;

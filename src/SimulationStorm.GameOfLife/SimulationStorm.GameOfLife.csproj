@@ -16,6 +16,7 @@
       <ProjectReference Include="..\SimulationStorm.Simulation.History\SimulationStorm.Simulation.History.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.Bounded\SimulationStorm.Simulation.Bounded.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.Statistics\SimulationStorm.Simulation.Statistics.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
     </ItemGroup>
 
 </Project>
