@@ -31,6 +31,19 @@ public static class SimulationManagerExtensions
             .Select(ep => ep.EventArgs);
     }
     
+    public static IObservable<SimulationCommandProgressChangedEventArgs> CommandProgressChangedObservable
+    (
+        this ISimulationManager commandScheduler)
+    {
+        return Observable
+            .FromEventPattern<EventHandler<SimulationCommandProgressChangedEventArgs>, SimulationCommandProgressChangedEventArgs>
+            (
+                h => commandScheduler.CommandProgressChanged += h,
+                h => commandScheduler.CommandProgressChanged -= h
+            )
+            .Select(ep => ep.EventArgs);
+    }
+    
     public static IObservable<SimulationCommandCompletedEventArgs> CommandCompletedObservable
     (
         this ISimulationManager simulationManager)

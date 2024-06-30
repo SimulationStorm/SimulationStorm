@@ -62,55 +62,57 @@ public class GameOfLifeManager :
         Algorithm = options.Algorithm;
         
         RememberGameOfLifePropertyValues();
+        
+        ResetSimulationInstance(_gameOfLifeImpl);
     }
 
     #region Reading methods
     public Task<GameOfLifeSave> SaveAsync() =>
-        WithReadLockAsync(_gameOfLifeImpl.Save);
+        WithSimulationReadLockAsync(_gameOfLifeImpl.Save);
     
     public Task<BenchmarkResult<GameOfLifeSave>> SaveAndMeasureAsync() =>
-        MeasureWithReadLockAsync(_gameOfLifeImpl.Save);
+        MeasureWithSimulationReadLockAsync(_gameOfLifeImpl.Save);
 
     public Task<GameOfLifeSummary> SummarizeAsync() =>
-        WithReadLockAsync(_gameOfLifeImpl.Summarize);
+        WithSimulationReadLockAsync(_gameOfLifeImpl.Summarize);
     
     public Task<BenchmarkResult<GameOfLifeSummary>> SummarizeAndMeasureAsync() =>
-        MeasureWithReadLockAsync(_gameOfLifeImpl.Summarize);
+        MeasureWithSimulationReadLockAsync(_gameOfLifeImpl.Summarize);
 
     public Task<IEnumerable<Point>> GetAliveCellsAsync() =>
-        WithReadLockAsync(_gameOfLifeImpl.GetAliveCells);
+        WithSimulationReadLockAsync(_gameOfLifeImpl.GetAliveCells);
     #endregion
 
     #region Writing methods
     public Task ChangeWorldSizeAsync(Size newSize) =>
-        QueueCommandExecutionAsync(new ChangeWorldSizeCommand(newSize));
+        ScheduleCommandAsync(new ChangeWorldSizeCommand(newSize));
 
     public Task ChangeWorldWrappingAsync(WorldWrapping newWrapping) =>
-        QueueCommandExecutionAsync(new ChangeWorldWrappingCommand(newWrapping));
+        ScheduleCommandAsync(new ChangeWorldWrappingCommand(newWrapping));
 
     public Task ChangeRuleAsync(GameOfLifeRule newRule) =>
-        QueueCommandExecutionAsync(new ChangeRuleCommand(newRule));
+        ScheduleCommandAsync(new ChangeRuleCommand(newRule));
 
     public Task ChangeAlgorithmAsync(GameOfLifeAlgorithm newAlgorithm) =>
-        QueueCommandExecutionAsync(new ChangeAlgorithmCommand(newAlgorithm));
+        ScheduleCommandAsync(new ChangeAlgorithmCommand(newAlgorithm));
 
     public Task RestoreStateAsync(GameOfLifeSave save, bool isRestoringFromAppState = false) =>
-        QueueCommandExecutionAsync(new RestoreStateCommand(save, isRestoringFromAppState));
+        ScheduleCommandAsync(new RestoreStateCommand(save, isRestoringFromAppState));
     
     public Task AdvanceAsync() =>
-        QueueCommandExecutionAsync(new AdvanceCommand());
+        ScheduleCommandAsync(new AdvanceCommand());
 
     public Task ResetAsync() =>
-        QueueCommandExecutionAsync(new ResetCommand());
+        ScheduleCommandAsync(new ResetCommand());
 
     public Task ChangeCellStatesAsync(IEnumerable<Point> cells, GameOfLifeCellState newState) =>
-        QueueCommandExecutionAsync(new DrawCommand<GameOfLifeCellState>(cells, newState));
+        ScheduleCommandAsync(new DrawCommand<GameOfLifeCellState>(cells, newState));
 
     public Task PlacePatternAtPositionsAsync(GameOfLifePattern pattern, IEnumerable<Point> positions, bool placeWithOverlay) =>
-        QueueCommandExecutionAsync(new PlacePatternCommand(pattern, positions, placeWithOverlay));
+        ScheduleCommandAsync(new PlacePatternCommand(pattern, positions, placeWithOverlay));
 
     public Task PopulateRandomlyAsync(double cellBirthProbability) =>
-        QueueCommandExecutionAsync(new PopulateRandomlyCommand(cellBirthProbability));
+        ScheduleCommandAsync(new PopulateRandomlyCommand(cellBirthProbability));
     #endregion
 
     protected override void ExecuteCommand(SimulationCommand command)
