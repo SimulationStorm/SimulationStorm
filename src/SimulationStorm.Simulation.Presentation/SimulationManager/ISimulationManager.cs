@@ -6,7 +6,13 @@ namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
 public interface ISimulationManager
 {
-    ReadOnlyObservableCollection<SimulationCommand> CommandQueue { get; }
+    ReadOnlyObservableCollection<SimulationCommand> ScheduledCommandQueue { get; }
+
+    #region Events
+    /// <summary>
+    /// Occurs after the command has been scheduled to execution.
+    /// </summary>
+    event EventHandler<SimulationCommandEventArgs>? CommandScheduled;
     
     /// <summary>
     /// Occurs before the start of the command execution.
@@ -17,8 +23,5 @@ public interface ISimulationManager
     /// Occurs after the command has been executed.
     /// </summary>
     event EventHandler<SimulationCommandCompletedEventArgs>? CommandCompleted;
-
-    // Task ClearCommandQueueAsync();
-
-    // Task WaitForAllQueuedCommandsExecutingAsync(); // to implement this, we can use Task.WhenAll(queuedCommands.Tasks)
+    #endregion
 }

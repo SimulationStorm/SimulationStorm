@@ -39,7 +39,7 @@ public partial class CommandQueueViewModel : DisposableObservableObject
         
         WithDisposables(disposables =>
         {
-            simulationManager.CommandQueue
+            simulationManager.ScheduledCommandQueue
                 .IndexItemsAndBind<ReadOnlyObservableCollection<SimulationCommand>, SimulationCommand, IndexedSimulationCommand>
                 (
                     command => new IndexedSimulationCommand(command),
@@ -48,7 +48,7 @@ public partial class CommandQueueViewModel : DisposableObservableObject
                 )
                 .DisposeWith(disposables);
 
-            simulationManager.CommandQueue
+            simulationManager.ScheduledCommandQueue
                 .WhenValueChanged(x => x.Count)
                 .ObserveOn(uiThreadScheduler)
                 .Subscribe(commandCount => AreThereCommands = commandCount is not 0)
