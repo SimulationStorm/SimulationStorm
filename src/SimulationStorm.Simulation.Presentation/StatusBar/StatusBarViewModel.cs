@@ -129,10 +129,10 @@ public class StatusBarViewModel : DisposableObservableObject
                 .DisposeWith(disposables);
             
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => simulationManager.CommandExecuted += h,
-                    h => simulationManager.CommandExecuted -= h
+                    h => simulationManager.CommandCompleted += h,
+                    h => simulationManager.CommandCompleted -= h
                 )
                 .Do(_ => ExecutingCommand = null)
                 .Where(_ => IsCommandTimeVisible)

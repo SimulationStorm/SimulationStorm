@@ -3,16 +3,14 @@ using DotNext.Threading;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
-public class SimulationCommandExecutedEventArgs
+public class SimulationCommandCompletedEventArgs
 (
     SimulationCommand command,
     TimeSpan elapsedTime,
     IAsyncEvent synchronizer
 )
-    : EventArgs
+    : SimulationCommandEventArgs(command)
 {
-    public SimulationCommand Command { get; } = command;
-
     public TimeSpan ElapsedTime { get; } = elapsedTime;
 
     public IAsyncEvent Synchronizer { get; } = synchronizer;

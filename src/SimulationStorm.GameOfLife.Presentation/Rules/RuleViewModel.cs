@@ -54,10 +54,10 @@ public partial class RuleViewModel : DisposableObservableObject
         WithDisposables(disposables =>
         {
             var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => _gameOfLifeManager.CommandExecuted += h,
-                    h => _gameOfLifeManager.CommandExecuted -= h
+                    h => _gameOfLifeManager.CommandCompleted += h,
+                    h => _gameOfLifeManager.CommandCompleted -= h
                 )
                 .Select(e => e.EventArgs.Command)
                 .ObserveOn(uiThreadScheduler);

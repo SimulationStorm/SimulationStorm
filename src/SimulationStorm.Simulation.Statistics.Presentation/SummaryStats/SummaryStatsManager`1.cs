@@ -29,10 +29,10 @@ public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord
         WithDisposables(disposables =>
         {
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => _simulationManager.CommandExecuted += h,
-                    h => _simulationManager.CommandExecuted += h
+                    h => _simulationManager.CommandCompleted += h,
+                    h => _simulationManager.CommandCompleted += h
                 )
                 .Select(e => e.EventArgs)
                 .Subscribe(e => HandleSimulationCommandExecutedAsync(e).ConfigureAwait(false))
@@ -54,7 +54,7 @@ public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord
     //     ? SummarizeSimulationAndAddToCollection(new NullCommand()).ThrowWhenFaulted()
     //     : Task.CompletedTask;
     
-    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandExecutedEventArgs e)
+    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandCompletedEventArgs e)
     {
         var isSummarizingNeeded =
             e.Command is not RestoreStateCommand { IsRestoringFromAppState: true }

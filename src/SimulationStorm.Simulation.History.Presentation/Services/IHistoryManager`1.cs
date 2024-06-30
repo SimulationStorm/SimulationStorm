@@ -8,7 +8,7 @@ namespace SimulationStorm.Simulation.History.Presentation.Services;
 
 public interface IHistoryManager<TSave> : ICollectionManager<HistoryRecord<TSave>>
 {
-    event EventHandler<SimulationCommandExecutedEventArgs>? SimulationCommandExecutedEventHandled;
+    event EventHandler<SimulationCommandCompletedEventArgs>? SimulationCommandExecutedEventHandled;
     
     bool CanGoToPreviousSave();
     Task GoToPreviousSaveAsync();

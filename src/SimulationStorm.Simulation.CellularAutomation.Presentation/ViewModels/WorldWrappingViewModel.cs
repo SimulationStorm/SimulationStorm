@@ -84,10 +84,10 @@ public partial class WorldWrappingViewModel<TCellState> : DisposableObservableOb
         WithDisposables(disposables =>
         {
             var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => _automationManager.CommandExecuted += h,
-                    h => _automationManager.CommandExecuted -= h
+                    h => _automationManager.CommandCompleted += h,
+                    h => _automationManager.CommandCompleted -= h
                 )
                 .Select(e => e.EventArgs.Command)
                 .ObserveOn(uiThreadScheduler);

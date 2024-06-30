@@ -32,7 +32,7 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
     #region Fields
     private readonly IIntervalActionExecutor _intervalActionExecutor;
     
-    private SimulationCommandExecutedEventArgs? _simulationCommandExecutedEvent;
+    private SimulationCommandCompletedEventArgs? _simulationCommandExecutedEvent;
 
     private readonly ConcurrentQueue<SimulationCommand> _commandQueue = new();
     #endregion
@@ -55,10 +55,10 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
         WithDisposables(disposables =>
         {
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => simulationManager.CommandExecuted += h,
-                    h => simulationManager.CommandExecuted -= h
+                    h => simulationManager.CommandCompleted += h,
+                    h => simulationManager.CommandCompleted -= h
                 )
                 .Select(e => e.EventArgs)
                 .Subscribe(e =>

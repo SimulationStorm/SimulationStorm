@@ -16,7 +16,7 @@ public interface ISimulationManager
     /// <summary>
     /// Occurs after the command has been executed.
     /// </summary>
-    event EventHandler<SimulationCommandExecutedEventArgs>? CommandExecuted;
+    event EventHandler<SimulationCommandCompletedEventArgs>? CommandCompleted;
 
     // Task ClearCommandQueueAsync();
 

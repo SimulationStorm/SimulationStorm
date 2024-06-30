@@ -140,10 +140,10 @@ public abstract partial class WorldSizeViewModelBase : DisposableObservableObjec
         WithDisposables(disposables =>
         {
             var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => _simulationManager.CommandExecuted += h,
-                    h => _simulationManager.CommandExecuted -= h
+                    h => _simulationManager.CommandCompleted += h,
+                    h => _simulationManager.CommandCompleted -= h
                 )
                 .Select(e => e.EventArgs.Command)
                 .ObserveOn(uiThreadScheduler);

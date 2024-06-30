@@ -24,10 +24,10 @@ public class CommandExecutionStatsManager : CollectionManagerBase<CommandExecuti
         WithDisposables(disposables =>
         {
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => simulationManager.CommandExecuted += h,
-                    h => simulationManager.CommandExecuted -= h
+                    h => simulationManager.CommandCompleted += h,
+                    h => simulationManager.CommandCompleted -= h
                 )
                 .Where(_ => IsSavingEnabled)
                 .Select(e => e.EventArgs)

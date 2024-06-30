@@ -16,7 +16,7 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
     #region Events
     public event EventHandler<SimulationCommandExecutingEventArgs>? CommandExecuting;
     
-    public event EventHandler<SimulationCommandExecutedEventArgs>? CommandExecuted;
+    public event EventHandler<SimulationCommandCompletedEventArgs>? CommandCompleted;
     #endregion
 
     #region Fields
@@ -203,6 +203,6 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         CommandExecuting?.Invoke(this, new SimulationCommandExecutingEventArgs(command));
 
     private void NotifyCommandExecuted(SimulationCommand command, TimeSpan elapsedTime, IAsyncEvent synchronizer) =>
-        CommandExecuted?.Invoke(this, new SimulationCommandExecutedEventArgs(command, elapsedTime, synchronizer));
+        CommandCompleted?.Invoke(this, new SimulationCommandCompletedEventArgs(command, elapsedTime, synchronizer));
     #endregion
 }

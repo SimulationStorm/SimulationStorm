@@ -53,7 +53,7 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
         {
             // After history manager completing its work, make new summary record if needed
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
                     h => _historyManager.SimulationCommandExecutedEventHandled += h,
                     h => _historyManager.SimulationCommandExecutedEventHandled += h
@@ -130,7 +130,7 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
     }
     
     #region Private methods
-    private async Task OnHistoryManagerHandledSimulationCommandExecutedEvent(SimulationCommandExecutedEventArgs e)
+    private async Task OnHistoryManagerHandledSimulationCommandExecutedEvent(SimulationCommandCompletedEventArgs e)
     {
         // if (e.Command.ChangesWorld && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext())
         //     await SummarizeSimulationAndAddToCollection(e.Command)

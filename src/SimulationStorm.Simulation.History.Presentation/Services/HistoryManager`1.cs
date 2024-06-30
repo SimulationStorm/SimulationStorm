@@ -13,7 +13,7 @@ namespace SimulationStorm.Simulation.History.Presentation.Services;
 
 public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>, IHistoryManager<TSave>
 {
-    public event EventHandler<SimulationCommandExecutedEventArgs>? SimulationCommandExecutedEventHandled;
+    public event EventHandler<SimulationCommandCompletedEventArgs>? SimulationCommandExecutedEventHandled;
     
     private readonly ISaveableSimulationManager<TSave> _simulationManager;
 
@@ -31,10 +31,10 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
         WithDisposables(disposables =>
         {
             Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
+                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
                 (
-                    h => _simulationManager.CommandExecuted += h,
-                    h => _simulationManager.CommandExecuted -= h
+                    h => _simulationManager.CommandCompleted += h,
+                    h => _simulationManager.CommandCompleted -= h
                 )
                 .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false))
                 .DisposeWith(disposables);
@@ -100,7 +100,7 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
     //         ? SaveSimulationAndAddRecordToCollectionAsync(new NullCommand(), TimeSpan.Zero).ThrowWhenFaulted()
     //         : Task.CompletedTask;
 
-    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandExecutedEventArgs e)
+    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandCompletedEventArgs e)
     {
         if (e.Command is not RestoreStateCommand && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext())
             await SaveSimulationAndAddRecordToCollectionAsync(e.Command).ConfigureAwait(false);
