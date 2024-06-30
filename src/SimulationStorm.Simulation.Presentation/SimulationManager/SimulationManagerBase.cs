@@ -50,13 +50,8 @@ public abstract class SimulationManagerBase : AsyncDisposableObject, ISimulation
         _commandCompletedEventSynchronizer = new AsyncCountdownEvent(options.CommandExecutedEventHandlerCount);
     }
 
-    public override async ValueTask DisposeAsync()
+    protected override async ValueTask DisposeAsyncCore()
     {
-        if (IsDisposed)
-            return;
-        
-        IsDisposed = true;
-        
         _scheduledCommandChannel.Writer.Complete();
         
         await _commandProcessingCycleCts
