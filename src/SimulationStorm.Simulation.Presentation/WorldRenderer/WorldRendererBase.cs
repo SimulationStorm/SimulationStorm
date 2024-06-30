@@ -23,11 +23,11 @@ public abstract class WorldRendererBase : RendererBase, IWorldRenderer
     protected WorldRendererBase
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IWorldViewport worldViewport,
         IWorldCamera worldCamera
     )
-        : base(graphicsFactory, benchmarkingService)
+        : base(graphicsFactory, benchmarker)
     {
         WorldViewport = worldViewport;
         WorldCamera = worldCamera;

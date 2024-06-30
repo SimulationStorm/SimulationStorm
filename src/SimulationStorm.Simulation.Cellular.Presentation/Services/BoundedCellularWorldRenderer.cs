@@ -139,14 +139,14 @@ public class BoundedCellularWorldRenderer : WorldRendererBase, IBoundedCellularW
     public BoundedCellularWorldRenderer
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IWorldViewport worldViewport,
         IWorldCamera worldCamera,
         ISimulationRenderer simulationRenderer,
         IUiColorProvider uiColorProvider,
         ICellularWorldRendererOptions options
     )
-        : base(graphicsFactory, benchmarkingService, worldViewport, worldCamera)
+        : base(graphicsFactory, benchmarker, worldViewport, worldCamera)
     {
         _simulationRenderer = simulationRenderer;
         _uiColorProvider = uiColorProvider;

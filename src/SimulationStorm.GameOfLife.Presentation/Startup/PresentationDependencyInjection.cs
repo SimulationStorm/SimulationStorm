@@ -58,7 +58,7 @@ public static class PresentationDependencyInjection
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services) => services
         // Independent transient services
-        .AddTransient<IBenchmarkingService, BenchmarkingService>()
+        .AddTransient<IBenchmarker, StopwatchBenchmarker>()
         .AddTransient<IIntervalActionExecutor, IntervalActionExecutor>()
         //
         

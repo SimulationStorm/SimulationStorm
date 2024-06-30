@@ -25,7 +25,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #endregion
 
     #region Fields
-    private readonly IBenchmarkingService _benchmarkingService;
+    private readonly IBenchmarker _benchmarker;
     
     private ISimulation _simulation = null!;
     
@@ -45,9 +45,9 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private SimulationCommand? _executingCommand;
     #endregion
 
-    protected SimulationManagerBase(IBenchmarkingService benchmarkingService, ISimulationManagerOptions options)
+    protected SimulationManagerBase(IBenchmarker benchmarker, ISimulationManagerOptions options)
     {
-        _benchmarkingService = benchmarkingService;
+        _benchmarker = benchmarker;
         _commandCompletedEventSynchronizer = new AsyncCountdownEvent(options.CommandExecutedEventHandlerCount);
         
         InitializeCommandChannelAndStartProcessing();
@@ -129,16 +129,16 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
     #region Benchmarking helpers
     protected Task<BenchmarkResult> MeasureWithSimulationReadLockAsync(Action action) =>
-        WithSimulationReadLockAsync(() => _benchmarkingService.Measure(action));
+        WithSimulationReadLockAsync(() => _benchmarker.Measure(action));
     
     protected Task<BenchmarkResult<T>> MeasureWithSimulationReadLockAsync<T>(Func<T> function) =>
-        WithSimulationReadLockAsync(() => _benchmarkingService.Measure(function));
+        WithSimulationReadLockAsync(() => _benchmarker.Measure(function));
     
     protected Task<BenchmarkResult> MeasureWithSimulationWriteLockAsync(Action action) =>
-        WithSimulationWriteLockAsync(() => _benchmarkingService.Measure(action));
+        WithSimulationWriteLockAsync(() => _benchmarker.Measure(action));
     
     protected Task<BenchmarkResult<T>> MeasureWithSimulationWriteLockAsync<T>(Func<T> function) =>
-        WithSimulationWriteLockAsync(() => _benchmarkingService.Measure(function));
+        WithSimulationWriteLockAsync(() => _benchmarker.Measure(function));
     #endregion
     
     #region Simulation read/write lock helpers

@@ -24,7 +24,7 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     protected abstract Size SizeToRender { get; }
     
     #region Fields
-    private readonly IBenchmarkingService _benchmarkingService;
+    private readonly IBenchmarker _benchmarker;
 
     private readonly AsyncAutoResetEvent _renderingCycleSynchronizer = new(false);
 
@@ -39,10 +39,10 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     private ICanvas? _bitmapCanvas;
     #endregion
 
-    protected RendererBase(IGraphicsFactory graphicsFactory, IBenchmarkingService benchmarkingService)
+    protected RendererBase(IGraphicsFactory graphicsFactory, IBenchmarker benchmarker)
     {
         GraphicsFactory = graphicsFactory;
-        _benchmarkingService = benchmarkingService;
+        _benchmarker = benchmarker;
 
         _renderingCycleTask = RenderInCycleAsync(_renderingCycleCts.Token);
     }
@@ -119,7 +119,7 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
         
         NotifyRenderingStarted();
         
-        var benchmarkResult = await _benchmarkingService
+        var benchmarkResult = await _benchmarker
             .MeasureAsync(RenderCoreAsync)
             .ConfigureAwait(false);
         

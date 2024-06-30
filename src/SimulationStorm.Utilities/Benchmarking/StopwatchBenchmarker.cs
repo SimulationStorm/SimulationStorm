@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SimulationStorm.Utilities.Benchmarking;
 
-public class BenchmarkingService : IBenchmarkingService
+public class StopwatchBenchmarker : IBenchmarker
 {
     private readonly Stopwatch _stopwatch = new();
     

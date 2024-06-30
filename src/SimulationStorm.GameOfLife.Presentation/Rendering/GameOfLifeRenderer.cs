@@ -40,12 +40,12 @@ public class GameOfLifeRenderer : BoundedCellularSimulationRendererBase
     public GameOfLifeRenderer
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
         GameOfLifeManager gameOfLifeManager,
         GameOfLifeRendererOptions options
     )
-        : base(graphicsFactory, benchmarkingService, intervalActionExecutor, gameOfLifeManager, options)
+        : base(graphicsFactory, benchmarker, intervalActionExecutor, gameOfLifeManager, options)
     {
         _gameOfLifeManager = gameOfLifeManager;
         

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SimulationStorm.Utilities.Benchmarking;
 
-public interface IBenchmarkingService
+public interface IBenchmarker
 {
     BenchmarkResult Measure(Action action);
 

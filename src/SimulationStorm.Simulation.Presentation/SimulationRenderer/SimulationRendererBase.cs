@@ -40,12 +40,12 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
     protected SimulationRendererBase
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
         ISimulationManager simulationManager,
         ISimulationRendererOptions options
     )
-        : base(graphicsFactory, benchmarkingService)
+        : base(graphicsFactory, benchmarker)
     {
         _intervalActionExecutor = intervalActionExecutor;
 

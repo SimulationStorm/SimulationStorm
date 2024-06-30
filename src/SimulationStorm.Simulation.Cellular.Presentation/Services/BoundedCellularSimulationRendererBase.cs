@@ -10,12 +10,12 @@ namespace SimulationStorm.Simulation.Cellular.Presentation.Services;
 public abstract class BoundedCellularSimulationRendererBase
 (
     IGraphicsFactory graphicsFactory,
-    IBenchmarkingService benchmarkingService,
+    IBenchmarker benchmarker,
     IIntervalActionExecutor intervalActionExecutor,
     IBoundedSimulationManager simulationManager,
     ISimulationRendererOptions options
 )
-    : SimulationRendererBase(graphicsFactory, benchmarkingService, intervalActionExecutor, simulationManager, options)
+    : SimulationRendererBase(graphicsFactory, benchmarker, intervalActionExecutor, simulationManager, options)
 {
     protected override Size SizeToRender => simulationManager.WorldSize;
 }

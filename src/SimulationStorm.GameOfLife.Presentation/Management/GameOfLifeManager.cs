@@ -48,11 +48,11 @@ public class GameOfLifeManager :
     
     public GameOfLifeManager
     (
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IGameOfLifeFactory gameOfLifeFactory,
         GameOfLifeManagerOptions options
     )
-        : base(benchmarkingService, options)
+        : base(benchmarker, options)
     {
         _gameOfLifeFactory = gameOfLifeFactory;
 
