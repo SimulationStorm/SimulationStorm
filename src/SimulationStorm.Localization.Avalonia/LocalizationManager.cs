@@ -50,18 +50,15 @@ public class LocalizationManager : DisposableObject, ILocalizationManager
         SetCurrentCultureAndChangeCultureManagerCulture(initialCulture);
         AddLocaleResourcesToResourceDictionary(initialCulture);
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => CultureManager.Instance.CultureChanged += h,
-                    h => CultureManager.Instance.CultureChanged -= h
-                )
-                .Where(_ => !_skipCultureManagerCultureChangedNotification)
-                .Subscribe(_ => ChangeCulture(CultureManager.Instance.CurrentCulture))
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => CultureManager.Instance.CultureChanged += h,
+                h => CultureManager.Instance.CultureChanged -= h
+            )
+            .Where(_ => !_skipCultureManagerCultureChangedNotification)
+            .Subscribe(_ => ChangeCulture(CultureManager.Instance.CurrentCulture))
+            .DisposeWith(Disposables);
     }
 
     #region Public methods

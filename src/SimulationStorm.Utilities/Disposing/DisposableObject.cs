@@ -1,23 +1,40 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using Disposable = DotNext.Disposable;
 
 namespace SimulationStorm.Utilities.Disposing;
 
-public abstract class DisposableObject : IDisposable
+public abstract class DisposableObject : Disposable
 {
-    public bool IsDisposed { get; protected set; }
-    
-    private readonly CompositeDisposable _disposables = new();
+    private string? ObjectName => GetType().FullName;
 
-    protected void WithDisposables(Action<CompositeDisposable> action) => action(_disposables);
+    protected CompositeDisposable Disposables { get; } = new();
 
-    public virtual void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        if (IsDisposed)
-            return;
+        base.Dispose(disposing);
         
-        _disposables.Dispose();
-        IsDisposed = true;
-        GC.SuppressFinalize(this);
+        if (disposing)
+            Disposables.Dispose();
     }
+
+    #region Throw helpers
+    protected void ThrowIfDisposing()
+    {
+        if (IsDisposing)
+            throw new ObjectDisposedException(ObjectName, "The object is being disposed.");
+    }
+    
+    protected void ThrowIfDisposed()
+    {
+        if (IsDisposing)
+            throw new ObjectDisposedException(ObjectName, "The object is disposed.");
+    }
+
+    protected void ThrowIfDisposingOrDisposed()
+    {
+        if (IsDisposingOrDisposed)
+            throw new ObjectDisposedException(ObjectName, "The object is being disposed or disposed.");
+    }
+    #endregion
 }
