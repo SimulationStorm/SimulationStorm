@@ -2,9 +2,9 @@
 
 namespace SimulationStorm.Simulation.History.Presentation.Commands;
 
-public class RestoreStateCommand(object state, bool isRestoringFromAppSave = false) : SimulationCommand("RestoreState", true)
+public class RestoreSaveCommand(object save, bool isRestoringFromAppSave = false) : SimulationCommand("RestoreSave", true)
 {
-    public object State { get; } = state;
+    public object Save { get; } = save;
 
     public bool IsRestoringFromAppSave { get; } = isRestoringFromAppSave;
 }

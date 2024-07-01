@@ -66,7 +66,7 @@ public partial class RuleViewModel : DisposableObservableObject
             .DisposeWith(Disposables);
         
         executedCommandStream
-            .Where(command => command is RestoreStateCommand)
+            .Where(command => command is RestoreSaveCommand)
             .Subscribe(_ =>
             {
                 if (EditingRule.Equals(ActualRule))

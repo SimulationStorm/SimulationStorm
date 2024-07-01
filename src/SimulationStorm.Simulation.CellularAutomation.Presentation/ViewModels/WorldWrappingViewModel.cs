@@ -96,7 +96,7 @@ public partial class WorldWrappingViewModel<TCellState> : DisposableObservableOb
             .DisposeWith(Disposables);
         
         executedCommandStream
-            .Where(command => command is RestoreStateCommand)
+            .Where(command => command is RestoreSaveCommand)
             .Subscribe(_ =>
             {
                 if (_editingWorldWrapping == ActualWorldWrapping)

@@ -29,7 +29,7 @@ public class CommandExecutionStatsManager : CollectionManagerBase<CommandExecuti
             )
             .Where(_ => IsSavingEnabled)
             .Select(e => e.EventArgs)
-            .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppSave: true })
+            .Where(e => e.Command is not RestoreSaveCommand { IsRestoringFromAppSave: true })
             .Select(e => new CommandExecutionResultRecord(e.Command, e.ElapsedTime))
             .Subscribe(Collection.Add)
             .DisposeWith(Disposables);

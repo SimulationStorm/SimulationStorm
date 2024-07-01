@@ -152,7 +152,7 @@ public abstract partial class WorldSizeViewModelBase : DisposableObservableObjec
             .DisposeWith(Disposables);
         
         executedCommandStream
-            .Where(command => command is RestoreStateCommand)
+            .Where(command => command is RestoreSaveCommand)
             .Subscribe(_ =>
             {
                 if (_editingWorldSize == ActualWorldSize)

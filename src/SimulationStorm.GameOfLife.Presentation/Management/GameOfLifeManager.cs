@@ -95,8 +95,8 @@ public class GameOfLifeManager :
     public Task ChangeAlgorithmAsync(GameOfLifeAlgorithm newAlgorithm) =>
         ScheduleCommandAsync(new ChangeAlgorithmCommand(newAlgorithm));
 
-    public Task RestoreStateAsync(GameOfLifeSave save, bool isRestoringFromAppState = false) =>
-        ScheduleCommandAsync(new RestoreStateCommand(save, isRestoringFromAppState));
+    public Task RestoreSaveAsync(GameOfLifeSave save, bool isRestoringFromAppSave = false) =>
+        ScheduleCommandAsync(new RestoreSaveCommand(save, isRestoringFromAppSave));
     
     public Task AdvanceAsync() =>
         ScheduleCommandAsync(new AdvanceCommand());
@@ -148,7 +148,7 @@ public class GameOfLifeManager :
                 ExecuteReset(resetCommand);
                 break;
             }
-            case RestoreStateCommand restoreStateCommand:
+            case RestoreSaveCommand restoreStateCommand:
             {
                 ExecuteRestoreState(restoreStateCommand);
                 break;
@@ -211,9 +211,9 @@ public class GameOfLifeManager :
     private void ExecuteReset(ResetCommand command) =>
         _gameOfLifeImpl.Reset();
 
-    private void ExecuteRestoreState(RestoreStateCommand command)
+    private void ExecuteRestoreState(RestoreSaveCommand command)
     {
-        var state = (GameOfLifeSave)command.State;
+        var state = (GameOfLifeSave)command.Save;
         switch (state.Algorithm)
         {
             case GameOfLifeAlgorithm.Bitwise when Algorithm is not GameOfLifeAlgorithm.Bitwise:

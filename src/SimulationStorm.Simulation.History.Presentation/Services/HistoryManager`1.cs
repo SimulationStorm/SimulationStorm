@@ -45,7 +45,7 @@ public class HistoryManager<TSave>
         var save = record.Save;
         
         await simulationManager
-            .RestoreStateAsync(save)
+            .RestoreSaveAsync(save)
             .ConfigureAwait(false);
         
         Collection.MovePointer(saveIndex);
@@ -80,7 +80,7 @@ public class HistoryManager<TSave>
 
     private bool IsSavingNeeded(SimulationCommand command) =>
         !IsDisposingOrDisposed
-        && command is not RestoreStateCommand
+        && command is not RestoreSaveCommand
         && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
     
     private async Task SaveSimulationAndAddRecordToCollectionAsync(SimulationCommand command)

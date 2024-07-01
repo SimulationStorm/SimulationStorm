@@ -8,9 +8,14 @@ public class SimulationSaveManagerBase<TSave>(ISaveableSimulationManager<TSave> 
 {
     protected override Task<TSave> SaveServiceAsyncCore() => simulationManager.SaveAsync();
 
-    protected override Task RestoreServiceSaveAsyncCore(TSave save)
+    protected override async Task RestoreServiceSaveAsyncCore(TSave save)
     {
-        // await simulationManager.ClearCommandQueueAsync();
-        return simulationManager.RestoreStateAsync(save, true);
+        // await simulationManager
+        //     .ClearScheduledCommandsAsync()
+        //     .ConfigureAwait(false);
+        
+        await simulationManager
+            .RestoreSaveAsync(save, isRestoringFromAppSave: true)
+            .ConfigureAwait(false);
     }
 }

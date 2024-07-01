@@ -30,7 +30,7 @@ public class SummaryStatsManager<TSummary>
     private bool IsSummarizingNeeded(SimulationCommand command) =>
         !IsDisposingOrDisposed
         && command.ChangesWorld
-        && command is not RestoreStateCommand { IsRestoringFromAppSave: true }
+        && command is not RestoreSaveCommand { IsRestoringFromAppSave: true }
         && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
     
     private async Task SummarizeSimulationAndAddToCollection(SimulationCommand command)
