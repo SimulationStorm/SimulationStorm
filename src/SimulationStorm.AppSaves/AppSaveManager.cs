@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,25 +52,12 @@ public class AppSaveManager : IAppSaveManager
     {
         var appSave = _appSavesEntityFactory.CreateAppSave(saveName);
 
-        _serviceSaveManagers.ForEach(serviceSaveManager =>
-        {
-            var saveType = serviceSaveManager.SaveType;
-            var save = serviceSaveManager.SaveService();
+        foreach (var serviceSave in CreateServiceSaves())
+            appSave.ServiceSaves.Add(serviceSave);
 
-            var appServiceSave = _appSavesEntityFactory.CreateServiceSave(saveType, save);
-            appSave.ServiceSaves.Add(appServiceSave);
-        });
-
-        foreach (var asyncServiceSaveManager in _asyncServiceSaveManagers)
-        {
-            var saveType = asyncServiceSaveManager.SaveType;
-            var save = await asyncServiceSaveManager
-                .SaveServiceAsync()
-                .ConfigureAwait(false);
-            
-            var appServiceSave = _appSavesEntityFactory.CreateServiceSave(saveType, save);
-            appSave.ServiceSaves.Add(appServiceSave);
-        }
+        await foreach (var serviceSave in CreateAsyncServiceSavesAsync()
+                           .ConfigureAwait(false))
+            appSave.ServiceSaves.Add(serviceSave);
 
         await _appSaveRepository
             .AddAppSaveAsync(appSave)
@@ -77,31 +65,20 @@ public class AppSaveManager : IAppSaveManager
         
         _appSaves.Add(appSave);
     });
-
-    /// <remarks>
-    /// Due to using LazyLoadProxies(), accessing serviceSave.Save may take significant time;
-    /// because of it, all following operations are executed in task.
-    /// </remarks>
+    
     public Task RestoreAppSaveAsync(AppSave appSave) => Task.Run(async () =>
     {
-        _appSaveRestoringOperations.ForEach(operation => operation.OnAppSaveRestoring());
-        
-        _serviceSaveManagers.ForEach(serviceSaveManager =>
-        {
-            var serviceSave = appSave.ServiceSaves.First(x => x.SaveObjectType == serviceSaveManager.SaveType);
-            serviceSaveManager.RestoreServiceSave(serviceSave.SaveObject);
-        });
-    
-        foreach (var asyncServiceSaveManager in _asyncServiceSaveManagers)
-        {
-            var serviceSave = appSave.ServiceSaves.First(x => x.SaveObjectType == asyncServiceSaveManager.SaveType);
-            
-            await asyncServiceSaveManager
-                .RestoreServiceSaveAsync(serviceSave.SaveObject)
-                .ConfigureAwait(false);
-        }
-    });
+        ExecuteAppStateRestoringOperations();
 
+        var serviceSaveObjectsByType = appSave.ServiceSaves
+            .ToDictionary(k => k.SaveObjectType, v => v.SaveObject);
+        
+        RestoreServiceSaves(serviceSaveObjectsByType);
+        
+        await RestoreAsyncServiceSavesAsync(serviceSaveObjectsByType)
+            .ConfigureAwait(false);
+    });
+    
     public Task UpdateAppSaveAsync(AppSave appSave) => _appSaveRepository.UpdateAppSaveAsync(appSave);
 
     public async Task DeleteAppSaveAsync(AppSave appSave)
@@ -123,5 +100,60 @@ public class AppSaveManager : IAppSaveManager
     }
     #endregion
 
+    #region Private methods
+    private void ExecuteAppStateRestoringOperations() =>
+        _appSaveRestoringOperations.ForEach(operation => operation.OnAppSaveRestoring());
+
     private void LoadAllAppSavesFromRepository() => _appSaves.AddRange(_appSaveRepository.GetAllAppSaves());
+
+    #region Services saving
+    private IEnumerable<ServiceSave> CreateServiceSaves()
+    {
+        foreach (var serviceSaveManager in _serviceSaveManagers)
+        {
+            var saveType = serviceSaveManager.SaveType;
+            var save = serviceSaveManager.SaveService();
+
+            yield return _appSavesEntityFactory.CreateServiceSave(saveType, save);
+        }
+    }
+
+    private async IAsyncEnumerable<ServiceSave> CreateAsyncServiceSavesAsync()
+    {
+        foreach (var asyncServiceSaveManager in _asyncServiceSaveManagers)
+        {
+            var saveType = asyncServiceSaveManager.SaveType;
+            
+            var save = await asyncServiceSaveManager
+                .SaveServiceAsync()
+                .ConfigureAwait(false);
+            
+            yield return _appSavesEntityFactory.CreateServiceSave(saveType, save);
+        }
+    }
+    #endregion
+
+    #region Services restoring
+    private void RestoreServiceSaves(IDictionary<Type, object> serviceSaveObjectsByType)
+    {
+        foreach (var serviceSaveManager in _serviceSaveManagers)
+        {
+            var save = serviceSaveObjectsByType[serviceSaveManager.SaveType];
+            serviceSaveManager.RestoreServiceSave(save);
+        }
+    }
+    
+    private async Task RestoreAsyncServiceSavesAsync(IDictionary<Type, object> serviceSaveObjectsByType)
+    {
+        foreach (var asyncServiceSaveManager in _asyncServiceSaveManagers)
+        {
+            var save = serviceSaveObjectsByType[asyncServiceSaveManager.SaveType];
+            
+            await asyncServiceSaveManager
+                .RestoreServiceSaveAsync(save)
+                .ConfigureAwait(false);
+        }
+    }
+    #endregion
+    #endregion
 }
