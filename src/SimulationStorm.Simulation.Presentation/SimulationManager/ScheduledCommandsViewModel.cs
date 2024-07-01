@@ -42,7 +42,7 @@ public partial class ScheduledCommandsViewModel : DisposableObservableObject
             var scheduledCommands = new ObservableCollection<SimulationCommand>();
 
             simulationManager
-                .CommandScheduledObservable()
+                .CommandSchedulingObservable()
                 .Subscribe(e => scheduledCommands.Add(e.Command));
 
             simulationManager

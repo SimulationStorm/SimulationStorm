@@ -15,7 +15,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     public bool IsCommandProgressReportingEnabled { get; set; }
 
     #region Events
-    public event EventHandler<SimulationCommandEventArgs>? CommandScheduled;
+    public event EventHandler<SimulationCommandEventArgs>? CommandScheduling;
     
     public event EventHandler<SimulationCommandEventArgs>? CommandStarting;
     
@@ -27,7 +27,9 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #region Fields
     private readonly IBenchmarker _benchmarker;
     
-    private ISimulation _simulation = null!;
+    private ISimulation? _simulation;
+
+    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
     
     private readonly Stopwatch _stopwatch = new();
 
@@ -38,8 +40,6 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private readonly CancellationTokenSource _commandProcessingCycleCts = new();
     
     private readonly AsyncReaderWriterLock _simulationRwLock = new();
-
-    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
 
     // This field is needed to store command while doing ExecuteCommand to access command from simulation progress event
     private SimulationCommand? _executingCommand;
@@ -58,19 +58,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     {
         ThrowIfDisposingOrDisposed();
 
-        await _scheduledCommandChannelRwLock
-            .EnterReadLockAsync()
+        var scheduledCommand = await ScheduleCommandAndNotifyAsync(command)
             .ConfigureAwait(false);
-
-        var scheduledCommand = new ScheduledCommand(command);
-
-        await _scheduledCommandChannel.Writer
-            .WriteAsync(scheduledCommand)
-            .ConfigureAwait(false);
-        
-        NotifyCommandScheduled(command);
-        
-        _scheduledCommandChannelRwLock.Release();
         
         await scheduledCommand.Task
             .ConfigureAwait(false);
@@ -119,6 +108,10 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         // In this new implementation, we try to avoid waiting task itself...
         
         await _commandCompletedEventSynchronizer
+            .DisposeAsync()
+            .ConfigureAwait(false);
+
+        await _scheduledCommandChannelRwLock
             .DisposeAsync()
             .ConfigureAwait(false);
 
@@ -209,6 +202,25 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         ProcessScheduledCommandsAsync(_commandProcessingCycleCts.Token)
             .ConfigureAwait(false);
     
+    private async Task<ScheduledCommand> ScheduleCommandAndNotifyAsync(SimulationCommand command)
+    {
+        NotifyCommandScheduling(command);
+        
+        await _scheduledCommandChannelRwLock
+            .EnterReadLockAsync()
+            .ConfigureAwait(false);
+
+        var scheduledCommand = new ScheduledCommand(command);
+        
+        await _scheduledCommandChannel.Writer
+            .WriteAsync(scheduledCommand)
+            .ConfigureAwait(false);
+        
+        _scheduledCommandChannelRwLock.Release();
+
+        return scheduledCommand;
+    }
+    
     private async Task ProcessScheduledCommandsAsync(CancellationToken cancellationToken)
     {
         try
@@ -221,7 +233,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
                     .ConfigureAwait(false);
             }
         }
-        catch (OperationCanceledException _)
+        catch (OperationCanceledException)
         {
             // No operation
         }
@@ -232,7 +244,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     {
         var command = scheduledCommand.Command;
 
-        var elapsedTime = await NotifyCommandStartedAndExecuteCommandAsync(command, cancellationToken)
+        var elapsedTime = await NotifyCommandStartingAndExecuteCommandAsync(command, cancellationToken)
             .ConfigureAwait(false);
 
         await NotifyCommandCompletedAndWaitForEventHandling(command, elapsedTime, cancellationToken)
@@ -241,20 +253,21 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         scheduledCommand.NotifyTaskCompleted();
     }
 
-    private async Task<TimeSpan> NotifyCommandStartedAndExecuteCommandAsync(
+    private async Task<TimeSpan> NotifyCommandStartingAndExecuteCommandAsync(
         SimulationCommand command, CancellationToken cancellationToken)
     {
+        NotifyCommandStarting(command);
+        
         await _simulationRwLock
             .EnterWriteLockAsync(cancellationToken)
             .ConfigureAwait(false);
-        
-        NotifyCommandStarting(command);
 
-        // The simplest way to synchronize this property is to set it before command execution
-        _simulation.IsProgressReportingEnabled = IsCommandProgressReportingEnabled;
+        _simulation!.IsProgressReportingEnabled = IsCommandProgressReportingEnabled;
         
         var elapsedTime = ExecuteCommandCore(command);
+        
         _simulationRwLock.Release();
+        
         return elapsedTime;
     }
     
@@ -273,7 +286,6 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     {
         _stopwatch.Stop();
 
-        // If disposing / clearing commands, cancel current simulation domain operation and return...
         if (_commandProcessingCycleCts.IsCancellationRequested)
         {
             e.Cancel = true;
@@ -289,19 +301,19 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private async ValueTask NotifyCommandCompletedAndWaitForEventHandling(
         SimulationCommand command, TimeSpan elapsedTime, CancellationToken cancellationToken)
     {
+        _commandCompletedEventSynchronizer.Reset();
+
         NotifyCommandCompleted(command, elapsedTime);
 
         await _commandCompletedEventSynchronizer
             .WaitAsync(cancellationToken)
             .ConfigureAwait(false);
-
-        _commandCompletedEventSynchronizer.Reset();
     }
     #endregion
 
     #region Notification methods
-    private void NotifyCommandScheduled(SimulationCommand command) =>
-        CommandScheduled?.Invoke(this, new SimulationCommandEventArgs(command));
+    private void NotifyCommandScheduling(SimulationCommand command) =>
+        CommandScheduling?.Invoke(this, new SimulationCommandEventArgs(command));
     
     private void NotifyCommandStarting(SimulationCommand command) =>
         CommandStarting?.Invoke(this, new SimulationCommandEventArgs(command));

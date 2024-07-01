@@ -12,7 +12,7 @@ public interface ISimulationManager
     /// <summary>
     /// Occurs after the command has been scheduled to execution.
     /// </summary>
-    event EventHandler<SimulationCommandEventArgs>? CommandScheduled;
+    event EventHandler<SimulationCommandEventArgs>? CommandScheduling;
     
     /// <summary>
     /// Occurs before the start of the command execution.

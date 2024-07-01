@@ -5,15 +5,15 @@ namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
 public static class SimulationManagerExtensions
 {
-    public static IObservable<SimulationCommandEventArgs> CommandScheduledObservable
+    public static IObservable<SimulationCommandEventArgs> CommandSchedulingObservable
     (
         this ISimulationManager simulationManager)
     {
         return Observable
             .FromEventPattern<EventHandler<SimulationCommandEventArgs>, SimulationCommandEventArgs>
             (
-                h => simulationManager.CommandScheduled += h,
-                h => simulationManager.CommandScheduled -= h
+                h => simulationManager.CommandScheduling += h,
+                h => simulationManager.CommandScheduling -= h
             )
             .Select(ep => ep.EventArgs);
     }
