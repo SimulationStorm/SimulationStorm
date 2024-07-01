@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimulationStorm.AppSaves;
+namespace SimulationStorm.AppSaves.Entities;
 
 public class ServiceSave
 {

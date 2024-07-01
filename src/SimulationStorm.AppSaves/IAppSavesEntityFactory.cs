@@ -1,4 +1,5 @@
 ﻿using System;
+using SimulationStorm.AppSaves.Entities;
 
 namespace SimulationStorm.AppSaves;
 

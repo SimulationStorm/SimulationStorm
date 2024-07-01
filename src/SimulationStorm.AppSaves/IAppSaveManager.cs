@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using SimulationStorm.AppSaves.Entities;
 
 namespace SimulationStorm.AppSaves;
 

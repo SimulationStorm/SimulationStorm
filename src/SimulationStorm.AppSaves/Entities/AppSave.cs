@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimulationStorm.AppSaves;
+namespace SimulationStorm.AppSaves.Entities;
 
 public class AppSave
 {

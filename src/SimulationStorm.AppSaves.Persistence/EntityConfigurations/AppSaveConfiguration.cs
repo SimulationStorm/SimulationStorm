@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SimulationStorm.AppSaves.Entities;
 
 namespace SimulationStorm.AppSaves.Persistence.EntityConfigurations;
 

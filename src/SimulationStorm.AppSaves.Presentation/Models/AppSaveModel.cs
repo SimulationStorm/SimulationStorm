@@ -1,4 +1,5 @@
 ﻿using System;
+using SimulationStorm.AppSaves.Entities;
 using SimulationStorm.Utilities.Indexing;
 
 namespace SimulationStorm.AppSaves.Presentation.Models;

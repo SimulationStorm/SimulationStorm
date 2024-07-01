@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using SimulationStorm.AppSaves.Entities;
 using SimulationStorm.AppSaves.Persistence.EntityConfigurations;
 
 namespace SimulationStorm.AppSaves.Persistence;

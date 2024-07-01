@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SimulationStorm.AppSaves.Entities;
 using SimulationStorm.AppSaves.Persistence.Serialization;
 
 namespace SimulationStorm.AppSaves.Persistence.EntityConfigurations;
