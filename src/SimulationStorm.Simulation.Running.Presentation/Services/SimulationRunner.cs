@@ -51,9 +51,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
     #region Public methods
     public void StartSimulation()
     {
-        // Todo: At the moment, do so to avoid exception with object disposed exception
-        if (IsDisposed)
-            return;
+        // Todo: ThrowIfDisposingOrDisposed();
         
         if (SimulationRunningState is SimulationRunningState.Running)
             return;
@@ -67,9 +65,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
 
     public void PauseSimulation()
     {
-        // Todo: At the moment, do so to avoid exception with object disposed exception
-        if (IsDisposed)
-            return;
+        // Todo: ThrowIfDisposingOrDisposed();
         
         if (SimulationRunningState is SimulationRunningState.Paused)
             return;
@@ -81,13 +77,8 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
         _notificationManager.ShowInformation("Simulation.Running.AdvancementPausedMessage", "Notifications.Notification");
     }
 
-    public override async ValueTask DisposeAsync()
+    protected override async ValueTask DisposeAsyncCore()
     {
-        if (IsDisposed)
-            return;
-
-        IsDisposed = true;
-        
         await _advancingCycleCts
             .CancelAsync()
             .ConfigureAwait(false);
@@ -100,12 +91,6 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
             .ConfigureAwait(false);
         
         _advancingCycleCts.Dispose();
-
-        await base
-            .DisposeAsync()
-            .ConfigureAwait(false);
-        
-        GC.SuppressFinalize(this);
     }
     #endregion
 

@@ -50,20 +50,13 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
 
     public void RequestRerender()
     {
-        // Todo: At the moment, do so to avoid exception with object disposed exception
-        if (IsDisposed)
-            return;
+        // Todo: ThrowIfDisposingOrDisposed();
         
         _renderingLoopSynchronizer.Set();
     }
-
-    public override async ValueTask DisposeAsync()
+    
+    protected override async ValueTask DisposeAsyncCore()
     {
-        if (IsDisposed)
-            return;
-        
-        IsDisposed = true;
-        
         await _renderingLoopCts
             .CancelAsync()
             .ConfigureAwait(false);
@@ -80,12 +73,6 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
         _bitmap?.Dispose();
         _bitmapCanvas?.Dispose();
         _bitmapCopy?.Dispose();
-        
-        await base
-            .DisposeAsync()
-            .ConfigureAwait(false);
-        
-        GC.SuppressFinalize(this);
     }
     
     #region Rendering methods
