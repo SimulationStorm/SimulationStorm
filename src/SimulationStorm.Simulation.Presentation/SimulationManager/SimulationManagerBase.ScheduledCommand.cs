@@ -17,7 +17,8 @@ public abstract partial class SimulationManagerBase
         #region Methods
         public void NotifyCompleted() => _tcs.SetResult();
 
-        public void NotifyCanceled() => _tcs.SetCanceled();
+        // Todo: for now, it is not very needed to have a such thing.
+        // public void NotifyCanceled() => _tcs.SetCanceled();
         #endregion
     }
 }

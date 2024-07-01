@@ -10,9 +10,9 @@ public class SimulationSaveManagerBase<TSave>(ISaveableSimulationManager<TSave> 
 
     protected override async Task RestoreServiceSaveAsyncCore(TSave save)
     {
-        // await simulationManager
-        //     .ClearScheduledCommandsAsync()
-        //     .ConfigureAwait(false);
+        await simulationManager
+            .ClearScheduledCommandsAsync()
+            .ConfigureAwait(false);
         
         await simulationManager
             .RestoreSaveAsync(save, isRestoringFromAppSave: true)

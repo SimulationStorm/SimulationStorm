@@ -73,7 +73,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
         var scheduledCommand = await ScheduleCommandAndNotifyAsync(command)
             .ConfigureAwait(false);
-        
+
         await scheduledCommand.Task
             .ConfigureAwait(false);
     }
@@ -216,7 +216,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         await _commandProcessingLoopTask
             .ConfigureAwait(false);
         
-        _scheduledCommands.ForEach(scheduledCommand => scheduledCommand.NotifyCanceled());
+        _scheduledCommands.ForEach(scheduledCommand => scheduledCommand.NotifyCompleted());
         _scheduledCommands.Clear();
     }
 
