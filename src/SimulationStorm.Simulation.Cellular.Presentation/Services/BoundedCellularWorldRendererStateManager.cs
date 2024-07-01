@@ -1,21 +1,21 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Cellular.Presentation.Services;
 
-public class BoundedCellularWorldRendererStateManager(IBoundedCellularWorldRenderer worldRenderer) :
-    ServiceStateManagerBase<BoundedCellularWorldRendererState>
+public class BoundedCellularWorldRendererSaveManager(IBoundedCellularWorldRenderer worldRenderer) :
+    ServiceSaveManagerBase<BoundedCellularWorldRendererSave>
 {
-    protected override BoundedCellularWorldRendererState SaveServiceStateImpl() => new()
+    protected override BoundedCellularWorldRendererSave SaveServiceCore() => new()
     {
         BackgroundColor = worldRenderer.BackgroundColor,
         IsGridLinesVisible = worldRenderer.IsGridLinesVisible,
         GridLinesColor = worldRenderer.GridLinesColor
     };
 
-    protected override void RestoreServiceStateImpl(BoundedCellularWorldRendererState state)
+    protected override void RestoreServiceSaveCore(BoundedCellularWorldRendererSave save)
     {
-        worldRenderer.BackgroundColor = state.BackgroundColor;
-        worldRenderer.IsGridLinesVisible = state.IsGridLinesVisible;
-        worldRenderer.GridLinesColor = state.GridLinesColor;
+        worldRenderer.BackgroundColor = save.BackgroundColor;
+        worldRenderer.IsGridLinesVisible = save.IsGridLinesVisible;
+        worldRenderer.GridLinesColor = save.GridLinesColor;
     }
 }

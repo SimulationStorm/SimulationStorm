@@ -1,7 +1,7 @@
 ﻿namespace SimulationStorm.Simulation.Statistics.Presentation.RenderingStats.ViewModels;
 
-public class RenderingStatsViewModelStateManager
+public class RenderingStatsViewModelSaveManager
 (
     RenderingStatsViewModel renderingStatsViewModel
 )
-    : StatsViewModelStateManagerBase<RenderingStatsViewModelState>(renderingStatsViewModel);
+    : StatsViewModelSaveManagerBase<RenderingStatsViewModelSave>(renderingStatsViewModel);

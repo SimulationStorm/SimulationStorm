@@ -1,10 +1,10 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Presentation.StatusBar;
 
-public class StatusBarStateManager(StatusBarViewModel statusBarViewModel) : ServiceStateManagerBase<StatusBarState>
+public class StatusBarSaveManager(StatusBarViewModel statusBarViewModel) : ServiceSaveManagerBase<StatusBarSave>
 {
-    protected override StatusBarState SaveServiceStateImpl() => new()
+    protected override StatusBarSave SaveServiceCore() => new()
     {
         IsCommandProgressVisible = statusBarViewModel.IsCommandProgressVisible,
         IsCommandTimeVisible = statusBarViewModel.IsCommandTimeVisible,
@@ -16,15 +16,15 @@ public class StatusBarStateManager(StatusBarViewModel statusBarViewModel) : Serv
         WorldRenderingTime = statusBarViewModel.WorldRenderingTime
     };
 
-    protected override void RestoreServiceStateImpl(StatusBarState state)
+    protected override void RestoreServiceSaveCore(StatusBarSave save)
     {
-        statusBarViewModel.IsCommandProgressVisible = state.IsCommandProgressVisible;
-        statusBarViewModel.IsCommandTimeVisible = state.IsCommandTimeVisible;
-        statusBarViewModel.IsSimulationRenderingProgressVisible = state.IsSimulationRenderingProgressVisible;
-        statusBarViewModel.IsSimulationRenderingTimeVisible = state.IsSimulationRenderingTimeVisible;
-        statusBarViewModel.IsWorldRenderingTimeVisible = state.IsWorldRenderingTimeVisible;
-        statusBarViewModel.CommandTime = state.CommandTime;
-        statusBarViewModel.SimulationRenderingTime = state.SimulationRenderingTime;
-        statusBarViewModel.WorldRenderingTime = state.WorldRenderingTime;
+        statusBarViewModel.IsCommandProgressVisible = save.IsCommandProgressVisible;
+        statusBarViewModel.IsCommandTimeVisible = save.IsCommandTimeVisible;
+        statusBarViewModel.IsSimulationRenderingProgressVisible = save.IsSimulationRenderingProgressVisible;
+        statusBarViewModel.IsSimulationRenderingTimeVisible = save.IsSimulationRenderingTimeVisible;
+        statusBarViewModel.IsWorldRenderingTimeVisible = save.IsWorldRenderingTimeVisible;
+        statusBarViewModel.CommandTime = save.CommandTime;
+        statusBarViewModel.SimulationRenderingTime = save.SimulationRenderingTime;
+        statusBarViewModel.WorldRenderingTime = save.WorldRenderingTime;
     }
 }

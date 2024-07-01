@@ -1,9 +1,9 @@
-﻿using SimulationStorm.AppStates.Operations;
+﻿using SimulationStorm.AppSaves.Operations;
 
 namespace SimulationStorm.Simulation.Running.Presentation.Services;
 
-public class PauseSimulationOnAppStateRestoringOperation(ISimulationRunner simulationRunner) :
-    IAppStateRestoringOperation
+public class PauseSimulationOnAppSaveRestoringOperation(ISimulationRunner simulationRunner) :
+    IAppSaveRestoringOperation
 {
-    public void OnAppStateRestoring() => simulationRunner.PauseSimulation();
+    public void OnAppSaveRestoring() => simulationRunner.PauseSimulation();
 }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using SimulationStorm.AppStates;
+using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 
-public class SummaryStatsStateManager<TSummary>(ISummaryStatsManager<TSummary> summaryStatsManager) : IServiceStateManager
+public class SummaryStatsSaveManager<TSummary>(ISummaryStatsManager<TSummary> summaryStatsManager) : IServiceSaveManager
 {
-    public Type StateType => typeof(SummaryStatsState<TSummary>);
+    public Type SaveType => typeof(SummaryStatsSave<TSummary>);
     
-    public object SaveServiceState() => new SummaryStatsState<TSummary>()
+    public object SaveService() => new SummaryStatsSave<TSummary>()
     {
         IsSavingEnabled = summaryStatsManager.IsSavingEnabled,
         SavingInterval = summaryStatsManager.SavingInterval,
@@ -17,9 +17,9 @@ public class SummaryStatsStateManager<TSummary>(ISummaryStatsManager<TSummary> s
         Items = summaryStatsManager.Collection.ToArray()
     };
 
-    public void RestoreServiceState(object state)
+    public void RestoreServiceSave(object save)
     {
-        var summaryStatsManagerState = (SummaryStatsState<TSummary>)state;
+        var summaryStatsManagerState = (SummaryStatsSave<TSummary>)save;
         
         summaryStatsManager.IsSavingEnabled = summaryStatsManagerState.IsSavingEnabled;
         summaryStatsManager.SavingInterval = summaryStatsManagerState.SavingInterval;

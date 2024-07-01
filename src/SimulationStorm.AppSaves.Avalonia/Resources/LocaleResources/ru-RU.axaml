@@ -1,0 +1,25 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.AppSaves.AppSaves">Сохранения приложения</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Delete">Удалить</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DeleteAllSavesQuestion">Вы действительно хотите удалить все сохранения?</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DeleteAllSaves">Удалить все сохранения</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveDeleted">Сохранение удалено.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Confirmation">Подтверждение</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AllSavesDeleted">Все сохранения удалены.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.LoadSave">Загрузить сохранение</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveLoading">Загрузка…</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveLoaded">Сохранение загружено.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DoubleClickToEdit">Кликните дважды для редактирования</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveChanges">Сохранить изменения</sys:String>
+    <sys:String x:Key="Strings.AppSaves.ChangesSaved">Изменения сохранены.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Editing">Редактирование</sys:String>
+    <sys:String x:Key="Strings.AppSaves.CreatingSave">Создание сохранения</sys:String>
+    <sys:String x:Key="Strings.AppSaves.NewSave">Новое сохранение</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Save">Сохранить</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveApp">Сохранить приложение</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AppSaving">Сохранение…</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AppSaved">Приложение сохранено.</sys:String>
+</ResourceDictionary>

@@ -1,10 +1,10 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Densities.Presentation;
 
-public class UiDensityStateManager(IUiDensityManager uiDensityManager) : ServiceStateManagerBase<UiDensity>
+public class UiDensitySaveManager(IUiDensityManager uiDensityManager) : ServiceSaveManagerBase<UiDensity>
 {
-    protected override UiDensity SaveServiceStateImpl() => uiDensityManager.CurrentDensity;
+    protected override UiDensity SaveServiceCore() => uiDensityManager.CurrentDensity;
 
-    protected override void RestoreServiceStateImpl(UiDensity state) => uiDensityManager.ChangeDensity(state);
+    protected override void RestoreServiceSaveCore(UiDensity save) => uiDensityManager.ChangeDensity(save);
 }

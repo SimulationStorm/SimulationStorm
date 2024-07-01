@@ -1,0 +1,92 @@
+﻿<dialogs:DialogControl x:Class="SimulationStorm.AppSaves.Avalonia.Views.AppSaveManagerDialogView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                       xmlns:behaviors="using:SimulationStorm.Avalonia.Behaviors"
+                       xmlns:dialogs="using:SimulationStorm.Dialogs.Avalonia"
+                       xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+                       xmlns:models="using:SimulationStorm.AppSaves.Presentation.Models"
+                       xmlns:viewModels="using:SimulationStorm.AppSaves.Presentation.ViewModels"
+                       xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                       x:DataType="viewModels:AppSaveManagerDialogViewModel"
+                       Title="{DynamicResource Strings.AppSaves.AppSaves}"
+                       Width="{actipro:ScaledDouble 120}">
+    <DockPanel Classes="stack-items-vertically">
+        <actipro:ShadowChrome Elevation="4"
+                              Classes="has-bottom-margin">
+            <DataGrid x:Name="RecordModelsDataGrid"
+                      ItemsSource="{Binding AppSaveModels}"
+                      LoadingRow="OnRecordModelsDataGridLoadingRow"
+                      SelectedItem="{Binding SelectedAppSaveModel,
+                                         Mode=TwoWay}"
+                      Height="{actipro:ScaledDouble 45}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:DataType="models:AppSaveModel"
+                                        Binding="{Binding OrdinalNumber}"
+                                        Header="{DynamicResource Strings.Common.OrdinalNumber}"/>
+
+                    <DataGridTextColumn x:DataType="models:AppSaveModel"
+                                        Binding="{Binding DateAndTime,
+                                                      StringFormat=F}"
+                                        Header="{DynamicResource Strings.Common.Date}"/>
+
+                    <DataGridTextColumn x:DataType="models:AppSaveModel"
+                                        Binding="{Binding Name}"
+                                        Header="{DynamicResource Strings.Common.Name}"/>
+                </DataGrid.Columns>
+
+                <Interaction.Behaviors>
+                    <behaviors:ScrollToLastItemBehavior/>
+                </Interaction.Behaviors>
+
+                <DataGrid.Styles>
+                    <Style Selector="DataGridRow">
+                        <Setter Property="(ToolTip.Tip)" Value="{DynamicResource Strings.AppSaves.DoubleClickToEdit}"/>
+                    </Style>
+                </DataGrid.Styles>
+            </DataGrid>
+        </actipro:ShadowChrome>
+
+        <DockPanel>
+            <Button x:Name="DeleteAllAppSavesButton"
+                    helpers:IconHelper.Icon="IconX"
+                    Classes="theme-subtle danger hidden-when-disabled"
+                    Content="{DynamicResource Strings.AppSaves.DeleteAllSaves}"
+                    IsEnabled="{Binding !IsRestoringInProgress}"
+                    IsVisible="{Binding CanDeleteAllAppSaves}"/>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="{actipro:ScaledDouble 1.5}"
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right">
+
+                <Button Classes.restoring-in-progress="{Binding IsRestoringInProgress}"
+                        Command="{Binding RestoreAppSaveCommand}">
+                    <Button.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Content">
+                                <Template>
+                                    <ContentControl helpers:IconHelper.Icon="IconRestore"
+                                                    Content="{DynamicResource Strings.AppSaves.LoadSave}"/>
+                                </Template>
+                            </Setter>
+                            <Style Selector="^.restoring-in-progress">
+                                <Setter Property="Content">
+                                    <Template>
+                                        <controls:ProgressControl Content="{DynamicResource Strings.AppSaves.SaveLoading}"/>
+                                    </Template>
+                                </Setter>
+                            </Style>
+                        </Style>
+                    </Button.Styles>
+                </Button>
+
+                <DropDownButton x:Name="SaveAppButton"
+                                helpers:IconHelper.Icon="IconDeviceFloppy"
+                                Classes="theme-solid accent"
+                                Content="{DynamicResource Strings.AppSaves.SaveApp}"
+                                IsEnabled="{Binding !IsRestoringInProgress}"/>
+            </StackPanel>
+        </DockPanel>
+    </DockPanel>
+</dialogs:DialogControl>

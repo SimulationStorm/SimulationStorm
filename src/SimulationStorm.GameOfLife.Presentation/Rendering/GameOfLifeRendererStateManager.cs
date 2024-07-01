@@ -1,21 +1,21 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.GameOfLife.Presentation.Rendering;
 
-public class GameOfLifeRendererStateManager(GameOfLifeRenderer gameOfLifeRenderer) :
-    ServiceStateManagerBase<GameOfLifeRendererState>
+public class GameOfLifeRendererSaveManager(GameOfLifeRenderer gameOfLifeRenderer) :
+    ServiceSaveManagerBase<GameOfLifeRendererSave>
 {
-    protected override GameOfLifeRendererState SaveServiceStateImpl() => new()
+    protected override GameOfLifeRendererSave SaveServiceCore() => new()
     {
         IsRenderingEnabled = gameOfLifeRenderer.IsRenderingEnabled,
         RenderingInterval = gameOfLifeRenderer.RenderingInterval,
         CellColors = gameOfLifeRenderer.CellColors
     };
 
-    protected override void RestoreServiceStateImpl(GameOfLifeRendererState state)
+    protected override void RestoreServiceSaveCore(GameOfLifeRendererSave save)
     {
-        gameOfLifeRenderer.IsRenderingEnabled = state.IsRenderingEnabled;
-        gameOfLifeRenderer.RenderingInterval = state.RenderingInterval;
-        gameOfLifeRenderer.CellColors = state.CellColors;
+        gameOfLifeRenderer.IsRenderingEnabled = save.IsRenderingEnabled;
+        gameOfLifeRenderer.RenderingInterval = save.RenderingInterval;
+        gameOfLifeRenderer.CellColors = save.CellColors;
     }
 }

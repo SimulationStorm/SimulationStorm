@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimulationStorm.AppStates.Presentation;
+using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Avalonia;
 using SimulationStorm.Themes.Presentation;
 
@@ -9,5 +9,5 @@ public static class UiThemesDependencyInjection
 {
     public static IServiceCollection AddUiThemeManager(this IServiceCollection services) => services
         .AddSingleton<IUiThemeManager>(_ => new UiThemeManager(AvaloniaServiceProvider.GetApplicationOrThrow()))
-        .AddServiceStateManager<UiThemeStateManager>();
+        .AddServiceSaveManager<UiThemeSaveManager>();
 }

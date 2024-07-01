@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.AppSaves.Presentation\SimulationStorm.AppSaves.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.AppSaves\SimulationStorm.AppSaves.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Dialogs.Presentation\SimulationStorm.Dialogs.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Dialogs.Avalonia\SimulationStorm.Dialogs.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Flyouts.Avalonia\SimulationStorm.Flyouts.Avalonia.csproj" />
+    </ItemGroup>
+
+</Project>

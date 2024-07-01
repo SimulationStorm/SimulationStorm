@@ -29,7 +29,7 @@ public class RenderingStatsManager : CollectionManagerBase<RenderingResultRecord
             )
             .Where(_ => IsSavingEnabled)
             .Select(e => e.EventArgs)
-            .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppState: true })
+            .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppSave: true })
             .Select(e => new RenderingResultRecord(e.Command, e.ElapsedTime))
             .Subscribe(Collection.Add)
             .DisposeWith(Disposables);

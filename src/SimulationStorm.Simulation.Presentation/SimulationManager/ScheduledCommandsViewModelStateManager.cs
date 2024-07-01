@@ -1,15 +1,15 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
-public class ScheduledCommandsViewModelStateManager(ScheduledCommandsViewModel scheduledCommandsViewModel) :
-    ServiceStateManagerBase<ScheduledCommandsViewModelState>
+public class ScheduledCommandsViewModelSaveManager(ScheduledCommandsViewModel scheduledCommandsViewModel) :
+    ServiceSaveManagerBase<ScheduledCommandsViewModelSave>
 {
-    protected override ScheduledCommandsViewModelState SaveServiceStateImpl() => new()
+    protected override ScheduledCommandsViewModelSave SaveServiceCore() => new()
     {
         AreScheduledCommandsVisible = scheduledCommandsViewModel.AreScheduledCommandsVisible
     };
 
-    protected override void RestoreServiceStateImpl(ScheduledCommandsViewModelState state) =>
-        scheduledCommandsViewModel.AreScheduledCommandsVisible = state.AreScheduledCommandsVisible;
+    protected override void RestoreServiceSaveCore(ScheduledCommandsViewModelSave save) =>
+        scheduledCommandsViewModel.AreScheduledCommandsVisible = save.AreScheduledCommandsVisible;
 }

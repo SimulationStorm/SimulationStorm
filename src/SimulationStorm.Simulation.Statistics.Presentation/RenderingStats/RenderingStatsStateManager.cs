@@ -3,5 +3,5 @@ using SimulationStorm.Simulation.Statistics.Presentation.RenderingStats.DataType
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.RenderingStats;
 
-public class RenderingStatsStateManager(IRenderingStatsManager renderingStatsManager)
-    : CollectionStateManagerBase<RenderingResultRecord, RenderingStatsState>(renderingStatsManager);
+public class RenderingStatsSaveManager(IRenderingStatsManager renderingStatsManager)
+    : CollectionSaveManagerBase<RenderingResultRecord, RenderingStatsSave>(renderingStatsManager);

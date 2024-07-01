@@ -3,5 +3,5 @@ using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.D
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats;
 
-public class CommandExecutionStatsStateManager(ICommandExecutionStatsManager commandExecutionStatsManager)
-    : CollectionStateManagerBase<CommandExecutionResultRecord, CommandExecutionStatsState>(commandExecutionStatsManager);
+public class CommandExecutionStatsSaveManager(ICommandExecutionStatsManager commandExecutionStatsManager)
+    : CollectionSaveManagerBase<CommandExecutionResultRecord, CommandExecutionStatsSave>(commandExecutionStatsManager);

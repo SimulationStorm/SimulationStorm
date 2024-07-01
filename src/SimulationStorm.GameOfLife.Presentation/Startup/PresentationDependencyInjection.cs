@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimulationStorm.AppStates.Presentation;
+using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Collections.Lists;
 using SimulationStorm.Collections.Universal;
 using SimulationStorm.DependencyInjection;
@@ -75,7 +75,7 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ISummarizableSimulationManager<GameOfLifeSummary>, GameOfLifeManager>()
         .AddSharedSingleton<ICellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
         .AddSharedSingleton<IBoundedCellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
-        .AddAsyncServiceStateManager<GameOfLifeStateManager>()
+        .AddAsyncServiceSaveManager<GameOfLifeSaveManager>()
         
         .AddStartupOperation<AddSimulationCommandCompletedHandlersOnStartupOperation>()
         //
@@ -84,8 +84,8 @@ public static class PresentationDependencyInjection
         .AddSingleton(PresentationConfiguration.SimulationRunnerOptions)
         .AddSingleton<ISimulationRunner, SimulationRunner>()
         .AddSingleton<SimulationRunnerViewModel>()
-        .AddServiceStateManager<SimulationRunnerStateManager>()
-        .AddAppStateRestoringOperation<PauseSimulationOnAppStateRestoringOperation>()
+        .AddServiceSaveManager<SimulationRunnerSaveManager>()
+        .AddAppSaveRestoringOperation<PauseSimulationOnAppSaveRestoringOperation>()
         //
         
         // Tool panels infrastructure
@@ -93,7 +93,7 @@ public static class PresentationDependencyInjection
         .AddSingleton<IToolPanelManager, ToolPanelManager>()
         .AddSingleton<IToolPanelViewModelFactory, ToolPanelViewModelFactory>()
         .AddSingleton<ToolPanelManagerViewModel>()
-        .AddServiceStateManager<ToolPanelStatesManager>()
+        .AddServiceSaveManager<ToolPanelSavesManager>()
         //
         
         // Simulation and world rendering
@@ -103,7 +103,7 @@ public static class PresentationDependencyInjection
         .AddSingleton<GameOfLifeRenderer>()
         .AddSharedSingleton<ISimulationRenderer, GameOfLifeRenderer>()
         .AddSharedSingleton<ISimulationCommandCompletedHandler, ISimulationRenderer>()
-        .AddServiceStateManager<GameOfLifeRendererStateManager>()
+        .AddServiceSaveManager<GameOfLifeRendererSaveManager>()
         
         .AddStartupOperation<RenderSimulationOnStartupOperation>()
         //
@@ -112,7 +112,7 @@ public static class PresentationDependencyInjection
         .AddSingleton(PresentationConfiguration.WorldCameraOptions)
         .AddSingleton<IWorldCamera, WorldCamera>()
         .AddSingleton<CameraSettingsViewModel>()
-        .AddServiceStateManager<WorldCameraStateManager>()
+        .AddServiceSaveManager<WorldCameraSaveManager>()
         //
         // World renderer
         .AddSingleton<ICellularWorldRendererOptions>(PresentationConfiguration.CellularWorldRendererOptions)
@@ -121,7 +121,7 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<IBoundedWorldRenderer, BoundedCellularWorldRenderer>()
         .AddSharedSingleton<ICellularWorldRenderer, BoundedCellularWorldRenderer>()
         .AddSharedSingleton<IBoundedCellularWorldRenderer, BoundedCellularWorldRenderer>()
-        .AddServiceStateManager<BoundedCellularWorldRendererStateManager>()
+        .AddServiceSaveManager<BoundedCellularWorldRendererSaveManager>()
         //
         .AddSingleton<GameOfLifeWorldViewModel>()
         //
@@ -132,7 +132,7 @@ public static class PresentationDependencyInjection
         
         .AddSingleton<GameOfLifeDrawingSettings>()
         .AddSharedSingleton<IDrawingSettings<GameOfLifeCellState>, GameOfLifeDrawingSettings>()
-        .AddServiceStateManager<GameOfLifeDrawingSettingsStateManager>()
+        .AddServiceSaveManager<GameOfLifeDrawingSettingsSaveManager>()
         
         .AddSingleton<IDrawingSettingsViewModel, DrawingSettingsViewModel>()
         .AddSingleton<DrawingToolPanelViewModel>()
@@ -142,7 +142,7 @@ public static class PresentationDependencyInjection
         .AddSingleton(PresentationConfiguration.HistoryOptions)
         .AddSingleton<IHistoryManager<GameOfLifeSave>, HistoryManager<GameOfLifeSave>>()
         .AddSharedSingleton<ISimulationCommandCompletedHandler, IHistoryManager<GameOfLifeSave>>()
-        .AddServiceStateManager<HistoryStateManager<GameOfLifeSave>>()
+        .AddServiceSaveManager<HistorySaveManager<GameOfLifeSave>>()
         .AddSingleton<IHistoryViewModel, HistoryViewModel<GameOfLifeSave>>()
         //
 
@@ -153,9 +153,9 @@ public static class PresentationDependencyInjection
         .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, SummaryStatsManager<GameOfLifeSummary>>()
         .AddSharedSingleton<ISimulationCommandCompletedHandler, ISummaryStatsManager<GameOfLifeSummary>>()
         // .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, HistoryAwareSummaryStatsManager<GameOfLifeSummary, GameOfLifeSave>>()
-        .AddServiceStateManager<SummaryStatsStateManager<GameOfLifeSummary>>()
+        .AddServiceSaveManager<SummaryStatsSaveManager<GameOfLifeSummary>>()
         .AddSingleton<ISummaryStatsViewModel, SummaryStatsViewModel<GameOfLifeSummary>>()
-        .AddServiceStateManager<SummaryStatsViewModelStateManager>()
+        .AddServiceSaveManager<SummaryStatsViewModelSaveManager>()
         // Summary stats chart view models
         .AddSingleton<SummaryStatsChartViewModelFactory>()
         .AddTransient<TableChartViewModel>()
@@ -166,9 +166,9 @@ public static class PresentationDependencyInjection
         // Command execution stats
         .AddSingleton(PresentationConfiguration.CommandExecutionStatsOptions)
         .AddSingleton<ICommandExecutionStatsManager, CommandExecutionStatsManager>()
-        .AddServiceStateManager<CommandExecutionStatsStateManager>()
+        .AddServiceSaveManager<CommandExecutionStatsSaveManager>()
         .AddSingleton<CommandExecutionStatsViewModel>()
-        .AddServiceStateManager<CommandExecutionStatsViewModelStateManager>()
+        .AddServiceSaveManager<CommandExecutionStatsViewModelSaveManager>()
         
         .AddSingleton<CommandExecutionChartViewModelFactory>()
         .AddTransient<CommandExecutionLineChartViewModel>()
@@ -177,9 +177,9 @@ public static class PresentationDependencyInjection
         // Simulation rendering stats
         .AddSingleton(PresentationConfiguration.RenderingStatsOptions)
         .AddSingleton<IRenderingStatsManager, RenderingStatsManager>()
-        .AddServiceStateManager<RenderingStatsStateManager>()
+        .AddServiceSaveManager<RenderingStatsSaveManager>()
         .AddSingleton<RenderingStatsViewModel>()
-        .AddServiceStateManager<RenderingStatsViewModelStateManager>()
+        .AddServiceSaveManager<RenderingStatsViewModelSaveManager>()
 
         .AddSingleton<RenderingChartViewModelFactory>()
         .AddTransient<RenderingLineChartViewModel>()
@@ -189,18 +189,18 @@ public static class PresentationDependencyInjection
         // Simulation tool panel
         .AddSingleton<SimulationToolPanelViewModel>()
         .AddSingleton<IWorldSizeViewModel, WorldSizeViewModel>()
-        .AddServiceStateManager<WorldSizeViewModelStateManager>()
+        .AddServiceSaveManager<WorldSizeViewModelSaveManager>()
         .AddSingleton<IWorldWrappingViewModel, WorldWrappingViewModel<GameOfLifeCellState>>()
         // Population
         .AddSingleton(PresentationConfiguration.PopulationOptions)
         .AddSingleton<PopulationViewModel>()
-        .AddServiceStateManager<PopulationViewModelStateManager>()
+        .AddServiceSaveManager<PopulationViewModelSaveManager>()
         //
         .AddSingleton<AlgorithmViewModel>()
         .AddSingleton<PatternsViewModel>()
         .AddSingleton<RuleViewModel>()
         .AddSingleton<ScheduledCommandsViewModel>()
-        .AddServiceStateManager<ScheduledCommandsViewModelStateManager>()
+        .AddServiceSaveManager<ScheduledCommandsViewModelSaveManager>()
         //
 
         // Rendering tool panel
@@ -214,10 +214,10 @@ public static class PresentationDependencyInjection
         // Status bar
         .AddSingleton(PresentationConfiguration.StatusBarOptions)
         .AddSingleton<StatusBarViewModel>()
-        .AddServiceStateManager<StatusBarStateManager>()
+        .AddServiceSaveManager<StatusBarSaveManager>()
         //
     
-        .AddAppStateManagementServices(PresentationConfiguration.AppStatesOptions)
+        .AddAppSaveManagementServices(PresentationConfiguration.AppSavesOptions)
     
         .AddStartupOperationManager();
 }

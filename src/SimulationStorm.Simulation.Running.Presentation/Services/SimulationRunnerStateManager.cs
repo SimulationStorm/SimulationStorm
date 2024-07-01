@@ -1,14 +1,14 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Running.Presentation.Services;
 
-public class SimulationRunnerStateManager(ISimulationRunner simulationRunner) : ServiceStateManagerBase<SimulationRunnerState>
+public class SimulationRunnerSaveManager(ISimulationRunner simulationRunner) : ServiceSaveManagerBase<SimulationRunnerSave>
 {
-    protected override SimulationRunnerState SaveServiceStateImpl() => new()
+    protected override SimulationRunnerSave SaveServiceCore() => new()
     {
         IterationsPerSecondLimit = simulationRunner.MaxStepsPerSecond
     };
 
-    protected override void RestoreServiceStateImpl(SimulationRunnerState state) =>
-        simulationRunner.MaxStepsPerSecond = state.IterationsPerSecondLimit;
+    protected override void RestoreServiceSaveCore(SimulationRunnerSave save) =>
+        simulationRunner.MaxStepsPerSecond = save.IterationsPerSecondLimit;
 }

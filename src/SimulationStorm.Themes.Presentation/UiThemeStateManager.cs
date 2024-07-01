@@ -1,10 +1,10 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Themes.Presentation;
 
-public class UiThemeStateManager(IUiThemeManager uiThemeManager) : ServiceStateManagerBase<UiTheme>
+public class UiThemeSaveManager(IUiThemeManager uiThemeManager) : ServiceSaveManagerBase<UiTheme>
 {
-    protected override UiTheme SaveServiceStateImpl() => uiThemeManager.CurrentTheme;
+    protected override UiTheme SaveServiceCore() => uiThemeManager.CurrentTheme;
 
-    protected override void RestoreServiceStateImpl(UiTheme state) => uiThemeManager.ChangeTheme(state);
+    protected override void RestoreServiceSaveCore(UiTheme save) => uiThemeManager.ChangeTheme(save);
 }

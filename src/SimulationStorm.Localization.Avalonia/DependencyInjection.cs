@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using SimulationStorm.AppStates.Presentation;
+using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Localization.Presentation;
 using SimulationStorm.Localization.States;
 
@@ -26,6 +26,6 @@ public static class LocalizationDependencyInjection
 
                 return new LocalizationManager(localeResourceDictionary, localeResourceProvider, options);
             })
-            .AddServiceStateManager<LocalizationStateManager>();
+            .AddServiceSaveManager<LocalizationSaveManager>();
     }
 }

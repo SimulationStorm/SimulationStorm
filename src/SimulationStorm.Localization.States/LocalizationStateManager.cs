@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
-using SimulationStorm.AppStates;
+using SimulationStorm.AppSaves;
 using SimulationStorm.Localization.Presentation;
 
 namespace SimulationStorm.Localization.States;
 
-public class LocalizationStateManager(ILocalizationManager localizationManager) : ServiceStateManagerBase<CultureInfo>
+public class LocalizationSaveManager(ILocalizationManager localizationManager) : ServiceSaveManagerBase<CultureInfo>
 {
-    protected override CultureInfo SaveServiceStateImpl() => localizationManager.CurrentCulture;
+    protected override CultureInfo SaveServiceCore() => localizationManager.CurrentCulture;
 
-    protected override void RestoreServiceStateImpl(CultureInfo state) => localizationManager.ChangeCulture(state);
+    protected override void RestoreServiceSaveCore(CultureInfo save) => localizationManager.ChangeCulture(save);
 }

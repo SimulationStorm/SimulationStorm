@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
-using SimulationStorm.AppStates;
+using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.History.Presentation.Services;
 
-public class SimulationStateManagerBase<TState>(ISaveableSimulationManager<TState> simulationManager) :
-    AsyncServiceStateManagerBase<TState>
+public class SimulationSaveManagerBase<TSave>(ISaveableSimulationManager<TSave> simulationManager) :
+    AsyncServiceSaveManagerBase<TSave>
 {
-    protected override Task<TState> SaveServiceStateAsyncImpl() => simulationManager.SaveAsync();
+    protected override Task<TSave> SaveServiceAsyncCore() => simulationManager.SaveAsync();
 
-    protected override Task RestoreServiceStateAsyncImpl(TState state)
+    protected override Task RestoreServiceSaveAsyncCore(TSave save)
     {
         // await simulationManager.ClearCommandQueueAsync();
-        return simulationManager.RestoreStateAsync(state, true);
+        return simulationManager.RestoreStateAsync(save, true);
     }
 }

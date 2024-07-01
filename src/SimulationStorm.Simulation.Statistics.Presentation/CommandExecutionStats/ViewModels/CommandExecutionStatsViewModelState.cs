@@ -1,3 +1,3 @@
 ﻿namespace SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.ViewModels;
 
-public class CommandExecutionStatsViewModelState : StatsViewModelStateBase;
+public class CommandExecutionStatsViewModelSave : StatsViewModelSaveBase;
