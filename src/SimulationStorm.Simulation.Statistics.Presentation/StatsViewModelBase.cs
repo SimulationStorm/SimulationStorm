@@ -75,11 +75,12 @@ public abstract partial class StatsViewModelBase<TRecord> : CollectionManagerVie
             .DisposeWith(Disposables);
     }
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        base.Dispose();
-        CurrentChartViewModel?.Dispose();
-        GC.SuppressFinalize(this);
+        base.Dispose(disposing);
+        
+        if (disposing)
+            CurrentChartViewModel?.Dispose();
     }
 
     private void UpdateChartViewModel()
