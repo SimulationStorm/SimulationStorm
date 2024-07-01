@@ -39,8 +39,8 @@ public static class RendererExtensions
         return Observable
             .FromEventPattern<EventHandler<CancellableProgressChangedEventArgs>, CancellableProgressChangedEventArgs>
             (
-                h => renderer.ProgressChanged += h,
-                h => renderer.ProgressChanged -= h
+                h => renderer.RenderingProgressChanged += h,
+                h => renderer.RenderingProgressChanged -= h
             )
             .Select(ep => ep.EventArgs);
     }
