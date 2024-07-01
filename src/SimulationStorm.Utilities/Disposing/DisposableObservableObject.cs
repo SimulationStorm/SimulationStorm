@@ -64,7 +64,13 @@ public abstract class DisposableObservableObject : ObservableObject, IDisposable
     /// Releases managed and unmanaged resources associated with this object.
     /// </summary>
     /// <param name="disposing"><see langword="true"/> if called from <see cref="Dispose()"/>; <see langword="false"/> if called from finalizer <see cref="Finalize()"/>.</param>
-    protected virtual void Dispose(bool disposing) => state = DisposedState;
+    protected virtual void Dispose(bool disposing)
+    {
+        state = DisposedState;
+        
+        if (disposing)
+            Disposables.Dispose();
+    }
 
     /// <summary>
     /// Releases managed resources associated with this object asynchronously.
