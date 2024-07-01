@@ -28,21 +28,26 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private readonly IBenchmarker _benchmarker;
     
     private ISimulation? _simulation;
-
-    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
-    
-    private readonly Stopwatch _stopwatch = new();
-
-    private readonly AsyncReaderWriterLock _scheduledCommandChannelRwLock = new();
-
-    private Channel<ScheduledCommand> _scheduledCommandChannel = null!;
-
-    private readonly CancellationTokenSource _commandProcessingCycleCts = new();
     
     private readonly AsyncReaderWriterLock _simulationRwLock = new();
 
-    // This field is needed to store command while doing ExecuteCommand to access command from simulation progress event
+    private readonly AsyncExclusiveLock _commandChannelLock = new();
+
+    #region Command processing
+    private CancellationTokenSource _commandProcessingLoopCts = new();
+
+    private Task _commandProcessingLoopTask = null!;
+
+    private Channel<ScheduledCommand> _commandChannel = null!;
+    #endregion
+
+    #region Command execution
+    private readonly Stopwatch _commandStopwatch = new();
+    
+    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
+
     private SimulationCommand? _executingCommand;
+    #endregion
     #endregion
 
     protected SimulationManagerBase(IBenchmarker benchmarker, ISimulationManagerOptions options)
@@ -50,7 +55,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         _benchmarker = benchmarker;
         _commandCompletedEventSynchronizer = new AsyncCountdownEvent(options.CommandExecutedEventHandlerCount);
         
-        InitializeCommandChannelAndStartProcessing();
+        InitializeCommandChannelAndStartProcessingLoop();
     }
 
     #region Public methods
@@ -69,19 +74,16 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     {
         ThrowIfDisposingOrDisposed();
         
-        await _scheduledCommandChannelRwLock
-            .EnterWriteLockAsync()
-            .ConfigureAwait(false);
-        
-        _scheduledCommandChannel.Writer.Complete();
-        
-        await _commandProcessingCycleCts
-            .CancelAsync()
+        await _commandChannelLock
+            .AcquireAsync()
             .ConfigureAwait(false);
 
-        InitializeCommandChannelAndStartProcessing();
+        await StopCommandProcessingLoopAsync()
+            .ConfigureAwait(false);
 
-        _scheduledCommandChannelRwLock.Release();
+        InitializeCommandChannelAndStartProcessingLoop();
+
+        _commandChannelLock.Release();
     }
     #endregion
 
@@ -99,19 +101,18 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
     protected override async ValueTask DisposeAsyncCore()
     {
-        _scheduledCommandChannel.Writer.Complete();
-        
-        await _commandProcessingCycleCts
-            .CancelAsync()
+        await _commandChannelLock
+            .AcquireAsync()
             .ConfigureAwait(false);
 
-        // In this new implementation, we try to avoid waiting task itself...
-        
-        await _commandCompletedEventSynchronizer
+        await _commandChannelLock
             .DisposeAsync()
             .ConfigureAwait(false);
-
-        await _scheduledCommandChannelRwLock
+        
+        await StopCommandProcessingLoopAsync()
+            .ConfigureAwait(false);
+        
+        await _commandCompletedEventSynchronizer
             .DisposeAsync()
             .ConfigureAwait(false);
 
@@ -186,37 +187,51 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #endregion
     
     #region Private methods
-    private void InitializeCommandChannelAndStartProcessing()
+    private void InitializeCommandChannelAndStartProcessingLoop()
     {
-        InitializeScheduledCommandChannel();
-        StartScheduledCommandsProcessing();
+        InitializeCommandChannel();
+        StartCommandProcessingLoop();
     }
     
-    private void InitializeScheduledCommandChannel() => _scheduledCommandChannel =
+    private void InitializeCommandChannel() => _commandChannel =
         Channel.CreateUnbounded<ScheduledCommand>(new UnboundedChannelOptions
         {
             SingleReader = true
         });
     
-    private void StartScheduledCommandsProcessing() =>
-        ProcessScheduledCommandsAsync(_commandProcessingCycleCts.Token)
+    private void StartCommandProcessingLoop()
+    {
+        _commandProcessingLoopCts = new CancellationTokenSource();
+        _commandProcessingLoopTask = ProcessScheduledCommandsAsync(_commandProcessingLoopCts.Token);
+    }
+
+    private async Task StopCommandProcessingLoopAsync()
+    {
+        _commandChannel.Writer.Complete();
+        
+        await _commandProcessingLoopCts
+            .CancelAsync()
             .ConfigureAwait(false);
-    
+
+        await _commandProcessingLoopTask
+            .ConfigureAwait(false);
+    }
+
     private async Task<ScheduledCommand> ScheduleCommandAndNotifyAsync(SimulationCommand command)
     {
         NotifyCommandScheduling(command);
         
-        await _scheduledCommandChannelRwLock
-            .EnterReadLockAsync()
+        await _commandChannelLock
+            .AcquireAsync()
             .ConfigureAwait(false);
 
         var scheduledCommand = new ScheduledCommand(command);
         
-        await _scheduledCommandChannel.Writer
+        await _commandChannel.Writer
             .WriteAsync(scheduledCommand)
             .ConfigureAwait(false);
         
-        _scheduledCommandChannelRwLock.Release();
+        _commandChannelLock.Release();
 
         return scheduledCommand;
     }
@@ -225,7 +240,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     {
         try
         {
-            await foreach (var scheduledCommand in _scheduledCommandChannel.Reader
+            await foreach (var scheduledCommand in _commandChannel.Reader
                                .ReadAllAsync(cancellationToken)
                                .ConfigureAwait(false))
             {
@@ -233,10 +248,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
                     .ConfigureAwait(false);
             }
         }
-        catch (OperationCanceledException)
-        {
-            // No operation
-        }
+        catch (OperationCanceledException) { }
     }
     
     #region Scheduled command processing
@@ -274,19 +286,19 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private TimeSpan ExecuteCommandCore(SimulationCommand command)
     {
         _executingCommand = command;
-        _stopwatch.Restart();
+        _commandStopwatch.Restart();
         ExecuteCommand(command);
-        _stopwatch.Stop();
+        _commandStopwatch.Stop();
         _executingCommand = null;
         
-        return _stopwatch.Elapsed;
+        return _commandStopwatch.Elapsed;
     }
 
     private void OnSimulationProgressChanged(object? _, CancellableProgressChangedEventArgs e)
     {
-        _stopwatch.Stop();
+        _commandStopwatch.Stop();
 
-        if (_commandProcessingCycleCts.IsCancellationRequested)
+        if (_commandProcessingLoopCts.IsCancellationRequested)
         {
             e.Cancel = true;
             return;
@@ -295,7 +307,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         NotifyCommandProgressChanged(_executingCommand!, e.ProgressPercentage);
             
         if (e.ProgressPercentage is not 100) // Todo: this if may be omitted
-            _stopwatch.Start();
+            _commandStopwatch.Start();
     }
 
     private async ValueTask NotifyCommandCompletedAndWaitForEventHandling(
