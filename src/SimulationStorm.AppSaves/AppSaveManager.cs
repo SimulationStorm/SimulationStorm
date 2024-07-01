@@ -26,6 +26,8 @@ public class AppSaveManager : IAppSaveManager
     private readonly IEnumerable<IAsyncServiceSaveManager> _asyncServiceSaveManagers;
 
     private readonly IEnumerable<IAppSaveRestoringOperation> _appSaveRestoringOperations;
+    
+    private readonly IEnumerable<IAppSaveRestoredOperation> _appSaveRestoredOperations;
     #endregion
 
     public AppSaveManager
@@ -34,13 +36,15 @@ public class AppSaveManager : IAppSaveManager
         IAppSaveRepository appSaveRepository,
         IEnumerable<IServiceSaveManager> serviceSaveManagers,
         IEnumerable<IAsyncServiceSaveManager> asyncServiceSaveManagers,
-        IEnumerable<IAppSaveRestoringOperation> appSaveRestoringOperations)
+        IEnumerable<IAppSaveRestoringOperation> appSaveRestoringOperations,
+        IEnumerable<IAppSaveRestoredOperation> appSaveRestoredOperations)
     {
         _appSavesEntityFactory = appSavesEntityFactory;
         _appSaveRepository = appSaveRepository;
         _serviceSaveManagers = serviceSaveManagers;
         _asyncServiceSaveManagers = asyncServiceSaveManagers;
         _appSaveRestoringOperations = appSaveRestoringOperations;
+        _appSaveRestoredOperations = appSaveRestoredOperations;
 
         AppSaves = new ReadOnlyObservableCollection<AppSave>(_appSaves);
         
@@ -68,7 +72,7 @@ public class AppSaveManager : IAppSaveManager
     
     public Task RestoreAppSaveAsync(AppSave appSave) => Task.Run(async () =>
     {
-        ExecuteAppStateRestoringOperations();
+        ExecuteAppSaveRestoringOperations();
 
         var serviceSaveObjectsByType = appSave.ServiceSaves
             .ToDictionary(k => k.SaveObjectType, v => v.SaveObject);
@@ -77,6 +81,8 @@ public class AppSaveManager : IAppSaveManager
         
         await RestoreAsyncServiceSavesAsync(serviceSaveObjectsByType)
             .ConfigureAwait(false);
+        
+        ExecuteAppSaveRestoredOperations();
     });
     
     public Task UpdateAppSaveAsync(AppSave appSave) => _appSaveRepository.UpdateAppSaveAsync(appSave);
@@ -101,10 +107,15 @@ public class AppSaveManager : IAppSaveManager
     #endregion
 
     #region Private methods
-    private void ExecuteAppStateRestoringOperations() =>
-        _appSaveRestoringOperations.ForEach(operation => operation.OnAppSaveRestoring());
-
     private void LoadAllAppSavesFromRepository() => _appSaves.AddRange(_appSaveRepository.GetAllAppSaves());
+    
+    #region Operations
+    private void ExecuteAppSaveRestoringOperations() =>
+        _appSaveRestoringOperations.ForEach(operation => operation.OnAppSaveRestoring());
+    
+    private void ExecuteAppSaveRestoredOperations() =>
+        _appSaveRestoredOperations.ForEach(operation => operation.OnAppSaveRestored());
+    #endregion
 
     #region Services saving
     private IEnumerable<ServiceSave> CreateServiceSaves()

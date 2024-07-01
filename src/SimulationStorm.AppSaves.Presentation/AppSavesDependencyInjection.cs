@@ -50,4 +50,13 @@ public static class AppSavesDependencyInjection
     {
         return services.AddSingleton<IAppSaveRestoringOperation, TOperation>();
     }
+    
+    public static IServiceCollection AddAppSaveRestoredOperation<TOperation>
+    (
+        this IServiceCollection services
+    )
+        where TOperation : class, IAppSaveRestoredOperation
+    {
+        return services.AddSingleton<IAppSaveRestoredOperation, TOperation>();
+    }
 }
