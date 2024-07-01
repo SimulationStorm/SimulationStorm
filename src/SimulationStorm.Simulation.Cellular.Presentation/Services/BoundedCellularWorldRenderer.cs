@@ -167,30 +167,27 @@ public class BoundedCellularWorldRenderer : WorldRendererBase, IBoundedCellularW
         _simulationImageBorderPaint.Color = HoveredCellColor;
         _simulationImageBorderPaint.Style = PaintStyle.Stroke;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<UiColorChangedEventArgs>, UiColorChangedEventArgs>
-                (
-                    h => _uiColorProvider.BackgroundColorChanged += h,
-                    h => _uiColorProvider.BackgroundColorChanged -= h
-                )
-                .Select(e => e.EventArgs)
-                .Where(e => BackgroundColor == e.PreviousColor) // Set background color from ui color provider only if it was not changed manually
-                .Subscribe(e => BackgroundColor = e.NewColor)
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
-                (
-                    h => _simulationRenderer.RenderingCompleted += h,
-                    h => _simulationRenderer.RenderingCompleted -= h
-                )
-                .Subscribe(e => _ = UpdateSimulationImageCopy())
-                .DisposeWith(disposables);
-            
-            disposables.AddRange(_gridLinesPaint, _hoveredCellPaint, _pressedCellPaint);
-        });
+        Observable
+            .FromEventPattern<EventHandler<UiColorChangedEventArgs>, UiColorChangedEventArgs>
+            (
+                h => _uiColorProvider.BackgroundColorChanged += h,
+                h => _uiColorProvider.BackgroundColorChanged -= h
+            )
+            .Select(e => e.EventArgs)
+            .Where(e => BackgroundColor == e.PreviousColor) // Set background color from ui color provider only if it was not changed manually
+            .Subscribe(e => BackgroundColor = e.NewColor)
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
+            (
+                h => _simulationRenderer.RenderingCompleted += h,
+                h => _simulationRenderer.RenderingCompleted -= h
+            )
+            .Subscribe(e => _ = UpdateSimulationImageCopy())
+            .DisposeWith(Disposables);
+        
+        Disposables.AddRange(_gridLinesPaint, _hoveredCellPaint, _pressedCellPaint);
         
         RequestRerender();
     }

@@ -54,7 +54,7 @@ public class GameOfLifeRenderer : BoundedCellularSimulationRendererBase
         _aliveCellPaint = GraphicsFactory.CreatePaint();
         _aliveCellPaint.Color = options.AliveCellColor;
         
-        WithDisposables(disposables => disposables.Add(_aliveCellPaint));
+        Disposables.Add(_aliveCellPaint);
     }
 
     protected override async Task RenderAsync(ICanvas canvas)

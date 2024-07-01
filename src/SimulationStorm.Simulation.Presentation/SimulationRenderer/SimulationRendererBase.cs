@@ -52,30 +52,27 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
         IsRenderingEnabled = options.IsRenderingEnabled;
         RenderingInterval = options.RenderingInterval;
         
-        WithDisposables(disposables =>
-        {
-            simulationManager
-                .CommandCompletedObservable()
-                .Subscribe(e =>
+        simulationManager
+            .CommandCompletedObservable()
+            .Subscribe(e =>
+            {
+                _simulationCommandCompletedEventArgs = e;
+                
+                if (!e.Command.ChangesWorld)
                 {
-                    _simulationCommandCompletedEventArgs = e;
-                    
-                    if (!e.Command.ChangesWorld)
-                    {
-                        SignalSimulationCommandCompletedEventHandled();
-                        return;
-                    }
+                    SignalSimulationCommandCompletedEventHandled();
+                    return;
+                }
 
-                    if (_intervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-                    {
-                        RememberCompletedCommand(e.Command);
-                        RequestRerender();
-                    }
-                    else
-                        SignalSimulationCommandCompletedEventHandled();
-                })
-                .DisposeWith(disposables);
-        });
+                if (_intervalActionExecutor.GetIsExecutionNeededAndMoveNext())
+                {
+                    RememberCompletedCommand(e.Command);
+                    RequestRerender();
+                }
+                else
+                    SignalSimulationCommandCompletedEventHandled();
+            })
+            .DisposeWith(Disposables);
     }
 
     #region Protected methods

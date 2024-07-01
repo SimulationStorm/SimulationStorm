@@ -32,25 +32,22 @@ public abstract class WorldRendererBase : RendererBase, IWorldRenderer
         WorldViewport = worldViewport;
         WorldCamera = worldCamera;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
-                (
-                    h => worldViewport.SizeChanged += h,
-                    h => worldViewport.SizeChanged -= h
-                )
-                .Subscribe(_ => RequestRerender())
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
-                (
-                    h => worldCamera.MatrixChanged += h,
-                    h => worldCamera.MatrixChanged -= h
-                )
-                .Subscribe(_ => RequestRerender())
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
+            (
+                h => worldViewport.SizeChanged += h,
+                h => worldViewport.SizeChanged -= h
+            )
+            .Subscribe(_ => RequestRerender())
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
+            (
+                h => worldCamera.MatrixChanged += h,
+                h => worldCamera.MatrixChanged -= h
+            )
+            .Subscribe(_ => RequestRerender())
+            .DisposeWith(Disposables);
     }
 }
