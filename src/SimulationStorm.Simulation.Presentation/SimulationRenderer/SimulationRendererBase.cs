@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
+using DotNext.Threading;
 using SimulationStorm.Graphics;
 using SimulationStorm.Simulation.Presentation.Renderer;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
@@ -31,9 +30,9 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
 
     #region Fields
     private readonly IIntervalActionExecutor _intervalActionExecutor;
-    
-    private SimulationCommandCompletedEventArgs? _simulationCommandCompletedEventArgs;
 
+    private readonly AsyncAutoResetEvent _commandCompletedEventSynchronizer = new(false);
+    
     private readonly ConcurrentQueue<SimulationCommand> _commandQueue = new();
     #endregion
     
@@ -42,7 +41,6 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
         IGraphicsFactory graphicsFactory,
         IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
-        ISimulationManager simulationManager,
         ISimulationRendererOptions options
     )
         : base(graphicsFactory, benchmarker)
@@ -51,42 +49,40 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
 
         IsRenderingEnabled = options.IsRenderingEnabled;
         RenderingInterval = options.RenderingInterval;
+    }
 
-        simulationManager
-            .CommandCompletedObservable()
-            .Subscribe(e =>
-            {
-                _simulationCommandCompletedEventArgs = e;
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
+    {
+        if (!IsRenderingNeeded(e.Command))
+            return;
 
-                if (!e.Command.ChangesWorld)
-                {
-                    SignalSimulationCommandCompletedEventHandled();
-                    return;
-                }
+        RememberCompletedCommand(e.Command);
+        
+        RequestRerender();
 
-                if (_intervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-                {
-                    RememberCompletedCommand(e.Command);
-
-                    if (!IsDisposingOrDisposed)
-                        RequestRerender();
-                    else
-                        SignalSimulationCommandCompletedEventHandled();
-                }
-                else
-                    SignalSimulationCommandCompletedEventHandled();
-            });
-        // .DisposeWith(Disposables);
+        await _commandCompletedEventSynchronizer
+            .WaitAsync()
+            .ConfigureAwait(false);
     }
 
     #region Protected methods
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await _commandCompletedEventSynchronizer
+            .DisposeAsync()
+            .ConfigureAwait(false);
+        
+        await base.DisposeAsyncCore()
+            .ConfigureAwait(false);
+    }
+
     protected override async Task RenderAndNotifyStartingAndCompletedAsync()
     {
         await base
             .RenderAndNotifyStartingAndCompletedAsync()
             .ConfigureAwait(false);
-        
-        SignalSimulationCommandCompletedEventHandled();
+
+        _commandCompletedEventSynchronizer.Set();
     }
 
     protected override void NotifyRenderingCompleted(TimeSpan elapsedTime)
@@ -97,18 +93,17 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
     #endregion
 
     #region Private methods
-
     private void RememberCompletedCommand(SimulationCommand command) => _commandQueue.Enqueue(command);
+
     private SimulationCommand? GetFirstRememberedCompletedCommand()
     {
         _commandQueue.TryDequeue(out var command);
         return command;
     }
-
-    private void SignalSimulationCommandCompletedEventHandled()
-    {
-        _simulationCommandCompletedEventArgs?.Synchronizer.Signal();
-        _simulationCommandCompletedEventArgs = null;
-    }
+    
+    private bool IsRenderingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command.ChangesWorld
+        && _intervalActionExecutor.GetIsExecutionNeededAndMoveNext();
     #endregion
 }

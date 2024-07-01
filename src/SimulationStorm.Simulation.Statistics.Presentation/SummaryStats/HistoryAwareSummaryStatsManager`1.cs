@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using DotNext.Threading;
 using DynamicData;
 using DynamicData.Binding;
 using SimulationStorm.Collections.Pointed;
@@ -18,13 +19,17 @@ using SimulationStorm.Utilities;
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 
-public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManagerBase<SummaryRecord<TSummary>>, ISummaryStatsManager<TSummary>
+public class HistoryAwareSummaryStatsManager<TSummary, TSave> :
+    CollectionManagerBase<SummaryRecord<TSummary>>,
+    ISummaryStatsManager<TSummary>
 {
     #region Fields
     private readonly ISummarizableSimulationManager<TSummary> _simulationManager;
 
     private readonly IHistoryManager<TSave> _historyManager;
 
+    private readonly AsyncAutoResetEvent _commandCompletedEventSynchronizer = new(false);
+    
     private readonly IDictionary<SummaryRecord<TSummary>, HistoryRecord<TSave>?>
         _historyRecordsBySummaryRecord = new Dictionary<SummaryRecord<TSummary>, HistoryRecord<TSave>?>();
 
@@ -53,11 +58,11 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
         Observable
             .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
             (
-                h => _historyManager.SimulationCommandExecutedEventHandled += h,
-                h => _historyManager.SimulationCommandExecutedEventHandled += h
+                h => _historyManager.SimulationCommandCompletedEventHandled += h,
+                h => _historyManager.SimulationCommandCompletedEventHandled += h
             )
             .Select(e => e.EventArgs)
-            .Subscribe(e => _ = OnHistoryManagerHandledSimulationCommandExecutedEvent(e).ConfigureAwait(false))
+            .Subscribe(e => _commandCompletedEventSynchronizer.Set())
             .DisposeWith(Disposables);
 
         Observable
@@ -125,26 +130,36 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
             .Subscribe()
             .DisposeWith(Disposables);
     }
-    
-    #region Private methods
-    private async Task OnHistoryManagerHandledSimulationCommandExecutedEvent(SimulationCommandCompletedEventArgs e)
-    {
-        // if (e.Command.ChangesWorld && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-        //     await SummarizeSimulationAndAddToCollection(e.Command)
-        //         .ConfigureAwait(false);
-        //
-        // e.Synchronizer.Signal();
-        
-        var isSummarizingNeeded =
-            e.Command is not RestoreStateCommand
-            && e.Command.ChangesWorld
-            && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
-        
-        if (isSummarizingNeeded)
-            await SummarizeSimulationAndAddToCollection(e.Command).ConfigureAwait(false);
 
-        e.Synchronizer.Signal();
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
+    {
+        if (!IsSummarizingNeeded(e.Command))
+            return;
+        
+        await _commandCompletedEventSynchronizer
+            .WaitAsync()
+            .ConfigureAwait(false);
+        
+        await SummarizeSimulationAndAddToCollection(e.Command)
+            .ConfigureAwait(false);
     }
+
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await _commandCompletedEventSynchronizer
+            .DisposeAsync()
+            .ConfigureAwait(false);
+        
+        await base.DisposeAsyncCore()
+            .ConfigureAwait(false);
+    }
+
+    #region Private methods
+    private bool IsSummarizingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command.ChangesWorld
+        && command is not RestoreStateCommand { IsRestoringFromAppState: true }
+        && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
 
     private async Task SummarizeSimulationAndAddToCollection(SimulationCommand command)
     {

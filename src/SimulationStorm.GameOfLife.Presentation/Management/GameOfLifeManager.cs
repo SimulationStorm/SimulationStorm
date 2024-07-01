@@ -49,10 +49,11 @@ public class GameOfLifeManager :
     public GameOfLifeManager
     (
         IBenchmarker benchmarker,
+        IEnumerable<ISimulationCommandCompletedHandler> commandCompletedHandlers,
         IGameOfLifeFactory gameOfLifeFactory,
         GameOfLifeManagerOptions options
     )
-        : base(benchmarker, options)
+        : base(benchmarker, commandCompletedHandlers)
     {
         _gameOfLifeFactory = gameOfLifeFactory;
 

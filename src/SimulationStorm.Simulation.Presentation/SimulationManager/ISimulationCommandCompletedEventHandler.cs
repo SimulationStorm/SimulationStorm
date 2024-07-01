@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
-public interface ISimulationCommandCompletedEventHandler
+public interface ISimulationCommandCompletedHandler
 {
-    Task HandleCommandCompletedAsync(SimulationCommand command, TimeSpan elapsedTime);
+    Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e);
 }

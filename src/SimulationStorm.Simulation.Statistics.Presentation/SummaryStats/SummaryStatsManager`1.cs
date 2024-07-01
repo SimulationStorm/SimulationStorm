@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SimulationStorm.Collections.Presentation;
 using SimulationStorm.Collections.Universal;
 using SimulationStorm.Simulation.History.Presentation.Commands;
@@ -11,62 +8,34 @@ using SimulationStorm.Utilities;
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 
-public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord<TSummary>>, ISummaryStatsManager<TSummary>
+public class SummaryStatsManager<TSummary>
+(
+    IUniversalCollectionFactory universalCollectionFactory,
+    IIntervalActionExecutor intervalActionExecutor,
+    ISummarizableSimulationManager<TSummary> simulationManager,
+    ISummaryStatsOptions options
+)
+    : CollectionManagerBase<SummaryRecord<TSummary>>(universalCollectionFactory, intervalActionExecutor, options),
+        ISummaryStatsManager<TSummary>
 {
-    private readonly ISummarizableSimulationManager<TSummary> _simulationManager;
-
-    public SummaryStatsManager
-    (
-        IUniversalCollectionFactory universalCollectionFactory,
-        IIntervalActionExecutor intervalActionExecutor,
-        ISummarizableSimulationManager<TSummary> simulationManager,
-        ISummaryStatsOptions options
-    )
-        : base(universalCollectionFactory, intervalActionExecutor, options)
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
     {
-        _simulationManager = simulationManager;
-
-        Observable
-            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-            (
-                h => _simulationManager.CommandCompleted += h,
-                h => _simulationManager.CommandCompleted += h
-            )
-            .Select(e => e.EventArgs)
-            .Subscribe(e => HandleSimulationCommandExecutedAsync(e).ConfigureAwait(false));
-        // .DisposeWith(Disposables);
-
-        // CreateInitialRecordIfSavingIsEnabledAsync();
-    }
-    
-    // protected override void OnIsSavingEnabledChanged()
-    // {
-    //     base.OnIsSavingEnabledChanged();
-
-        // CreateInitialRecordIfSavingIsEnabledAsync();
-    // }
-
-    #region Private methods
-    // private Task CreateInitialRecordIfSavingIsEnabledAsync() => IsSavingEnabled
-    //     ? SummarizeSimulationAndAddToCollection(new NullCommand()).ThrowWhenFaulted()
-    //     : Task.CompletedTask;
-    
-    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandCompletedEventArgs e)
-    {
-        var isSummarizingNeeded =
-            e.Command is not RestoreStateCommand { IsRestoringFromAppState: true }
-            && e.Command.ChangesWorld
-            && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
+        if (!IsSummarizingNeeded(e.Command))
+            return;
         
-        if (isSummarizingNeeded)
-            await SummarizeSimulationAndAddToCollection(e.Command).ConfigureAwait(false);
-
-        e.Synchronizer.Signal();
+        await SummarizeSimulationAndAddToCollection(e.Command)
+            .ConfigureAwait(false);
     }
-
+    
+    private bool IsSummarizingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command.ChangesWorld
+        && command is not RestoreStateCommand { IsRestoringFromAppState: true }
+        && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
+    
     private async Task SummarizeSimulationAndAddToCollection(SimulationCommand command)
     {
-        var benchmarkResult = await _simulationManager
+        var benchmarkResult = await simulationManager
             .SummarizeAndMeasureAsync()
             .ConfigureAwait(false);
         
@@ -76,5 +45,4 @@ public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord
         var records = new SummaryRecord<TSummary>(command, summary, elapsedTime);
         Collection.Add(records);
     }
-    #endregion
 }

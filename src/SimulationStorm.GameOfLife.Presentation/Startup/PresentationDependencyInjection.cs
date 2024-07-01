@@ -107,6 +107,7 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ISimulationRendererOptions, GameOfLifeRendererOptions>()
         .AddSingleton<GameOfLifeRenderer>()
         .AddSharedSingleton<ISimulationRenderer, GameOfLifeRenderer>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, GameOfLifeRenderer>()
         .AddServiceStateManager<GameOfLifeRendererStateManager>()
         .AddStartupOperation<RenderSimulationOnStartupOperation>()
         //
@@ -144,27 +145,29 @@ public static class PresentationDependencyInjection
         // History
         .AddSingleton(PresentationConfiguration.HistoryOptions)
         .AddSingleton<IHistoryManager<GameOfLifeSave>, HistoryManager<GameOfLifeSave>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, HistoryManager<GameOfLifeSave>>()
         .AddServiceStateManager<HistoryStateManager<GameOfLifeSave>>()
         .AddSingleton<IHistoryViewModel, HistoryViewModel<GameOfLifeSave>>()
         //
 
-        // Statistics
-        // Summary statistics
+        // Stats
+        // Summary stats
         .AddSingleton(PresentationConfiguration.SummaryStatsOptions)
         .AddSharedSingleton<ISummaryStatsOptions, SummaryStatsOptions>()
         .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, SummaryStatsManager<GameOfLifeSummary>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, SummaryStatsManager<GameOfLifeSummary>>()
         // .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, HistoryAwareSummaryStatsManager<GameOfLifeSummary, GameOfLifeSave>>()
         .AddServiceStateManager<SummaryStatsStateManager<GameOfLifeSummary>>()
         .AddSingleton<ISummaryStatsViewModel, SummaryStatsViewModel<GameOfLifeSummary>>()
         .AddServiceStateManager<SummaryStatsViewModelStateManager>()
-        // Summary statistics chart view models
+        // Summary stats chart view models
         .AddSingleton<SummaryStatsChartViewModelFactory>()
         .AddTransient<TableChartViewModel>()
         .AddTransient<PieChartViewModel>()
         .AddTransient<LineChartViewModel>()
         .AddTransient<BarChartViewModel>()
         //
-        // Command execution statistics
+        // Command execution stats
         .AddSingleton(PresentationConfiguration.CommandExecutionStatsOptions)
         .AddSingleton<ICommandExecutionStatsManager, CommandExecutionStatsManager>()
         .AddServiceStateManager<CommandExecutionStatsStateManager>()
@@ -175,7 +178,7 @@ public static class PresentationDependencyInjection
         .AddTransient<CommandExecutionLineChartViewModel>()
         .AddTransient<CommandExecutionBarChartViewModel>()
         //
-        // Simulation rendering statistics
+        // Simulation rendering stats
         .AddSingleton(PresentationConfiguration.RenderingStatsOptions)
         .AddSingleton<IRenderingStatsManager, RenderingStatsManager>()
         .AddServiceStateManager<RenderingStatsStateManager>()

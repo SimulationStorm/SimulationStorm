@@ -29,6 +29,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
     #region Fields
     private readonly IBenchmarker _benchmarker;
+
+    private readonly IEnumerable<ISimulationCommandCompletedHandler> _commandCompletedHandlers;
     
     private ISimulation? _simulation;
     
@@ -49,16 +51,17 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #region Command execution
     private readonly Stopwatch _commandStopwatch = new();
     
-    private readonly AsyncCountdownEvent _commandCompletedEventSynchronizer;
-
     private SimulationCommand? _executingCommand;
     #endregion
     #endregion
 
-    protected SimulationManagerBase(IBenchmarker benchmarker, ISimulationManagerOptions options)
+    protected SimulationManagerBase
+    (
+        IBenchmarker benchmarker,
+        IEnumerable<ISimulationCommandCompletedHandler> commandCompletedHandlers)
     {
         _benchmarker = benchmarker;
-        _commandCompletedEventSynchronizer = new AsyncCountdownEvent(options.CommandExecutedEventHandlerCount);
+        _commandCompletedHandlers = commandCompletedHandlers;
         
         InitializeCommandChannelAndStartProcessingLoop();
     }
@@ -113,10 +116,6 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         await StopCommandProcessingLoopAsync()
             .ConfigureAwait(false);
         
-        await _commandCompletedEventSynchronizer
-            .DisposeAsync()
-            .ConfigureAwait(false);
-
         await _simulationRwLock
             .DisposeAsync()
             .ConfigureAwait(false);
@@ -265,7 +264,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         var elapsedTime = await NotifyCommandStartingAndExecuteCommandAsync(command, cancellationToken)
             .ConfigureAwait(false);
 
-        await NotifyCommandCompletedAndWaitForEventHandling(command, elapsedTime, cancellationToken)
+        await InvokeCommandCompletedHandlersAndNotify(command, elapsedTime)
             .ConfigureAwait(false);
         
         scheduledCommand.NotifyCompleted();
@@ -318,23 +317,16 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
             _commandStopwatch.Start();
     }
 
-    private async ValueTask NotifyCommandCompletedAndWaitForEventHandling(
-        SimulationCommand command, TimeSpan elapsedTime, CancellationToken cancellationToken)
+    private async ValueTask InvokeCommandCompletedHandlersAndNotify(SimulationCommand command, TimeSpan elapsedTime)
     {
-        _commandCompletedEventSynchronizer.Reset();
+        var eventArgs = new SimulationCommandCompletedEventArgs(command, elapsedTime);
 
-        NotifyCommandCompleted(command, elapsedTime);
-
-        // var commandCompletedEventHandlers = new List<ISimulationCommandCompletedEventHandler>();
-        //
-        // foreach (var commandCompletedEventHandler in commandCompletedEventHandlers)
-        //     await commandCompletedEventHandler
-        //         .HandleCommandCompletedAsync(command, elapsedTime)
-        //         .ConfigureAwait(false);
+        foreach (var commandCompletedEventHandler in _commandCompletedHandlers)
+            await commandCompletedEventHandler
+                .HandleSimulationCommandCompletedAsync(eventArgs)
+                .ConfigureAwait(false);
         
-        await _commandCompletedEventSynchronizer
-            .WaitAsync(cancellationToken)
-            .ConfigureAwait(false);
+        NotifyCommandCompleted(eventArgs);
     }
     #endregion
 
@@ -348,9 +340,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private void NotifyCommandProgressChanged(SimulationCommand command, int progressPercentage) =>
         CommandProgressChanged?.Invoke(this, new SimulationCommandProgressChangedEventArgs(command, progressPercentage));
 
-    private void NotifyCommandCompleted(SimulationCommand command, TimeSpan elapsedTime) =>
-        CommandCompleted?.Invoke(this, new SimulationCommandCompletedEventArgs(
-            command, elapsedTime, _commandCompletedEventSynchronizer));
+    private void NotifyCommandCompleted(SimulationCommandCompletedEventArgs eventArgs) =>
+        CommandCompleted?.Invoke(this, eventArgs);
     #endregion
     #endregion
 }

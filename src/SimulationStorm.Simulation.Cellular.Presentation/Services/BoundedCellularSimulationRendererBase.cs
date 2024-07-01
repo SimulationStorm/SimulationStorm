@@ -15,7 +15,7 @@ public abstract class BoundedCellularSimulationRendererBase
     IBoundedSimulationManager simulationManager,
     ISimulationRendererOptions options
 )
-    : SimulationRendererBase(graphicsFactory, benchmarker, intervalActionExecutor, simulationManager, options)
+    : SimulationRendererBase(graphicsFactory, benchmarker, intervalActionExecutor, options)
 {
     protected override Size SizeToRender => simulationManager.WorldSize;
 }
