@@ -83,10 +83,10 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
         });
     }
     
-    protected override async Task RenderAndNotifyRenderingCompletedAsync()
+    protected override async Task RenderAndNotifyStartingAndCompletedAsync()
     {
         await base
-            .RenderAndNotifyRenderingCompletedAsync()
+            .RenderAndNotifyStartingAndCompletedAsync()
             .ConfigureAwait(false);
         
         SignalSimulationCommandExecutedEventHandled();

@@ -7,9 +7,11 @@ public interface IRenderer
 {
     IBitmap? RenderedImage { get; }
 
-    event EventHandler? RenderingStarted;
+    #region Events
+    event EventHandler? RenderingStarting;
     
     event EventHandler<RenderingCompletedEventArgs>? RenderingCompleted;
+    #endregion
 
     void RequestRerender();
 }

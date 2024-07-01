@@ -143,8 +143,8 @@ public class StatusBarViewModel : DisposableObservableObject
             Observable
                 .FromEventPattern<EventHandler, EventArgs>
                 (
-                    h => simulationRenderer.RenderingStarted += h,
-                    h => simulationRenderer.RenderingStarted -= h
+                    h => simulationRenderer.RenderingStarting += h,
+                    h => simulationRenderer.RenderingStarting -= h
                 )
                 .Where(_ => IsSimulationRenderingProgressVisible)
                 .Subscribe(_ => IsSimulationRenderingInProgress = true)
