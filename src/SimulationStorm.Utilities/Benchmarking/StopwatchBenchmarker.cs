@@ -27,16 +27,24 @@ public class StopwatchBenchmarker : IBenchmarker
     public async Task<BenchmarkResult> MeasureAsync(Func<Task> asyncAction)
     {
         _stopwatch.Restart();
-        await asyncAction();
+        
+        await asyncAction()
+            .ConfigureAwait(false);
+        
         _stopwatch.Stop();
+        
         return new BenchmarkResult(_stopwatch.Elapsed);
     }
 
     public async Task<BenchmarkResult<T>> MeasureAsync<T>(Func<Task<T>> asyncFunction)
     {
         _stopwatch.Restart();
-        var taskResult = await asyncFunction();
+
+        var taskResult = await asyncFunction()
+            .ConfigureAwait(false);
+        
         _stopwatch.Stop();
+        
         return new BenchmarkResult<T>(_stopwatch.Elapsed, taskResult);
     }
 }
