@@ -93,10 +93,10 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     protected void ResetSimulationInstance(ISimulation simulation)
     {
         if (_simulation is not null)
-            _simulation.ProgressChanged -= OnSimulationProgressChanged;
+            _simulation.OperationProgressChanged -= OnSimulationOperationProgressChanged;
         
         _simulation = simulation;
-        _simulation.ProgressChanged += OnSimulationProgressChanged;
+        _simulation.OperationProgressChanged += OnSimulationOperationProgressChanged;
     }
 
     protected override async ValueTask DisposeAsyncCore()
@@ -274,7 +274,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
             .EnterWriteLockAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        _simulation!.IsProgressReportingEnabled = IsCommandProgressReportingEnabled;
+        _simulation!.IsOperationProgressReportingEnabled = IsCommandProgressReportingEnabled;
         
         var elapsedTime = ExecuteCommandCore(command);
         
@@ -294,7 +294,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         return _commandStopwatch.Elapsed;
     }
 
-    private void OnSimulationProgressChanged(object? _, CancellableProgressChangedEventArgs e)
+    private void OnSimulationOperationProgressChanged(object? _, CancellableProgressChangedEventArgs e)
     {
         _commandStopwatch.Stop();
 

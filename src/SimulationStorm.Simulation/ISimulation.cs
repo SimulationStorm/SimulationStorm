@@ -1,5 +1,11 @@
-﻿using SimulationStorm.Utilities.Progress;
+﻿using System;
+using SimulationStorm.Utilities.Progress;
 
 namespace SimulationStorm.Simulation;
 
-public interface ISimulation : IProgressReporter;
+public interface ISimulation
+{
+    bool IsOperationProgressReportingEnabled { get; set; }
+
+    event EventHandler<CancellableProgressChangedEventArgs> OperationProgressChanged;
+}
