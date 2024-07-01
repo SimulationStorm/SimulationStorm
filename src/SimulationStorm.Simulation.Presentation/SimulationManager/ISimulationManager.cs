@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationManager;
@@ -31,6 +30,8 @@ public interface ISimulationManager
     #endregion
     
     #region Methods
+    void AddCommandCompletedHandler(ISimulationCommandCompletedHandler commandCompletedHandler);
+    
     Task ScheduleCommandAsync(SimulationCommand command);
 
     Task ClearScheduledCommandsAsync();

@@ -68,11 +68,11 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
     #region Protected methods
     protected override async ValueTask DisposeAsyncCore()
     {
-        await _commandCompletedEventSynchronizer
-            .DisposeAsync()
+        await base.DisposeAsyncCore()
             .ConfigureAwait(false);
         
-        await base.DisposeAsyncCore()
+        await _commandCompletedEventSynchronizer
+            .DisposeAsync()
             .ConfigureAwait(false);
     }
 

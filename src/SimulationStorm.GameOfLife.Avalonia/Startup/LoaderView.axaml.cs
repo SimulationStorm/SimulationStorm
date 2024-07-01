@@ -10,13 +10,9 @@ using SimulationStorm.Avalonia.Controls;
 using SimulationStorm.Avalonia.Extensions;
 using SimulationStorm.DependencyInjection;
 using SimulationStorm.Dialogs.Presentation;
-using SimulationStorm.Exceptions;
-using SimulationStorm.Exceptions.Avalonia;
-using SimulationStorm.Exceptions.Logging;
 using SimulationStorm.GameOfLife.Avalonia.Views;
 using SimulationStorm.GameOfLife.Presentation.Startup;
 using SimulationStorm.Localization.Avalonia;
-using SimulationStorm.Logging;
 using SimulationStorm.Notifications.Avalonia;
 using SimulationStorm.Presentation;
 using SimulationStorm.Presentation.StartupOperations;
@@ -149,7 +145,7 @@ public partial class LoaderView : UserControl
             .AddPresentationServices();
         
         AddEssentialServiceInstancesToMainServiceCollection(mainServices);
-            
+        
         DiContainer.Default.Configure(mainServices, activateSingletonServices: true);
     }
 

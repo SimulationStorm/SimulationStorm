@@ -30,7 +30,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #region Fields
     private readonly IBenchmarker _benchmarker;
 
-    private readonly IEnumerable<ISimulationCommandCompletedHandler> _commandCompletedHandlers;
+    private readonly ICollection<ISimulationCommandCompletedHandler> _commandCompletedHandlers =
+        new Collection<ISimulationCommandCompletedHandler>();
     
     private ISimulation? _simulation;
     
@@ -55,18 +56,17 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #endregion
     #endregion
 
-    protected SimulationManagerBase
-    (
-        IBenchmarker benchmarker,
-        IEnumerable<ISimulationCommandCompletedHandler> commandCompletedHandlers)
+    protected SimulationManagerBase(IBenchmarker benchmarker)
     {
         _benchmarker = benchmarker;
-        _commandCompletedHandlers = commandCompletedHandlers;
         
         InitializeCommandChannelAndStartProcessingLoop();
     }
 
     #region Public methods
+    public void AddCommandCompletedHandler(ISimulationCommandCompletedHandler commandCompletedHandler) =>
+        _commandCompletedHandlers.Add(commandCompletedHandler);
+
     public async Task ScheduleCommandAsync(SimulationCommand command)
     {
         this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);

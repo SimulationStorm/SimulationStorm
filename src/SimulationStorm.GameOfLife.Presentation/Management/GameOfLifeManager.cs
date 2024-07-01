@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using SimulationStorm.GameOfLife.Algorithms;
 using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.GameOfLife.Presentation.Commands;
 using SimulationStorm.Primitives;
@@ -49,11 +48,10 @@ public class GameOfLifeManager :
     public GameOfLifeManager
     (
         IBenchmarker benchmarker,
-        IEnumerable<ISimulationCommandCompletedHandler> commandCompletedHandlers,
         IGameOfLifeFactory gameOfLifeFactory,
         GameOfLifeManagerOptions options
     )
-        : base(benchmarker, commandCompletedHandlers)
+        : base(benchmarker)
     {
         _gameOfLifeFactory = gameOfLifeFactory;
 

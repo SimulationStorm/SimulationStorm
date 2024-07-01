@@ -3,18 +3,18 @@ using SimulationStorm.AppStates.Presentation;
 using SimulationStorm.Collections.Lists;
 using SimulationStorm.Collections.Universal;
 using SimulationStorm.DependencyInjection;
-using SimulationStorm.Exceptions;
-using SimulationStorm.Exceptions.Logging;
-using SimulationStorm.Graphics;
-using SimulationStorm.Graphics.Skia;
+using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.GameOfLife.Presentation.Drawing;
 using SimulationStorm.GameOfLife.Presentation.Management;
 using SimulationStorm.GameOfLife.Presentation.Patterns;
 using SimulationStorm.GameOfLife.Presentation.Population;
 using SimulationStorm.GameOfLife.Presentation.Rendering;
 using SimulationStorm.GameOfLife.Presentation.Rules;
+using SimulationStorm.GameOfLife.Presentation.Stats;
 using SimulationStorm.GameOfLife.Presentation.ViewModels;
-using SimulationStorm.Logging;
+using SimulationStorm.Graphics;
+using SimulationStorm.Graphics.Skia;
+using SimulationStorm.Presentation.StartupOperations;
 using SimulationStorm.Simulation.Bounded.Presentation.Services;
 using SimulationStorm.Simulation.Bounded.Presentation.ViewModels;
 using SimulationStorm.Simulation.Cellular.Presentation.Services;
@@ -26,22 +26,12 @@ using SimulationStorm.Simulation.History.Presentation.ViewModels;
 using SimulationStorm.Simulation.Presentation.Camera;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
 using SimulationStorm.Simulation.Presentation.SimulationRenderer;
+using SimulationStorm.Simulation.Presentation.StatusBar;
 using SimulationStorm.Simulation.Presentation.Viewport;
 using SimulationStorm.Simulation.Presentation.WorldRenderer;
 using SimulationStorm.Simulation.Resetting.Presentation.Services;
 using SimulationStorm.Simulation.Running.Presentation.Services;
 using SimulationStorm.Simulation.Running.Presentation.ViewModels;
-using SimulationStorm.Simulation.Statistics.Presentation;
-using SimulationStorm.Simulation.Statistics.Presentation.Charts;
-using SimulationStorm.ToolPanels.Presentation;
-using SimulationStorm.Utilities;
-using SimulationStorm.Utilities.Benchmarking;
-using System;
-using LiveChartsCore.Kernel.Sketches;
-using SimulationStorm.GameOfLife.DataTypes;
-using SimulationStorm.GameOfLife.Presentation.Stats;
-using SimulationStorm.Presentation.StartupOperations;
-using SimulationStorm.Simulation.Presentation.StatusBar;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.Charts;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.ViewModels;
@@ -51,6 +41,9 @@ using SimulationStorm.Simulation.Statistics.Presentation.RenderingStats.ViewMode
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats.Charts;
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats.ViewModels;
+using SimulationStorm.ToolPanels.Presentation;
+using SimulationStorm.Utilities;
+using SimulationStorm.Utilities.Benchmarking;
 
 namespace SimulationStorm.GameOfLife.Presentation.Startup;
 
@@ -83,6 +76,8 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ICellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
         .AddSharedSingleton<IBoundedCellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
         .AddAsyncServiceStateManager<GameOfLifeStateManager>()
+        
+        .AddStartupOperation<AddSimulationCommandCompletedHandlersOnStartupOperation>()
         //
 
         // Simulation runner
@@ -107,8 +102,9 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ISimulationRendererOptions, GameOfLifeRendererOptions>()
         .AddSingleton<GameOfLifeRenderer>()
         .AddSharedSingleton<ISimulationRenderer, GameOfLifeRenderer>()
-        .AddSharedSingleton<ISimulationCommandCompletedHandler, GameOfLifeRenderer>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, ISimulationRenderer>()
         .AddServiceStateManager<GameOfLifeRendererStateManager>()
+        
         .AddStartupOperation<RenderSimulationOnStartupOperation>()
         //
         .AddSingleton<IWorldViewport, WorldViewport>()
@@ -145,7 +141,7 @@ public static class PresentationDependencyInjection
         // History
         .AddSingleton(PresentationConfiguration.HistoryOptions)
         .AddSingleton<IHistoryManager<GameOfLifeSave>, HistoryManager<GameOfLifeSave>>()
-        .AddSharedSingleton<ISimulationCommandCompletedHandler, HistoryManager<GameOfLifeSave>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, IHistoryManager<GameOfLifeSave>>()
         .AddServiceStateManager<HistoryStateManager<GameOfLifeSave>>()
         .AddSingleton<IHistoryViewModel, HistoryViewModel<GameOfLifeSave>>()
         //
@@ -155,7 +151,7 @@ public static class PresentationDependencyInjection
         .AddSingleton(PresentationConfiguration.SummaryStatsOptions)
         .AddSharedSingleton<ISummaryStatsOptions, SummaryStatsOptions>()
         .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, SummaryStatsManager<GameOfLifeSummary>>()
-        .AddSharedSingleton<ISimulationCommandCompletedHandler, SummaryStatsManager<GameOfLifeSummary>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, ISummaryStatsManager<GameOfLifeSummary>>()
         // .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, HistoryAwareSummaryStatsManager<GameOfLifeSummary, GameOfLifeSave>>()
         .AddServiceStateManager<SummaryStatsStateManager<GameOfLifeSummary>>()
         .AddSingleton<ISummaryStatsViewModel, SummaryStatsViewModel<GameOfLifeSummary>>()
