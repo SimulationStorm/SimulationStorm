@@ -325,6 +325,13 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
         NotifyCommandCompleted(command, elapsedTime);
 
+        // var commandCompletedEventHandlers = new List<ISimulationCommandCompletedEventHandler>();
+        //
+        // foreach (var commandCompletedEventHandler in commandCompletedEventHandlers)
+        //     await commandCompletedEventHandler
+        //         .HandleCommandCompletedAsync(command, elapsedTime)
+        //         .ConfigureAwait(false);
+        
         await _commandCompletedEventSynchronizer
             .WaitAsync(cancellationToken)
             .ConfigureAwait(false);
