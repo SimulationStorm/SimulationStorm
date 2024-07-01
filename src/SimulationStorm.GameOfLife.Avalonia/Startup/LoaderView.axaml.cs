@@ -62,17 +62,17 @@ public partial class LoaderView : UserControl
             .AddSingleton<IDialogManager>(DialogManager)
             .AddNotificationManagers(NotificationManager, Resources, AvaloniaConfiguration.NotificationsOptions)
             // Exception services
-            .AddExceptionHandlersToNotifiersSubscriber()
+            // .AddExceptionHandlersToNotifiersSubscriber()
             // Exception notifiers
-            .AddAppDomainExceptionNotifier()
-            .AddTaskSchedulerExceptionNotifier()
-            .AddDispatcherExceptionNotifier()
+            // .AddAppDomainExceptionNotifier()
+            // .AddTaskSchedulerExceptionNotifier()
+            // .AddDispatcherExceptionNotifier()
             // Exception handlers
-            .AddUnhandledExceptionSuppressor()
+            // .AddUnhandledExceptionSuppressor()
             //
             // Logging services
-            .AddLoggingServices(PresentationConfiguration.LoggingOptions)
-            .AddUnhandledExceptionLogger()
+            // .AddLoggingServices(PresentationConfiguration.LoggingOptions)
+            // .AddUnhandledExceptionLogger()
             //
             ;
             
