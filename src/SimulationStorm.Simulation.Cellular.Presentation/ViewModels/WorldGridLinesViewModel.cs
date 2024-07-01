@@ -54,33 +54,30 @@ public partial class WorldGridLinesViewModel : DisposableObservableObject
         
         // UpdateAreGridLinesRendered();
         
-        WithDisposables(disposables =>
-        {
-            // Observable
-            //     .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
-            //     (
-            //         h => worldCamera.MatrixChanged += h,
-            //         h => worldCamera.MatrixChanged -= h
-            //     )
-            //     .Subscribe(_ => UpdateAreGridLinesRendered())
-            //     .DisposeWith(disposables);
+        // Observable
+        //     .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
+        //     (
+        //         h => worldCamera.MatrixChanged += h,
+        //         h => worldCamera.MatrixChanged -= h
+        //     )
+        //     .Subscribe(_ => UpdateAreGridLinesRendered())
+        //     .DisposeWith(Disposables);
 
-            _worldRenderer
-                .WhenValueChanged(x => x.IsGridLinesVisible, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(IsGridLinesVisible)))
-                .DisposeWith(disposables);
-            
-            _worldRenderer
-                .WhenValueChanged(x => x.GridLinesColor, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(GridLinesColor));
-                    ResetGridLinesColorCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _worldRenderer
+            .WhenValueChanged(x => x.IsGridLinesVisible, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(IsGridLinesVisible)))
+            .DisposeWith(Disposables);
+        
+        _worldRenderer
+            .WhenValueChanged(x => x.GridLinesColor, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(GridLinesColor));
+                ResetGridLinesColorCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 
     // private void UpdateAreGridLinesRendered() => AreGridLinesRendered = _worldCamera.Zoom >= 2;

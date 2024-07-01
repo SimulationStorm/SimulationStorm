@@ -7,17 +7,15 @@ namespace SimulationStorm.Utilities.Disposing;
 public abstract class DisposableObservableObject : ObservableObject, IDisposable
 {
     public bool IsDisposed { get; protected set; }
-    
-    private readonly CompositeDisposable _disposables = new();
 
-    protected void WithDisposables(Action<CompositeDisposable> action) => action(_disposables);
+    protected CompositeDisposable Disposables { get; } = new();
 
     public virtual void Dispose()
     {
         if (IsDisposed)
             return;
 
-        _disposables.Dispose();
+        Disposables.Dispose();
         IsDisposed = true;
         GC.SuppressFinalize(this);
     }

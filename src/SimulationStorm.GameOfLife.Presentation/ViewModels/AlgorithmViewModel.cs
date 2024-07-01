@@ -50,34 +50,31 @@ public partial class AlgorithmViewModel : DisposableObservableObject
         _notificationManager = notificationManager;
         _selectedAlgorithm = gameOfLifeManager.Algorithm;
         
-        WithDisposables(disposables =>
-        {
-            var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-                (
-                    h => _gameOfLifeManager.CommandCompleted += h,
-                    h => _gameOfLifeManager.CommandCompleted -= h
-                )
-                .Select(e => e.EventArgs.Command)
-                .ObserveOn(uiThreadScheduler);
-                
-            executedCommandStream
-                .Where(command => command is ChangeAlgorithmCommand)
-                .Subscribe(_ => OnPropertyChanged(nameof(ActualAlgorithm)))
-                .DisposeWith(disposables);
+        var executedCommandStream = Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _gameOfLifeManager.CommandCompleted += h,
+                h => _gameOfLifeManager.CommandCompleted -= h
+            )
+            .Select(e => e.EventArgs.Command)
+            .ObserveOn(uiThreadScheduler);
             
-            executedCommandStream
-                .Where(command => command is RestoreStateCommand)
-                .Subscribe(_ =>
-                {
-                    if (SelectedAlgorithm == ActualAlgorithm)
-                        return;
+        executedCommandStream
+            .Where(command => command is ChangeAlgorithmCommand)
+            .Subscribe(_ => OnPropertyChanged(nameof(ActualAlgorithm)))
+            .DisposeWith(Disposables);
+        
+        executedCommandStream
+            .Where(command => command is RestoreStateCommand)
+            .Subscribe(_ =>
+            {
+                if (SelectedAlgorithm == ActualAlgorithm)
+                    return;
 
-                    OnPropertyChanged(nameof(ActualAlgorithm));
-                    SelectedAlgorithm = ActualAlgorithm;
-                })
-                .DisposeWith(disposables);
-        });
+                OnPropertyChanged(nameof(ActualAlgorithm));
+                SelectedAlgorithm = ActualAlgorithm;
+            })
+            .DisposeWith(Disposables);
     }
 
     [RelayCommand(CanExecute = nameof(CanChangeAlgorithm))]

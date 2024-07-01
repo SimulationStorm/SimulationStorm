@@ -37,33 +37,30 @@ public partial class ScheduledCommandsViewModel : DisposableObservableObject
 
         ReadOnlyObservableCollection<SimulationCommandModel> scheduledCommandModels = null!;
         
-        WithDisposables(disposables =>
-        {
-            var scheduledCommands = new ObservableCollection<SimulationCommand>();
+        var scheduledCommands = new ObservableCollection<SimulationCommand>();
 
-            simulationManager
-                .CommandSchedulingObservable()
-                .Subscribe(e => scheduledCommands.Add(e.Command));
+        simulationManager
+            .CommandSchedulingObservable()
+            .Subscribe(e => scheduledCommands.Add(e.Command));
 
-            simulationManager
-                .CommandCompletedObservable()
-                .Subscribe(_ => scheduledCommands.RemoveAt(0));
-            
-            scheduledCommands
-                .IndexItemsAndBind<ObservableCollection<SimulationCommand>, SimulationCommand, SimulationCommandModel>
-                (
-                    command => new SimulationCommandModel(command),
-                    out scheduledCommandModels,
-                    scheduler: uiThreadScheduler
-                )
-                .DisposeWith(disposables);
+        simulationManager
+            .CommandCompletedObservable()
+            .Subscribe(_ => scheduledCommands.RemoveAt(0));
+        
+        scheduledCommands
+            .IndexItemsAndBind<ObservableCollection<SimulationCommand>, SimulationCommand, SimulationCommandModel>
+            (
+                command => new SimulationCommandModel(command),
+                out scheduledCommandModels,
+                scheduler: uiThreadScheduler
+            )
+            .DisposeWith(Disposables);
 
-            scheduledCommands
-                .WhenValueChanged(x => x.Count)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(commandCount => AreThereCommands = commandCount is not 0)
-                .DisposeWith(disposables);
-        });
+        scheduledCommands
+            .WhenValueChanged(x => x.Count)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(commandCount => AreThereCommands = commandCount is not 0)
+            .DisposeWith(Disposables);
 
         ScheduledCommandModels = scheduledCommandModels;
     }

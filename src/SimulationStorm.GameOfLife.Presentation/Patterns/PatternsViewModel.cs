@@ -35,23 +35,20 @@ public partial class PatternsViewModel : DisposableObservableObject
     {
         _drawingSettings = drawingSettings;
         
-        WithDisposables(disposables =>
-        {
-            _drawingSettings
-                .WhenValueChanged(x => x.CurrentPattern, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(CurrentPattern));
-                    UnselectCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-            
-            _drawingSettings
-                .WhenValueChanged(x => x.PlacePatternWithOverlay, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(PlacePatternWithOverlay)))
-                .DisposeWith(disposables);
-        });
+        _drawingSettings
+            .WhenValueChanged(x => x.CurrentPattern, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(CurrentPattern));
+                UnselectCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
+        
+        _drawingSettings
+            .WhenValueChanged(x => x.PlacePatternWithOverlay, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(PlacePatternWithOverlay)))
+            .DisposeWith(Disposables);
     }
 }

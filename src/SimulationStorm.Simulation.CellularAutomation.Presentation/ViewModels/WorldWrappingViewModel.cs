@@ -81,36 +81,33 @@ public partial class WorldWrappingViewModel<TCellState> : DisposableObservableOb
         _automationManager = automationManager;
         _editingWorldWrapping = automationManager.WorldWrapping;
         
-        WithDisposables(disposables =>
-        {
-            var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-                (
-                    h => _automationManager.CommandCompleted += h,
-                    h => _automationManager.CommandCompleted -= h
-                )
-                .Select(e => e.EventArgs.Command)
-                .ObserveOn(uiThreadScheduler);
-                
-            executedCommandStream
-                .Where(command => command is ChangeWorldWrappingCommand)
-                .Subscribe(_ => OnPropertyChanged(nameof(ActualWorldWrapping)))
-                .DisposeWith(disposables);
+        var executedCommandStream = Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _automationManager.CommandCompleted += h,
+                h => _automationManager.CommandCompleted -= h
+            )
+            .Select(e => e.EventArgs.Command)
+            .ObserveOn(uiThreadScheduler);
             
-            executedCommandStream
-                .Where(command => command is RestoreStateCommand)
-                .Subscribe(_ =>
-                {
-                    if (_editingWorldWrapping == ActualWorldWrapping)
-                        return;
+        executedCommandStream
+            .Where(command => command is ChangeWorldWrappingCommand)
+            .Subscribe(_ => OnPropertyChanged(nameof(ActualWorldWrapping)))
+            .DisposeWith(Disposables);
+        
+        executedCommandStream
+            .Where(command => command is RestoreStateCommand)
+            .Subscribe(_ =>
+            {
+                if (_editingWorldWrapping == ActualWorldWrapping)
+                    return;
 
-                    OnPropertyChanged(nameof(ActualWorldWrapping));
-                    
-                    _editingWorldWrapping = ActualWorldWrapping;
-                    OnPropertyChanged(nameof(IsWrappedHorizontally));
-                    OnPropertyChanged(nameof(IsWrappedVertically));
-                })
-                .DisposeWith(disposables);
-        });
+                OnPropertyChanged(nameof(ActualWorldWrapping));
+                
+                _editingWorldWrapping = ActualWorldWrapping;
+                OnPropertyChanged(nameof(IsWrappedHorizontally));
+                OnPropertyChanged(nameof(IsWrappedVertically));
+            })
+            .DisposeWith(Disposables);
     }
 }

@@ -71,31 +71,28 @@ public abstract partial class DrawingSettingsViewModelBase<TCellState> : Disposa
 
         BrushRadiusRange = options.BrushRadiusRange;
 
-        WithDisposables(disposables =>
-        {
-            _settings
-                .WhenValueChanged(x => x.IsDrawingEnabled, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(IsDrawingModeEnabled)))
-                .DisposeWith(disposables);
+        _settings
+            .WhenValueChanged(x => x.IsDrawingEnabled, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(IsDrawingModeEnabled)))
+            .DisposeWith(Disposables);
 
-            _settings
-                .WhenValueChanged(x => x.BrushRadius, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(BrushRadius)))
-                .DisposeWith(disposables);
-            
-            _settings
-                .WhenValueChanged(x => x.BrushShape, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => ChangeBrushShapeCommand.NotifyCanExecuteChanged())
-                .DisposeWith(disposables);
+        _settings
+            .WhenValueChanged(x => x.BrushRadius, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(BrushRadius)))
+            .DisposeWith(Disposables);
+        
+        _settings
+            .WhenValueChanged(x => x.BrushShape, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => ChangeBrushShapeCommand.NotifyCanExecuteChanged())
+            .DisposeWith(Disposables);
 
-            _settings
-                .WhenValueChanged(x => x.BrushCellState, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => ChangeBrushCellStateCommand.NotifyCanExecuteChanged())
-                .DisposeWith(disposables);
-        });
+        _settings
+            .WhenValueChanged(x => x.BrushCellState, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => ChangeBrushCellStateCommand.NotifyCanExecuteChanged())
+            .DisposeWith(Disposables);
     }
 }

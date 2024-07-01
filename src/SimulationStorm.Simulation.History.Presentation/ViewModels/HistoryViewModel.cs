@@ -101,39 +101,36 @@ public partial class HistoryViewModel<TSave> :
     {
         _historyManager = historyManager;
 
-        WithDisposables(disposables =>
-        {
-            _historyManager.Collection
-                .IndexItemsAndBind<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>, HistoryRecordModel>
-                (
-                    record => new HistoryRecordModel(record.ExecutedCommand, record.SavingTime),
-                    out _recordModels,
-                    scheduler: immediateUiThreadScheduler
-                )
-                .DisposeWith(disposables);
+        _historyManager.Collection
+            .IndexItemsAndBind<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>, HistoryRecordModel>
+            (
+                record => new HistoryRecordModel(record.ExecutedCommand, record.SavingTime),
+                out _recordModels,
+                scheduler: immediateUiThreadScheduler
+            )
+            .DisposeWith(Disposables);
 
-            _historyManager.Collection
-                .ObserveCollectionChanges()
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => UpdateRecordModelPositions())
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
-                (
-                    h => _historyManager.Collection.PointerMoved += h,
-                    h => _historyManager.Collection.PointerMoved -= h
-                )
-                .ObserveOn(immediateUiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    UpdateRecordModelPositions();
-                    
-                    OnPropertyChanged(nameof(CurrentSaveIndex));
-                    NotifyNavigationCommandsCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _historyManager.Collection
+            .ObserveCollectionChanges()
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => UpdateRecordModelPositions())
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
+            (
+                h => _historyManager.Collection.PointerMoved += h,
+                h => _historyManager.Collection.PointerMoved -= h
+            )
+            .ObserveOn(immediateUiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                UpdateRecordModelPositions();
+                
+                OnPropertyChanged(nameof(CurrentSaveIndex));
+                NotifyNavigationCommandsCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
     
     private void UpdateRecordModelPositions() => _recordModels.ForEach(UpdateRecordModelPosition);

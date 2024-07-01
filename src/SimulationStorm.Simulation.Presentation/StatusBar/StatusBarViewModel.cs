@@ -115,63 +115,60 @@ public class StatusBarViewModel : DisposableObservableObject
         _isSimulationRenderingTimeVisible = options.IsSimulationRenderingTimeVisible;
         _isWorldRenderingTimeVisible = options.IsWorldRenderingTimeVisible;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandEventArgs>, SimulationCommandEventArgs>
-                (
-                    h => simulationManager.CommandStarting += h,
-                    h => simulationManager.CommandStarting -= h
-                )
-                .Where(_ => IsCommandProgressVisible)
-                .Select(e => e.EventArgs)
-                .Subscribe(e => ExecutingCommand = e.Command)
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-                (
-                    h => simulationManager.CommandCompleted += h,
-                    h => simulationManager.CommandCompleted -= h
-                )
-                .Do(_ => ExecutingCommand = null)
-                .Where(_ => IsCommandTimeVisible)
-                .Select(e => e.EventArgs)
-                .Subscribe(e => CommandTime = e.ElapsedTime)
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => simulationRenderer.RenderingStarting += h,
-                    h => simulationRenderer.RenderingStarting -= h
-                )
-                .Where(_ => IsSimulationRenderingProgressVisible)
-                .Subscribe(_ => IsSimulationRenderingInProgress = true)
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
-                (
-                    h => simulationRenderer.RenderingCompleted += h,
-                    h => simulationRenderer.RenderingCompleted -= h
-                )
-                .Do(_ => IsSimulationRenderingInProgress = false)
-                .Where(_ => IsSimulationRenderingTimeVisible)
-                .Select(e => e.EventArgs)
-                .Subscribe(e => SimulationRenderingTime = e.ElapsedTime)
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<RenderingCompletedEventArgs>, RenderingCompletedEventArgs>
-                (
-                    h => worldRenderer.RenderingCompleted += h,
-                    h => worldRenderer.RenderingCompleted -= h
-                )
-                .Where(_ => IsWorldRenderingTimeVisible)
-                .Select(e => e.EventArgs)
-                .Subscribe(e => WorldRenderingTime = e.ElapsedTime)
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandEventArgs>, SimulationCommandEventArgs>
+            (
+                h => simulationManager.CommandStarting += h,
+                h => simulationManager.CommandStarting -= h
+            )
+            .Where(_ => IsCommandProgressVisible)
+            .Select(e => e.EventArgs)
+            .Subscribe(e => ExecutingCommand = e.Command)
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => simulationManager.CommandCompleted += h,
+                h => simulationManager.CommandCompleted -= h
+            )
+            .Do(_ => ExecutingCommand = null)
+            .Where(_ => IsCommandTimeVisible)
+            .Select(e => e.EventArgs)
+            .Subscribe(e => CommandTime = e.ElapsedTime)
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => simulationRenderer.RenderingStarting += h,
+                h => simulationRenderer.RenderingStarting -= h
+            )
+            .Where(_ => IsSimulationRenderingProgressVisible)
+            .Subscribe(_ => IsSimulationRenderingInProgress = true)
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
+            (
+                h => simulationRenderer.RenderingCompleted += h,
+                h => simulationRenderer.RenderingCompleted -= h
+            )
+            .Do(_ => IsSimulationRenderingInProgress = false)
+            .Where(_ => IsSimulationRenderingTimeVisible)
+            .Select(e => e.EventArgs)
+            .Subscribe(e => SimulationRenderingTime = e.ElapsedTime)
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<RenderingCompletedEventArgs>, RenderingCompletedEventArgs>
+            (
+                h => worldRenderer.RenderingCompleted += h,
+                h => worldRenderer.RenderingCompleted -= h
+            )
+            .Where(_ => IsWorldRenderingTimeVisible)
+            .Select(e => e.EventArgs)
+            .Subscribe(e => WorldRenderingTime = e.ElapsedTime)
+            .DisposeWith(Disposables);
     }
 }

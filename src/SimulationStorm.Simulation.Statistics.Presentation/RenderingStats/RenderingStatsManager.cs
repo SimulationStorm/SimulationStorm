@@ -21,20 +21,17 @@ public class RenderingStatsManager : CollectionManagerBase<RenderingResultRecord
     )
         : base(universalCollectionFactory, intervalActionExecutor, options)
     {
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
-                (
-                    h => simulationRenderer.RenderingCompleted += h,
-                    h => simulationRenderer.RenderingCompleted -= h
-                )
-                .Where(_ => IsSavingEnabled)
-                .Select(e => e.EventArgs)
-                .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppState: true })
-                .Select(e => new RenderingResultRecord(e.Command, e.ElapsedTime))
-                .Subscribe(Collection.Add)
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<SimulationRenderingCompletedEventArgs>, SimulationRenderingCompletedEventArgs>
+            (
+                h => simulationRenderer.RenderingCompleted += h,
+                h => simulationRenderer.RenderingCompleted -= h
+            )
+            .Where(_ => IsSavingEnabled)
+            .Select(e => e.EventArgs)
+            .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppState: true })
+            .Select(e => new RenderingResultRecord(e.Command, e.ElapsedTime))
+            .Subscribe(Collection.Add)
+            .DisposeWith(Disposables);
     }
 }

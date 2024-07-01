@@ -63,17 +63,14 @@ public partial class WorldViewModel : DisposableObservableObject
         WorldCamera = worldCamera;
         _worldRenderer = worldRenderer;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<RenderingCompletedEventArgs>, RenderingCompletedEventArgs>
-                (
-                    h => worldRenderer.RenderingCompleted += h,
-                    h => worldRenderer.RenderingCompleted -= h
-                )
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(WorldImage)))
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<RenderingCompletedEventArgs>, RenderingCompletedEventArgs>
+            (
+                h => worldRenderer.RenderingCompleted += h,
+                h => worldRenderer.RenderingCompleted -= h
+            )
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(WorldImage)))
+            .DisposeWith(Disposables);
     }
 }

@@ -49,84 +49,81 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
         _simulationManager = simulationManager;
         _historyManager = historyManager;
         
-        WithDisposables(disposables =>
-        {
-            // After history manager completing its work, make new summary record if needed
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-                (
-                    h => _historyManager.SimulationCommandExecutedEventHandled += h,
-                    h => _historyManager.SimulationCommandExecutedEventHandled += h
-                )
-                .Select(e => e.EventArgs)
-                .Subscribe(e => _ = OnHistoryManagerHandledSimulationCommandExecutedEvent(e).ConfigureAwait(false))
-                .DisposeWith(disposables);
+        // After history manager completing its work, make new summary record if needed
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _historyManager.SimulationCommandExecutedEventHandled += h,
+                h => _historyManager.SimulationCommandExecutedEventHandled += h
+            )
+            .Select(e => e.EventArgs)
+            .Subscribe(e => _ = OnHistoryManagerHandledSimulationCommandExecutedEvent(e).ConfigureAwait(false))
+            .DisposeWith(Disposables);
 
-            Observable
-                .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
-                (
-                    h => _historyManager.Collection.PointerMoved += h,
-                    h => _historyManager.Collection.PointerMoved -= h
-                )
-                .Select(e => e.EventArgs)
-                .Subscribe(e =>
+        Observable
+            .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
+            (
+                h => _historyManager.Collection.PointerMoved += h,
+                h => _historyManager.Collection.PointerMoved -= h
+            )
+            .Select(e => e.EventArgs)
+            .Subscribe(e =>
+            {
+                var start = e.MovementDirection is PointerMovementDirection.Forward
+                    ? e.OldPosition + 1
+                    : e.NewPosition + 1;
+                var count = e.PositionDelta;
+                var affectedHistoryRecords = _historyManager.Collection
+                    .Skip(start)
+                    .Take(count)
+                    .ToList();
+                
+                var summaryRecords = _historyRecordsBySummaryRecord
+                    .Where(x => x.Value is not null && affectedHistoryRecords.Contains(x.Value))
+                    .Select(x => x.Key)
+                    .ToList();
+                
+                if (e.MovementDirection is PointerMovementDirection.Backward)
                 {
-                    var start = e.MovementDirection is PointerMovementDirection.Forward
-                        ? e.OldPosition + 1
-                        : e.NewPosition + 1;
-                    var count = e.PositionDelta;
-                    var affectedHistoryRecords = _historyManager.Collection
-                        .Skip(start)
-                        .Take(count)
-                        .ToList();
-                    
-                    var summaryRecords = _historyRecordsBySummaryRecord
-                        .Where(x => x.Value is not null && affectedHistoryRecords.Contains(x.Value))
-                        .Select(x => x.Key)
-                        .ToList();
-                    
-                    if (e.MovementDirection is PointerMovementDirection.Backward)
-                    {
-                        _wereSummaryRecordsHidden = true;
-                        Collection.RemoveMany(summaryRecords);
-                        _wereSummaryRecordsHidden = false;
-                    }
-                    else
-                    {
-                        Collection.Add(summaryRecords);
-                    }
-                })
-                .DisposeWith(disposables);
-
-            // If history record was removed, remove associated summary records
-            _historyManager.Collection
-                .ToObservableChangeSet<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>>()
-                .OnItemRemoved(historyRecord =>
-                {
-                    // Here, we should remove records
-                    var summaryRecords = _historyRecordsBySummaryRecord
-                        .Where(x => x.Value == historyRecord)
-                        .Select(x => x.Key)
-                        .ToList();
-                    
+                    _wereSummaryRecordsHidden = true;
                     Collection.RemoveMany(summaryRecords);
-                })
-                .Subscribe()
-                .DisposeWith(disposables);
-            
-            // If summary record was removed, remove association if association exists
-            Collection
-                .ToObservableChangeSet<IUniversalCollection<SummaryRecord<TSummary>>, SummaryRecord<TSummary>>()
-                .OnItemRemoved(summaryRecord =>
+                    _wereSummaryRecordsHidden = false;
+                }
+                else
                 {
-                    if (_wereSummaryRecordsHidden)
-                        return;
-                    
-                    _historyRecordsBySummaryRecord.Remove(summaryRecord);
-                })
-                .Subscribe()
-                .DisposeWith(disposables);
-        });
+                    Collection.Add(summaryRecords);
+                }
+            })
+            .DisposeWith(Disposables);
+
+        // If history record was removed, remove associated summary records
+        _historyManager.Collection
+            .ToObservableChangeSet<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>>()
+            .OnItemRemoved(historyRecord =>
+            {
+                // Here, we should remove records
+                var summaryRecords = _historyRecordsBySummaryRecord
+                    .Where(x => x.Value == historyRecord)
+                    .Select(x => x.Key)
+                    .ToList();
+                
+                Collection.RemoveMany(summaryRecords);
+            })
+            .Subscribe()
+            .DisposeWith(Disposables);
+        
+        // If summary record was removed, remove association if association exists
+        Collection
+            .ToObservableChangeSet<IUniversalCollection<SummaryRecord<TSummary>>, SummaryRecord<TSummary>>()
+            .OnItemRemoved(summaryRecord =>
+            {
+                if (_wereSummaryRecordsHidden)
+                    return;
+                
+                _historyRecordsBySummaryRecord.Remove(summaryRecord);
+            })
+            .Subscribe()
+            .DisposeWith(Disposables);
     }
     
     #region Private methods

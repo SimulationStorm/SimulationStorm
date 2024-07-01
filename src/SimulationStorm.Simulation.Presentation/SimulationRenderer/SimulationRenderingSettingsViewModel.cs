@@ -46,23 +46,20 @@ public partial class SimulationRenderingSettingsViewModel : DisposableObservable
         _simulationRenderer = simulationRenderer;
         _options = options;
         
-        WithDisposables(disposables =>
-        {
-            _simulationRenderer
-                .WhenValueChanged(x => x.IsRenderingEnabled, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(IsRenderingEnabled)))
-                .DisposeWith(disposables);
-            
-            _simulationRenderer
-                .WhenValueChanged(x => x.RenderingInterval, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(RenderingInterval));
-                    ResetRenderingIntervalCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _simulationRenderer
+            .WhenValueChanged(x => x.IsRenderingEnabled, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(IsRenderingEnabled)))
+            .DisposeWith(Disposables);
+        
+        _simulationRenderer
+            .WhenValueChanged(x => x.RenderingInterval, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(RenderingInterval));
+                ResetRenderingIntervalCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 }

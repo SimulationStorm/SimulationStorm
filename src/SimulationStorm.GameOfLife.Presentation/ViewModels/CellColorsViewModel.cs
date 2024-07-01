@@ -70,19 +70,16 @@ public partial class CellColorsViewModel : DisposableObservableObject
         _gameOfLifeRenderer = gameOfLifeRenderer;
         _options = options;
         
-        WithDisposables(disposables =>
-        {
-            _gameOfLifeRenderer
-                .WhenValueChanged(x => x.CellColors, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(DeadCellColor));
-                    OnPropertyChanged(nameof(AliveCellColor));
-                    
-                    ResetCellColorCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _gameOfLifeRenderer
+            .WhenValueChanged(x => x.CellColors, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(DeadCellColor));
+                OnPropertyChanged(nameof(AliveCellColor));
+                
+                ResetCellColorCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 }

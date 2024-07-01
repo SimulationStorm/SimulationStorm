@@ -106,49 +106,46 @@ public abstract partial class CollectionManagerViewModelBase<T> : DisposableObse
         CapacityRange = options.CapacityRange;
         SavingIntervalRange = options.SavingIntervalRange;
         
-        WithDisposables(disposables =>
-        {
-            _collectionManager
-                .WhenValueChanged(x => x.IsSavingEnabled, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(IsSavingEnabled)))
-                .DisposeWith(disposables);
-            
-            _collectionManager
-                .WhenValueChanged(x => x.SavingInterval, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(SavingInterval));
-                    ResetSavingIntervalCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
+        _collectionManager
+            .WhenValueChanged(x => x.IsSavingEnabled, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(IsSavingEnabled)))
+            .DisposeWith(Disposables);
+        
+        _collectionManager
+            .WhenValueChanged(x => x.SavingInterval, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(SavingInterval));
+                ResetSavingIntervalCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
 
-            _collectionManager.Collection
-                .WhenValueChanged(x => x.StorageLocation, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(newStorageLocation => EditingStorageLocation = newStorageLocation)
-                .DisposeWith(disposables);
-            
-            _collectionManager.Collection
-                .WhenValueChanged(x => x.Capacity, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(newCapacity =>
-                {
-                    OnPropertyChanged(nameof(Capacity));
-                    EditingCapacity = newCapacity;
-                })
-                .DisposeWith(disposables);
-            
-            collectionManager.Collection
-                .WhenValueChanged(x => x.Count)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    AreThereRecords = collectionManager.Collection.Count is not 0;
-                    ClearCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _collectionManager.Collection
+            .WhenValueChanged(x => x.StorageLocation, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(newStorageLocation => EditingStorageLocation = newStorageLocation)
+            .DisposeWith(Disposables);
+        
+        _collectionManager.Collection
+            .WhenValueChanged(x => x.Capacity, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(newCapacity =>
+            {
+                OnPropertyChanged(nameof(Capacity));
+                EditingCapacity = newCapacity;
+            })
+            .DisposeWith(Disposables);
+        
+        collectionManager.Collection
+            .WhenValueChanged(x => x.Count)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                AreThereRecords = collectionManager.Collection.Count is not 0;
+                ClearCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 }

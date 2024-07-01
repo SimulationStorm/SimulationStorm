@@ -66,22 +66,19 @@ public partial class AppStateManagerDialogViewModel : DialogViewModelBase
         _appStateManager = appStateManager;
         _notificationManager = notificationManager;
         
-        WithDisposables(disposables =>
-        {
-            _appStateManager.AppStates
-                .IndexItemsAndBind<ReadOnlyObservableCollection<AppState>, AppState, AppStateModel>
-                (
-                    appState => new AppStateModel(appState),
-                    out _appStateModels,
-                    uiThreadScheduler
-                )
-                .DisposeWith(disposables);
+        _appStateManager.AppStates
+            .IndexItemsAndBind<ReadOnlyObservableCollection<AppState>, AppState, AppStateModel>
+            (
+                appState => new AppStateModel(appState),
+                out _appStateModels,
+                uiThreadScheduler
+            )
+            .DisposeWith(Disposables);
 
-            _appStateManager.AppStates
-                .ObserveCollectionChanges()
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => OnPropertyChanged(nameof(CanDeleteAllAppStates)))
-                .DisposeWith(disposables);
-        });
+        _appStateManager.AppStates
+            .ObserveCollectionChanges()
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => OnPropertyChanged(nameof(CanDeleteAllAppStates)))
+            .DisposeWith(Disposables);
     }
 }

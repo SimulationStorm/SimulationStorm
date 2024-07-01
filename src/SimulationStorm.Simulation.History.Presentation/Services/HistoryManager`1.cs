@@ -28,17 +28,14 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
     {
         _simulationManager = simulationManager;
 
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
-                (
-                    h => _simulationManager.CommandCompleted += h,
-                    h => _simulationManager.CommandCompleted -= h
-                )
-                .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false))
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _simulationManager.CommandCompleted += h,
+                h => _simulationManager.CommandCompleted -= h
+            )
+            .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false))
+            .DisposeWith(Disposables);
 
         // CreateInitialRecordIfSavingIsEnabledAsync();
     }

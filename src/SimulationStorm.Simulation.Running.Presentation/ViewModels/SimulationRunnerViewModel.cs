@@ -69,38 +69,35 @@ public partial class SimulationRunnerViewModel : DisposableObservableObject
         _simulationRunner = simulationRunner;
         _options = options;
         
-        WithDisposables(disposables =>
-        {
-            _simulationRunner
-                .WhenValueChanged(x => x.SimulationRunningState, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(SimulationRunningState));
-                    AdvanceSimulationCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-            
-            _simulationRunner
-                .WhenValueChanged(x => x.MaxStepsPerSecond, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(MaxStepsPerSecond));
-                    ResetMaxStepsPerSecondCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
+        _simulationRunner
+            .WhenValueChanged(x => x.SimulationRunningState, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(SimulationRunningState));
+                AdvanceSimulationCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
+        
+        _simulationRunner
+            .WhenValueChanged(x => x.MaxStepsPerSecond, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(MaxStepsPerSecond));
+                ResetMaxStepsPerSecondCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
 
-            Observable
-                .FromEventPattern<EventHandler<SimulationAdvancedEventArgs>, SimulationAdvancedEventArgs>
-                (
-                    h => _simulationRunner.SimulationAdvanced += h,
-                    h => _simulationRunner.SimulationAdvanced -= h
-                )
-                .Select(ep => ep.EventArgs)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(e => StepExecutionTime = e.ElapsedTime)
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<SimulationAdvancedEventArgs>, SimulationAdvancedEventArgs>
+            (
+                h => _simulationRunner.SimulationAdvanced += h,
+                h => _simulationRunner.SimulationAdvanced -= h
+            )
+            .Select(ep => ep.EventArgs)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(e => StepExecutionTime = e.ElapsedTime)
+            .DisposeWith(Disposables);
     }
 }

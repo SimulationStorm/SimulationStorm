@@ -58,24 +58,21 @@ public abstract partial class StatsViewModelBase<TRecord> : CollectionManagerVie
         ChartTypes = options.ChartTypes;
         _currentChartType = options.DefaultChartType;
         
-        WithDisposables(disposables =>
-        {
-            // [WORKAROUND] This is needed to update chart tooltip background color.
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => uiThemeManager.ThemeChanged += h,
-                    h => uiThemeManager.ThemeChanged -= h
-                )
-                .Subscribe(_ => UpdateChartViewModel())
-                .DisposeWith(disposables);
+        // [WORKAROUND] This is needed to update chart tooltip background color.
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => uiThemeManager.ThemeChanged += h,
+                h => uiThemeManager.ThemeChanged -= h
+            )
+            .Subscribe(_ => UpdateChartViewModel())
+            .DisposeWith(Disposables);
 
-            collectionManager
-                .WhenValueChanged(x => x.IsSavingEnabled, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => UpdateChartViewModel())
-                .DisposeWith(disposables);
-        });
+        collectionManager
+            .WhenValueChanged(x => x.IsSavingEnabled, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => UpdateChartViewModel())
+            .DisposeWith(Disposables);
     }
 
     public override void Dispose()
