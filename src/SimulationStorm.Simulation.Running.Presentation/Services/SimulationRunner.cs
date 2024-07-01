@@ -51,7 +51,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
     #region Public methods
     public void StartSimulation()
     {
-        // Todo: ThrowIfDisposingOrDisposed();
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
         
         if (SimulationRunningState is SimulationRunningState.Running)
             return;
@@ -65,7 +65,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
 
     public void PauseSimulation()
     {
-        // Todo: ThrowIfDisposingOrDisposed();
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
         
         if (SimulationRunningState is SimulationRunningState.Paused)
             return;

@@ -50,7 +50,7 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
 
     public void RequestRerender()
     {
-        // Todo: ThrowIfDisposingOrDisposed();
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
         
         _renderingLoopSynchronizer.Set();
     }
