@@ -34,8 +34,8 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
                 h => _simulationManager.CommandCompleted += h,
                 h => _simulationManager.CommandCompleted -= h
             )
-            .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false))
-            .DisposeWith(Disposables);
+            .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false));
+        // .DisposeWith(Disposables);
 
         // CreateInitialRecordIfSavingIsEnabledAsync();
     }

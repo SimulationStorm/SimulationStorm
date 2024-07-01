@@ -25,7 +25,7 @@ public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord
         : base(universalCollectionFactory, intervalActionExecutor, options)
     {
         _simulationManager = simulationManager;
-        
+
         Observable
             .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
             (
@@ -33,8 +33,8 @@ public class SummaryStatsManager<TSummary> : CollectionManagerBase<SummaryRecord
                 h => _simulationManager.CommandCompleted += h
             )
             .Select(e => e.EventArgs)
-            .Subscribe(e => HandleSimulationCommandExecutedAsync(e).ConfigureAwait(false))
-            .DisposeWith(Disposables);
+            .Subscribe(e => HandleSimulationCommandExecutedAsync(e).ConfigureAwait(false));
+        // .DisposeWith(Disposables);
 
         // CreateInitialRecordIfSavingIsEnabledAsync();
     }

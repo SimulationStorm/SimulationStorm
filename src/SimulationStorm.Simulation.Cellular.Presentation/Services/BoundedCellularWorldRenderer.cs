@@ -217,7 +217,8 @@ public class BoundedCellularWorldRenderer : WorldRendererBase, IBoundedCellularW
         
         _simulationImageLock.Release();
         
-        RequestRerender();
+        if (!IsDisposingOrDisposed)
+            RequestRerender();
     }
     
     private async Task RenderSimulationImage(ICanvas canvas)

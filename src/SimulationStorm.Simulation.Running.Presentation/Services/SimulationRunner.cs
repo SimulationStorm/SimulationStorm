@@ -25,13 +25,13 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
 
     private readonly ILocalizedNotificationManager _notificationManager;
 
-    private readonly AsyncManualResetEvent _advancingCycleSynchronizer = new(false);
+    private readonly AsyncManualResetEvent _advancementLoopSynchronizer = new(false);
     
-    private readonly CancellationTokenSource _advancingCycleCts = new();
+    private readonly CancellationTokenSource _advancementLoopCts = new();
 
-    private readonly Task _advancingCycleTask;
+    private Task _advancementLoopTask = null!;
 
-    private readonly Stopwatch _advancingCycleStopwatch = new();
+    private readonly Stopwatch _advancementLoopStopwatch = new();
     #endregion
 
     public SimulationRunner
@@ -44,8 +44,8 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
         _notificationManager = notificationManager;
         
         MaxStepsPerSecond = options.MaxStepsPerSecond;
-
-        _advancingCycleTask = AdvanceSimulationInCycleAsync(_advancingCycleCts.Token);
+        
+        StartSimulationAdvancementLoop();
     }
 
     #region Public methods
@@ -56,7 +56,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
         if (SimulationRunningState is SimulationRunningState.Running)
             return;
 
-        StartAdvancementCycle();
+        _advancementLoopSynchronizer.Set();
         
         SimulationRunningState = SimulationRunningState.Running;
         
@@ -70,7 +70,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
         if (SimulationRunningState is SimulationRunningState.Paused)
             return;
 
-        PauseAdvancementCycle();
+        _advancementLoopSynchronizer.Reset();
 
         SimulationRunningState = SimulationRunningState.Paused;
         
@@ -79,45 +79,44 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
 
     protected override async ValueTask DisposeAsyncCore()
     {
-        await _advancingCycleCts
+        await _advancementLoopCts
             .CancelAsync()
             .ConfigureAwait(false);
         
-        await _advancingCycleTask
+        await _advancementLoopTask
             .ConfigureAwait(false);
         
-        await _advancingCycleSynchronizer
+        await _advancementLoopSynchronizer
             .DisposeAsync()
             .ConfigureAwait(false);
         
-        _advancingCycleCts.Dispose();
+        _advancementLoopCts.Dispose();
     }
     #endregion
 
     #region Simulation advancement cycle
-    private void StartAdvancementCycle() => _advancingCycleSynchronizer.Set();
+    private void StartSimulationAdvancementLoop() =>
+        _advancementLoopTask = AdvanceSimulationInLoopAsync(_advancementLoopCts.Token);
 
-    private void PauseAdvancementCycle() => _advancingCycleSynchronizer.Reset();
-    
-    private async Task AdvanceSimulationInCycleAsync(CancellationToken cancellationToken)
+    private async Task AdvanceSimulationInLoopAsync(CancellationToken cancellationToken)
     {
         try
         {
             while (true)
             {
-                await _advancingCycleSynchronizer
+                await _advancementLoopSynchronizer
                     .WaitAsync(cancellationToken)
                     .ConfigureAwait(false);
 
-                _advancingCycleStopwatch.Restart();
+                _advancementLoopStopwatch.Restart();
                 await _simulationManager
                     .AdvanceAsync()
                     .ConfigureAwait(false);
-                _advancingCycleStopwatch.Stop();
+                _advancementLoopStopwatch.Stop();
                 
-                NotifySimulationAdvanced(_advancingCycleStopwatch.Elapsed);
+                NotifySimulationAdvanced(_advancementLoopStopwatch.Elapsed);
 
-                var elapsedTimeInMs = (int)_advancingCycleStopwatch.ElapsedMilliseconds;
+                var elapsedTimeInMs = (int)_advancementLoopStopwatch.ElapsedMilliseconds;
                 if (elapsedTimeInMs >= 1000 / MaxStepsPerSecond)
                     continue;
 
@@ -127,10 +126,7 @@ public partial class SimulationRunner : AsyncDisposableObservableObject, ISimula
                     .ConfigureAwait(false);
             }
         }
-        catch (OperationCanceledException _)
-        {
-            // Do nothing
-        }
+        catch (OperationCanceledException) { }
     }
 
     private void NotifySimulationAdvanced(TimeSpan elapsedTime) =>

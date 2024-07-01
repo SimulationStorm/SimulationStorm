@@ -124,7 +124,7 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
                     .ConfigureAwait(false);
             }
         }
-        catch (OperationCanceledException _) { }
+        catch (OperationCanceledException) { }
     }
     #endregion
 

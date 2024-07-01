@@ -51,13 +51,13 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
 
         IsRenderingEnabled = options.IsRenderingEnabled;
         RenderingInterval = options.RenderingInterval;
-        
+
         simulationManager
             .CommandCompletedObservable()
             .Subscribe(e =>
             {
                 _simulationCommandCompletedEventArgs = e;
-                
+
                 if (!e.Command.ChangesWorld)
                 {
                     SignalSimulationCommandCompletedEventHandled();
@@ -67,12 +67,16 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
                 if (_intervalActionExecutor.GetIsExecutionNeededAndMoveNext())
                 {
                     RememberCompletedCommand(e.Command);
-                    RequestRerender();
+
+                    if (!IsDisposingOrDisposed)
+                        RequestRerender();
+                    else
+                        SignalSimulationCommandCompletedEventHandled();
                 }
                 else
                     SignalSimulationCommandCompletedEventHandled();
-            })
-            .DisposeWith(Disposables);
+            });
+        // .DisposeWith(Disposables);
     }
 
     #region Protected methods

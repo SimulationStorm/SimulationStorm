@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using DotNext.Collections.Generic;
 using DotNext.Threading;
 using SimulationStorm.Utilities.Benchmarking;
 using SimulationStorm.Utilities.Disposing;
@@ -39,6 +42,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     private Task _commandProcessingLoopTask = null!;
 
     private Channel<ScheduledCommand> _commandChannel = null!;
+
+    private readonly Collection<ScheduledCommand> _scheduledCommands = [];
     #endregion
 
     #region Command execution
@@ -101,10 +106,6 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
     protected override async ValueTask DisposeAsyncCore()
     {
-        await _commandChannelLock
-            .AcquireAsync()
-            .ConfigureAwait(false);
-
         await _commandChannelLock
             .DisposeAsync()
             .ConfigureAwait(false);
@@ -215,6 +216,9 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
         await _commandProcessingLoopTask
             .ConfigureAwait(false);
+        
+        _scheduledCommands.ForEach(scheduledCommand => scheduledCommand.NotifyCanceled());
+        _scheduledCommands.Clear();
     }
 
     private async Task<ScheduledCommand> ScheduleCommandAndNotifyAsync(SimulationCommand command)
@@ -226,6 +230,8 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
             .ConfigureAwait(false);
 
         var scheduledCommand = new ScheduledCommand(command);
+        
+        _scheduledCommands.Add(scheduledCommand);
         
         await _commandChannel.Writer
             .WriteAsync(scheduledCommand)
@@ -262,7 +268,9 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
         await NotifyCommandCompletedAndWaitForEventHandling(command, elapsedTime, cancellationToken)
             .ConfigureAwait(false);
         
-        scheduledCommand.NotifyTaskCompleted();
+        scheduledCommand.NotifyCompleted();
+
+        _scheduledCommands.Remove(scheduledCommand);
     }
 
     private async Task<TimeSpan> NotifyCommandStartingAndExecuteCommandAsync(

@@ -13,7 +13,11 @@ public abstract partial class SimulationManagerBase
         #endregion
 
         private readonly TaskCompletionSource _tcs = new();
-    
-        public void NotifyTaskCompleted() => _tcs.SetResult();
+
+        #region Methods
+        public void NotifyCompleted() => _tcs.SetResult();
+
+        public void NotifyCanceled() => _tcs.SetCanceled();
+        #endregion
     }
 }
