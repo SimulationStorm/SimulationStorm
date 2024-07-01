@@ -61,7 +61,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
     #region Public methods
     public async Task ScheduleCommandAsync(SimulationCommand command)
     {
-        ThrowIfDisposingOrDisposed();
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
 
         var scheduledCommand = await ScheduleCommandAndNotifyAsync(command)
             .ConfigureAwait(false);
@@ -72,7 +72,7 @@ public abstract partial class SimulationManagerBase : AsyncDisposableObject, ISi
 
     public async Task ClearScheduledCommandsAsync()
     {
-        ThrowIfDisposingOrDisposed();
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
         
         await _commandChannelLock
             .AcquireAsync()
