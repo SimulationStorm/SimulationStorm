@@ -148,9 +148,9 @@ public class GameOfLifeManager :
                 ExecuteReset(resetCommand);
                 break;
             }
-            case RestoreSaveCommand restoreStateCommand:
+            case RestoreSaveCommand restoreSaveCommand:
             {
-                ExecuteRestoreState(restoreStateCommand);
+                ExecuteRestoreSave(restoreSaveCommand);
                 break;
             }
             case DrawCommand<GameOfLifeCellState> drawCommand:
@@ -205,16 +205,17 @@ public class GameOfLifeManager :
         WorldWrapping = _gameOfLifeImpl.WorldWrapping;
     }
 
-    private void ExecuteAdvance(AdvanceCommand command) =>
+    private void ExecuteAdvance(AdvanceCommand _) =>
         _gameOfLifeImpl.Advance();
 
-    private void ExecuteReset(ResetCommand command) =>
+    private void ExecuteReset(ResetCommand _) =>
         _gameOfLifeImpl.Reset();
 
-    private void ExecuteRestoreState(RestoreSaveCommand command)
+    private void ExecuteRestoreSave(RestoreSaveCommand command)
     {
-        var state = (GameOfLifeSave)command.Save;
-        switch (state.Algorithm)
+        var save = (GameOfLifeSave)command.Save;
+        
+        switch (save.Algorithm)
         {
             case GameOfLifeAlgorithm.Bitwise when Algorithm is not GameOfLifeAlgorithm.Bitwise:
             {
@@ -228,7 +229,7 @@ public class GameOfLifeManager :
             }
         }
         
-        _gameOfLifeImpl.RestoreState(state);
+        _gameOfLifeImpl.RestoreState(save);
         RememberGameOfLifePropertyValues();
     }
 
