@@ -11,7 +11,7 @@ public class GameOfLifeSave
     GameOfLifeRule rule,
     GameOfLifeAlgorithm algorithm,
     byte[]? world = null,
-    ISet<Point>? aliveCells = null)
+    IReadOnlySet<Point>? aliveCells = null)
 {
     public Size WorldSize { get; } = worldSize;
 
@@ -29,5 +29,5 @@ public class GameOfLifeSave
     /// <summary>
     /// Used with <see cref="GameOfLifeAlgorithm.Smart"/>.
     /// </summary>
-    public ISet<Point>? AliveCells { get; } = aliveCells;
+    public IReadOnlySet<Point>? AliveCells { get; } = aliveCells;
 }
