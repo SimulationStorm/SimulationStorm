@@ -39,25 +39,25 @@ A project of one level can only access projects of the lower levels.
 
 Complete components that implement useful functionality for various types of applications:
 
-* A module that provides some primitive data types
-* Module for working with two-dimensional graphics
-* Module for working with collections
-* Application save/load module
-* Interface localization module
-* Tool panels module
+* The module that provides some primitive data types
+* The module for working with two-dimensional graphics
+* The module for working with collections
+* The application save/load module
+* The interface localization module
+* The tool panels module
 
 ### Simulation modules
 
 Complete functional blocks that implement certain properties and behaviors of simulations:
 
 * The main simulation module
-* Simulation history module
-* Simulation statistics module
-* Simulation advancement module
-* A module for simulations with a limited world size
-* Module for returning the simulation to its original state
-* Module for cellular simulations
-* Module for cellular automations
+* The simulation history module
+* The simulation statistics module
+* The simulation advancement module
+* The module for simulations with a limited world size
+* The module for returning the simulation to its original state
+* The module for cellular simulations
+* The module for cellular automations
 
 ### Simulation Launcher
 
@@ -72,7 +72,6 @@ A launcher is available to run various simulations from a single interface.
 
 ## Video demonstration
 
-// Todo: load mp4 directly to the GitHub
 [![Game of Life simulation video demonstration](https://i3.ytimg.com/vi/lPE1HUHXKz4/maxresdefault.jpg)](https://youtu.be/lPE1HUHXKz4)
 
 ## Documentation
