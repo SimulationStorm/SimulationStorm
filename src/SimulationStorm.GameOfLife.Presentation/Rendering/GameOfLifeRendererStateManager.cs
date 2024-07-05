@@ -9,13 +9,14 @@ public class GameOfLifeRendererSaveManager(GameOfLifeRenderer gameOfLifeRenderer
     {
         IsRenderingEnabled = gameOfLifeRenderer.IsRenderingEnabled,
         RenderingInterval = gameOfLifeRenderer.RenderingInterval,
-        CellColors = gameOfLifeRenderer.CellColors
+        DeadCellColor = gameOfLifeRenderer.CellColors.DeadCellColor,
+        AliveCellColor = gameOfLifeRenderer.CellColors.AliveCellColor
     };
 
     protected override void RestoreServiceSaveCore(GameOfLifeRendererSave save)
     {
         gameOfLifeRenderer.IsRenderingEnabled = save.IsRenderingEnabled;
         gameOfLifeRenderer.RenderingInterval = save.RenderingInterval;
-        gameOfLifeRenderer.CellColors = save.CellColors;
+        gameOfLifeRenderer.CellColors = (save.DeadCellColor, save.AliveCellColor);
     }
 }

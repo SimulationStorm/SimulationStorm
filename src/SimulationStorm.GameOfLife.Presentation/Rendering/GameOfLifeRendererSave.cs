@@ -8,5 +8,9 @@ public class GameOfLifeRendererSave
     
     public int RenderingInterval { get; init; }
 
-    public (Color DeadCellColor, Color AliveCellColor) CellColors { get; init; }
+    // public (Color DeadCellColor, Color AliveCellColor) CellColors { get; init; }
+
+    public Color DeadCellColor { get; init; }
+
+    public Color AliveCellColor { get; init; }
 }
