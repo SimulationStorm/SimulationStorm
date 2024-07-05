@@ -3,5 +3,9 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
+    </ItemGroup>
     
 </Project>

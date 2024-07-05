@@ -23,19 +23,16 @@ public class UiColorProvider : DisposableObject, IUiColorProvider
    
     public UiColorProvider(Application application)
     {
-        WithDisposables(disposables =>
-        {
-            application
-                .GetResourceObservableOnUiThread(BackgroundBrushResourceKey)
-                .Select(x => x as ISolidColorBrush)
-                .Where(x => x is not null)
-                .Subscribe(backgroundBrush =>
-                {
-                    var previousColor = BackgroundColor;
-                    BackgroundColor = backgroundBrush!.Color.ToColor();
-                    BackgroundColorChanged?.Invoke(this, new UiColorChangedEventArgs(previousColor, BackgroundColor));
-                })
-                .DisposeWith(disposables);
-        });
+        application
+            .GetResourceObservableOnUiThread(BackgroundBrushResourceKey)
+            .Select(x => x as ISolidColorBrush)
+            .Where(x => x is not null)
+            .Subscribe(backgroundBrush =>
+            {
+                var previousColor = BackgroundColor;
+                BackgroundColor = backgroundBrush!.Color.ToColor();
+                BackgroundColorChanged?.Invoke(this, new UiColorChangedEventArgs(previousColor, BackgroundColor));
+            })
+            .DisposeWith(Disposables);
     }
 }

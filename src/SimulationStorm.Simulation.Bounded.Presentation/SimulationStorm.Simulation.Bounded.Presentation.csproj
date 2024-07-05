@@ -5,6 +5,7 @@
     </PropertyGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\SimulationStorm.AppSaves\SimulationStorm.AppSaves.csproj" />
       <ProjectReference Include="..\SimulationStorm.Notifications.Presentation\SimulationStorm.Notifications.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.History.Presentation\SimulationStorm.Simulation.History.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />

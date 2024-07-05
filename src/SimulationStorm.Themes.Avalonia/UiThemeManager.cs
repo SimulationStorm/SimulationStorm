@@ -29,19 +29,16 @@ public class UiThemeManager : DisposableObject, IUiThemeManager
     {
         _application = application;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => _application.ActualThemeVariantChanged += h,
-                    h => _application.ActualThemeVariantChanged -= h
-                )
-                .Where(_ => !_skipApplicationThemeChangedNotification)
-                .Select(e => e.EventArgs)
-                .Subscribe(_ => NotifyThemeChanged())
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => _application.ActualThemeVariantChanged += h,
+                h => _application.ActualThemeVariantChanged -= h
+            )
+            .Where(_ => !_skipApplicationThemeChangedNotification)
+            .Select(e => e.EventArgs)
+            .Subscribe(_ => NotifyThemeChanged())
+            .DisposeWith(Disposables);
     }
     
     #region Public methods

@@ -1,18 +1,18 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Statistics.Presentation;
 
-public abstract class StatsViewModelStateManagerBase<TState>
+public abstract class StatsViewModelSaveManagerBase<TSave>
 (
     IStatsViewModel statsViewModel
 )
-    : ServiceStateManagerBase<TState> where TState : StatsViewModelStateBase, new()
+    : ServiceSaveManagerBase<TSave> where TSave : StatsViewModelSaveBase, new()
 {
-    protected override TState SaveServiceStateImpl() => new()
+    protected override TSave SaveServiceCore() => new()
     {
         SelectedChartType = statsViewModel.CurrentChartType
     };
 
-    protected override void RestoreServiceStateImpl(TState state) =>
-        statsViewModel.CurrentChartType = state.SelectedChartType;
+    protected override void RestoreServiceSaveCore(TSave save) =>
+        statsViewModel.CurrentChartType = save.SelectedChartType;
 }

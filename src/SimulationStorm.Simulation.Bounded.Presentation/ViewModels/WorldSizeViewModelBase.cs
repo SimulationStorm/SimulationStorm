@@ -137,37 +137,34 @@ public abstract partial class WorldSizeViewModelBase : DisposableObservableObjec
         _editingWorldSize = simulationManager.WorldSize;
         WorldSizeRange = options.WorldSizeRange;
         
-        WithDisposables(disposables =>
-        {
-            var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => _simulationManager.CommandExecuted += h,
-                    h => _simulationManager.CommandExecuted -= h
-                )
-                .Select(e => e.EventArgs.Command)
-                .ObserveOn(uiThreadScheduler);
-                
-            executedCommandStream
-                .Where(command => command is ChangeWorldSizeCommand)
-                .Subscribe(_ => OnPropertyChanged(nameof(ActualWorldSize)))
-                .DisposeWith(disposables);
+        var executedCommandStream = Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _simulationManager.CommandCompleted += h,
+                h => _simulationManager.CommandCompleted -= h
+            )
+            .Select(e => e.EventArgs.Command)
+            .ObserveOn(uiThreadScheduler);
             
-            executedCommandStream
-                .Where(command => command is RestoreStateCommand)
-                .Subscribe(_ =>
-                {
-                    if (_editingWorldSize == ActualWorldSize)
-                        return;
+        executedCommandStream
+            .Where(command => command is ChangeWorldSizeCommand)
+            .Subscribe(_ => OnPropertyChanged(nameof(ActualWorldSize)))
+            .DisposeWith(Disposables);
+        
+        executedCommandStream
+            .Where(command => command is RestoreSaveCommand)
+            .Subscribe(_ =>
+            {
+                if (_editingWorldSize == ActualWorldSize)
+                    return;
 
-                    OnPropertyChanged(nameof(ActualWorldSize));
-                    
-                    _editingWorldSize = ActualWorldSize;
-                    OnPropertyChanged(nameof(EditingWorldWidth));
-                    OnPropertyChanged(nameof(EditingWorldHeight));
-                })
-                .DisposeWith(disposables);
-        });
+                OnPropertyChanged(nameof(ActualWorldSize));
+                
+                _editingWorldSize = ActualWorldSize;
+                OnPropertyChanged(nameof(EditingWorldWidth));
+                OnPropertyChanged(nameof(EditingWorldHeight));
+            })
+            .DisposeWith(Disposables);
     }
 
     protected virtual bool ValidateWorldSize(Size worldSize, [NotNullWhen(false)] out string? errorMessage)

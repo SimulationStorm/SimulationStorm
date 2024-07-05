@@ -51,33 +51,30 @@ public partial class RuleViewModel : DisposableObservableObject
         _gameOfLifeManager = gameOfLifeManager;
         _editingRule = gameOfLifeManager.Rule;
         
-        WithDisposables(disposables =>
-        {
-            var executedCommandStream = Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => _gameOfLifeManager.CommandExecuted += h,
-                    h => _gameOfLifeManager.CommandExecuted -= h
-                )
-                .Select(e => e.EventArgs.Command)
-                .ObserveOn(uiThreadScheduler);
-            
-            executedCommandStream
-                .Where(command => command is ChangeRuleCommand)
-                .Subscribe(_ => OnPropertyChanged(nameof(ActualRule)))
-                .DisposeWith(disposables);
-            
-            executedCommandStream
-                .Where(command => command is RestoreStateCommand)
-                .Subscribe(_ =>
-                {
-                    if (EditingRule.Equals(ActualRule))
-                        return;
+        var executedCommandStream = Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _gameOfLifeManager.CommandCompleted += h,
+                h => _gameOfLifeManager.CommandCompleted -= h
+            )
+            .Select(e => e.EventArgs.Command)
+            .ObserveOn(uiThreadScheduler);
+        
+        executedCommandStream
+            .Where(command => command is ChangeRuleCommand)
+            .Subscribe(_ => OnPropertyChanged(nameof(ActualRule)))
+            .DisposeWith(Disposables);
+        
+        executedCommandStream
+            .Where(command => command is RestoreSaveCommand)
+            .Subscribe(_ =>
+            {
+                if (EditingRule.Equals(ActualRule))
+                    return;
 
-                    OnPropertyChanged(nameof(ActualRule));
-                    EditingRule = ActualRule;
-                })
-                .DisposeWith(disposables);
-        });
+                OnPropertyChanged(nameof(ActualRule));
+                EditingRule = ActualRule;
+            })
+            .DisposeWith(Disposables);
     }
 }

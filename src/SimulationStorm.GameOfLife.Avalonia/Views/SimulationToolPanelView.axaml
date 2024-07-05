@@ -22,7 +22,7 @@
             <lifeViews:PopulationView/>
             <cellularViews:WorldWrappingView/>
             <lifeViews:AlgorithmView/>
-            <commonViews:CommandQueueView/>
+            <commonViews:ScheduledCommandsView/>
             <commandExecutionStats:CommandExecutionStatsView/>
         </DockPanel>
     </ScrollViewer>

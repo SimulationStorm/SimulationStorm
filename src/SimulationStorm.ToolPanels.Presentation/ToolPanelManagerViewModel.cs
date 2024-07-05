@@ -80,19 +80,16 @@ public partial class ToolPanelManagerViewModel : DisposableObservableObject
         _toolPanelManager = toolPanelManager;
         _toolPanelViewModelFactory = toolPanelViewModelFactory;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<ToolPanelAtPositionChangedEventArgs>, ToolPanelAtPositionChangedEventArgs>
-                (
-                    h => _toolPanelManager.ToolPanelAtPositionChanged += h,
-                    h => _toolPanelManager.ToolPanelAtPositionChanged -= h
-                )
-                .ObserveOn(uiThreadScheduler)
-                .Select(e => e.EventArgs)
-                .Subscribe(OnToolPanelAtPositionChanged)
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<ToolPanelAtPositionChangedEventArgs>, ToolPanelAtPositionChangedEventArgs>
+            (
+                h => _toolPanelManager.ToolPanelAtPositionChanged += h,
+                h => _toolPanelManager.ToolPanelAtPositionChanged -= h
+            )
+            .ObserveOn(uiThreadScheduler)
+            .Select(e => e.EventArgs)
+            .Subscribe(OnToolPanelAtPositionChanged)
+            .DisposeWith(Disposables);
         
         UpdateTopLeftToolPanelViewModel(_toolPanelManager.GetOpenedToolPanelAtPosition(ToolPanelPosition.TopLeft));
         UpdateTopRightToolPanelViewModel(_toolPanelManager.GetOpenedToolPanelAtPosition(ToolPanelPosition.TopRight));

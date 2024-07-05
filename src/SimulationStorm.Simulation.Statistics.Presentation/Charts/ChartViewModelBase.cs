@@ -30,26 +30,23 @@ public abstract class ChartViewModelBase<TRecord, TRecordModel> :
     {
         LocalizationManager = localizationManager;
         
-        WithDisposables(disposables =>
-        {
-            collectionManager.Collection
-                .IndexItemsAndBind<IUniversalCollection<TRecord>, TRecord, TRecordModel>
-                (
-                    CreateRecordModel,
-                    out _recordModels,
-                    scheduler: uiThreadScheduler
-                )
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
-                (
-                    h => LocalizationManager.CultureChanged += h,
-                    h => LocalizationManager.CultureChanged -= h
-                )
-                .Subscribe(_ => OnCultureChanged())
-                .DisposeWith(disposables);
-        });
+        collectionManager.Collection
+            .IndexItemsAndBind<IUniversalCollection<TRecord>, TRecord, TRecordModel>
+            (
+                CreateRecordModel,
+                out _recordModels,
+                scheduler: uiThreadScheduler
+            )
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
+            (
+                h => LocalizationManager.CultureChanged += h,
+                h => LocalizationManager.CultureChanged -= h
+            )
+            .Subscribe(_ => OnCultureChanged())
+            .DisposeWith(Disposables);
     }
 
     protected virtual void OnCultureChanged() { }

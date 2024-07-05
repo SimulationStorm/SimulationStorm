@@ -1,15 +1,15 @@
 ﻿using System.Linq;
-using SimulationStorm.AppStates;
+using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Collections.Presentation;
 
-public abstract class CollectionStateManagerBase<T, TState>
+public abstract class CollectionSaveManagerBase<TItem, TSave>
 (
-    ICollectionManager<T> collectionManager
+    ICollectionManager<TItem> collectionManager
 )
-    : ServiceStateManagerBase<TState> where TState : CollectionAndManagerStateBase<T>, new()
+    : ServiceSaveManagerBase<TSave> where TSave : CollectionAndManagerSaveBase<TItem>, new()
 {
-    protected override TState SaveServiceStateImpl() => new()
+    protected override TSave SaveServiceCore() => new()
     {
         IsSavingEnabled = collectionManager.IsSavingEnabled,
         SavingInterval = collectionManager.SavingInterval,
@@ -18,14 +18,14 @@ public abstract class CollectionStateManagerBase<T, TState>
         Items = collectionManager.Collection.ToArray()
     };
 
-    protected override void RestoreServiceStateImpl(TState state)
+    protected override void RestoreServiceSaveCore(TSave save)
     {
-        collectionManager.IsSavingEnabled = state.IsSavingEnabled;
-        collectionManager.SavingInterval = state.SavingInterval;
-        collectionManager.Collection.StorageLocation = state.StorageLocation;
-        collectionManager.Collection.Capacity = state.Capacity;
+        collectionManager.IsSavingEnabled = save.IsSavingEnabled;
+        collectionManager.SavingInterval = save.SavingInterval;
+        collectionManager.Collection.StorageLocation = save.StorageLocation;
+        collectionManager.Collection.Capacity = save.Capacity;
         
         collectionManager.Collection.Clear();
-        collectionManager.Collection.AddRange(state.Items);
+        collectionManager.Collection.AddRange(save.Items);
     }
 }

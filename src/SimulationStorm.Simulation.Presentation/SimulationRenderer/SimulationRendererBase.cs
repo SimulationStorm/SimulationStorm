@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
+using DotNext.Threading;
 using SimulationStorm.Graphics;
 using SimulationStorm.Simulation.Presentation.Renderer;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
@@ -31,84 +30,80 @@ public abstract class SimulationRendererBase : RendererBase, ISimulationRenderer
 
     #region Fields
     private readonly IIntervalActionExecutor _intervalActionExecutor;
-    
-    private SimulationCommandExecutedEventArgs? _simulationCommandExecutedEvent;
 
+    private readonly AsyncAutoResetEvent _commandCompletedEventSynchronizer = new(false);
+    
     private readonly ConcurrentQueue<SimulationCommand> _commandQueue = new();
     #endregion
     
     protected SimulationRendererBase
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
-        ISimulationManager simulationManager,
         ISimulationRendererOptions options
     )
-        : base(graphicsFactory, benchmarkingService)
+        : base(graphicsFactory, benchmarker)
     {
         _intervalActionExecutor = intervalActionExecutor;
 
         IsRenderingEnabled = options.IsRenderingEnabled;
         RenderingInterval = options.RenderingInterval;
-        
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => simulationManager.CommandExecuted += h,
-                    h => simulationManager.CommandExecuted -= h
-                )
-                .Select(e => e.EventArgs)
-                .Subscribe(e =>
-                {
-                    _simulationCommandExecutedEvent = e;
-                    
-                    if (!e.Command.ChangesWorld)
-                    {
-                        SignalSimulationCommandExecutedEventHandled();
-                        return;
-                    }
-
-                    if (_intervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-                    {
-                        RememberCommand(e.Command);
-                        RequestRerender();
-                    }
-                    else
-                        SignalSimulationCommandExecutedEventHandled();
-                })
-                .DisposeWith(disposables);
-        });
     }
-    
-    protected override async Task RenderAndNotifyRenderingCompletedAsync()
+
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
     {
-        await base
-            .RenderAndNotifyRenderingCompletedAsync()
+        if (!IsRenderingNeeded(e.Command))
+            return;
+
+        RememberCompletedCommand(e.Command);
+        
+        RequestRerender();
+
+        await _commandCompletedEventSynchronizer
+            .WaitAsync()
+            .ConfigureAwait(false);
+    }
+
+    #region Protected methods
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await base.DisposeAsyncCore()
             .ConfigureAwait(false);
         
-        SignalSimulationCommandExecutedEventHandled();
+        await _commandCompletedEventSynchronizer
+            .DisposeAsync()
+            .ConfigureAwait(false);
     }
 
-    protected void RememberCommand(SimulationCommand command) => _commandQueue.Enqueue(command);
+    protected override async Task RenderAndNotifyStartingAndCompletedAsync()
+    {
+        await base
+            .RenderAndNotifyStartingAndCompletedAsync()
+            .ConfigureAwait(false);
+
+        _commandCompletedEventSynchronizer.Set();
+    }
 
     protected override void NotifyRenderingCompleted(TimeSpan elapsedTime)
     {
-        var command = GetFirstRememberedCommand();
+        var command = GetFirstRememberedCompletedCommand();
         RenderingCompleted?.Invoke(this, new SimulationRenderingCompletedEventArgs(command, elapsedTime));
     }
-    
-    private SimulationCommand? GetFirstRememberedCommand()
+    #endregion
+
+    #region Private methods
+    private void RememberCompletedCommand(SimulationCommand command) => _commandQueue.Enqueue(command);
+
+    private SimulationCommand? GetFirstRememberedCompletedCommand()
     {
         _commandQueue.TryDequeue(out var command);
         return command;
     }
-
-    private void SignalSimulationCommandExecutedEventHandled()
-    {
-        _simulationCommandExecutedEvent?.Synchronizer.Signal();
-        _simulationCommandExecutedEvent = null;
-    }
+    
+    private bool IsRenderingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command.ChangesWorld
+        && _intervalActionExecutor.GetIsExecutionNeededAndMoveNext();
+    #endregion
 }

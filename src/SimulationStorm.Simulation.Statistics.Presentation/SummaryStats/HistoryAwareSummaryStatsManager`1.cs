@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using DotNext.Threading;
 using DynamicData;
 using DynamicData.Binding;
 using SimulationStorm.Collections.Pointed;
@@ -18,13 +19,17 @@ using SimulationStorm.Utilities;
 
 namespace SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 
-public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManagerBase<SummaryRecord<TSummary>>, ISummaryStatsManager<TSummary>
+public class HistoryAwareSummaryStatsManager<TSummary, TSave> :
+    CollectionManagerBase<SummaryRecord<TSummary>>,
+    ISummaryStatsManager<TSummary>
 {
     #region Fields
     private readonly ISummarizableSimulationManager<TSummary> _simulationManager;
 
     private readonly IHistoryManager<TSave> _historyManager;
 
+    private readonly AsyncAutoResetEvent _commandCompletedEventSynchronizer = new(false);
+    
     private readonly IDictionary<SummaryRecord<TSummary>, HistoryRecord<TSave>?>
         _historyRecordsBySummaryRecord = new Dictionary<SummaryRecord<TSummary>, HistoryRecord<TSave>?>();
 
@@ -49,105 +54,112 @@ public class HistoryAwareSummaryStatsManager<TSummary, TSave> : CollectionManage
         _simulationManager = simulationManager;
         _historyManager = historyManager;
         
-        WithDisposables(disposables =>
-        {
-            // After history manager completing its work, make new summary record if needed
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => _historyManager.SimulationCommandExecutedEventHandled += h,
-                    h => _historyManager.SimulationCommandExecutedEventHandled += h
-                )
-                .Select(e => e.EventArgs)
-                .Subscribe(e => _ = OnHistoryManagerHandledSimulationCommandExecutedEvent(e).ConfigureAwait(false))
-                .DisposeWith(disposables);
+        // After history manager completing its work, make new summary record if needed
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => _historyManager.SimulationCommandCompletedEventHandled += h,
+                h => _historyManager.SimulationCommandCompletedEventHandled += h
+            )
+            .Select(e => e.EventArgs)
+            .Subscribe(e => _commandCompletedEventSynchronizer.Set())
+            .DisposeWith(Disposables);
 
-            Observable
-                .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
-                (
-                    h => _historyManager.Collection.PointerMoved += h,
-                    h => _historyManager.Collection.PointerMoved -= h
-                )
-                .Select(e => e.EventArgs)
-                .Subscribe(e =>
+        Observable
+            .FromEventPattern<EventHandler<CollectionPointerMovedEventArgs>, CollectionPointerMovedEventArgs>
+            (
+                h => _historyManager.Collection.PointerMoved += h,
+                h => _historyManager.Collection.PointerMoved -= h
+            )
+            .Select(e => e.EventArgs)
+            .Subscribe(e =>
+            {
+                var start = e.MovementDirection is PointerMovementDirection.Forward
+                    ? e.OldPosition + 1
+                    : e.NewPosition + 1;
+                var count = e.PositionDelta;
+                var affectedHistoryRecords = _historyManager.Collection
+                    .Skip(start)
+                    .Take(count)
+                    .ToList();
+                
+                var summaryRecords = _historyRecordsBySummaryRecord
+                    .Where(x => x.Value is not null && affectedHistoryRecords.Contains(x.Value))
+                    .Select(x => x.Key)
+                    .ToList();
+                
+                if (e.MovementDirection is PointerMovementDirection.Backward)
                 {
-                    var start = e.MovementDirection is PointerMovementDirection.Forward
-                        ? e.OldPosition + 1
-                        : e.NewPosition + 1;
-                    var count = e.PositionDelta;
-                    var affectedHistoryRecords = _historyManager.Collection
-                        .Skip(start)
-                        .Take(count)
-                        .ToList();
-                    
-                    var summaryRecords = _historyRecordsBySummaryRecord
-                        .Where(x => x.Value is not null && affectedHistoryRecords.Contains(x.Value))
-                        .Select(x => x.Key)
-                        .ToList();
-                    
-                    if (e.MovementDirection is PointerMovementDirection.Backward)
-                    {
-                        _wereSummaryRecordsHidden = true;
-                        Collection.RemoveMany(summaryRecords);
-                        _wereSummaryRecordsHidden = false;
-                    }
-                    else
-                    {
-                        Collection.Add(summaryRecords);
-                    }
-                })
-                .DisposeWith(disposables);
-
-            // If history record was removed, remove associated summary records
-            _historyManager.Collection
-                .ToObservableChangeSet<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>>()
-                .OnItemRemoved(historyRecord =>
-                {
-                    // Here, we should remove records
-                    var summaryRecords = _historyRecordsBySummaryRecord
-                        .Where(x => x.Value == historyRecord)
-                        .Select(x => x.Key)
-                        .ToList();
-                    
+                    _wereSummaryRecordsHidden = true;
                     Collection.RemoveMany(summaryRecords);
-                })
-                .Subscribe()
-                .DisposeWith(disposables);
-            
-            // If summary record was removed, remove association if association exists
-            Collection
-                .ToObservableChangeSet<IUniversalCollection<SummaryRecord<TSummary>>, SummaryRecord<TSummary>>()
-                .OnItemRemoved(summaryRecord =>
+                    _wereSummaryRecordsHidden = false;
+                }
+                else
                 {
-                    if (_wereSummaryRecordsHidden)
-                        return;
-                    
-                    _historyRecordsBySummaryRecord.Remove(summaryRecord);
-                })
-                .Subscribe()
-                .DisposeWith(disposables);
-        });
-    }
-    
-    #region Private methods
-    private async Task OnHistoryManagerHandledSimulationCommandExecutedEvent(SimulationCommandExecutedEventArgs e)
-    {
-        // if (e.Command.ChangesWorld && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-        //     await SummarizeSimulationAndAddToCollection(e.Command)
-        //         .ConfigureAwait(false);
-        //
-        // e.Synchronizer.Signal();
-        
-        var isSummarizingNeeded =
-            e.Command is not RestoreStateCommand
-            && e.Command.ChangesWorld
-            && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
-        
-        if (isSummarizingNeeded)
-            await SummarizeSimulationAndAddToCollection(e.Command).ConfigureAwait(false);
+                    Collection.Add(summaryRecords);
+                }
+            })
+            .DisposeWith(Disposables);
 
-        e.Synchronizer.Signal();
+        // If history record was removed, remove associated summary records
+        _historyManager.Collection
+            .ToObservableChangeSet<IUniversalCollection<HistoryRecord<TSave>>, HistoryRecord<TSave>>()
+            .OnItemRemoved(historyRecord =>
+            {
+                // Here, we should remove records
+                var summaryRecords = _historyRecordsBySummaryRecord
+                    .Where(x => x.Value == historyRecord)
+                    .Select(x => x.Key)
+                    .ToList();
+                
+                Collection.RemoveMany(summaryRecords);
+            })
+            .Subscribe()
+            .DisposeWith(Disposables);
+        
+        // If summary record was removed, remove association if association exists
+        Collection
+            .ToObservableChangeSet<IUniversalCollection<SummaryRecord<TSummary>>, SummaryRecord<TSummary>>()
+            .OnItemRemoved(summaryRecord =>
+            {
+                if (_wereSummaryRecordsHidden)
+                    return;
+                
+                _historyRecordsBySummaryRecord.Remove(summaryRecord);
+            })
+            .Subscribe()
+            .DisposeWith(Disposables);
     }
+
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
+    {
+        if (!IsSummarizingNeeded(e.Command))
+            return;
+        
+        await _commandCompletedEventSynchronizer
+            .WaitAsync()
+            .ConfigureAwait(false);
+        
+        await SummarizeSimulationAndAddToCollection(e.Command)
+            .ConfigureAwait(false);
+    }
+
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await _commandCompletedEventSynchronizer
+            .DisposeAsync()
+            .ConfigureAwait(false);
+        
+        await base.DisposeAsyncCore()
+            .ConfigureAwait(false);
+    }
+
+    #region Private methods
+    private bool IsSummarizingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command.ChangesWorld
+        && command is not RestoreSaveCommand { IsRestoringFromAppSave: true }
+        && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
 
     private async Task SummarizeSimulationAndAddToCollection(SimulationCommand command)
     {

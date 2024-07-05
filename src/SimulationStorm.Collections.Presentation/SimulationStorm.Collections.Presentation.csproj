@@ -8,7 +8,7 @@
       <ProjectReference Include="..\SimulationStorm.Collections\SimulationStorm.Collections.csproj" />
         <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
         <ProjectReference Include="..\SimulationStorm.Primitives\SimulationStorm.Primitives.csproj" />
-        <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+        <ProjectReference Include="..\SimulationStorm.AppSaves.Presentation\SimulationStorm.AppSaves.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

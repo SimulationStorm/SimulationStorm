@@ -1,24 +1,39 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationManager;
 
 public interface ISimulationManager
 {
-    ReadOnlyObservableCollection<SimulationCommand> CommandQueue { get; }
+    bool IsCommandProgressReportingEnabled { get; set; }
+    
+    #region Events
+    /// <summary>
+    /// Occurs after the command has been scheduled to execution.
+    /// </summary>
+    event EventHandler<SimulationCommandEventArgs>? CommandScheduling;
     
     /// <summary>
     /// Occurs before the start of the command execution.
     /// </summary>
-    event EventHandler<SimulationCommandExecutingEventArgs>? CommandExecuting;
+    event EventHandler<SimulationCommandEventArgs>? CommandStarting;
+ 
+    /// <summary>
+    /// Occurs when the command progress changes.
+    /// </summary>
+    event EventHandler<SimulationCommandProgressChangedEventArgs>? CommandProgressChanged;
 
     /// <summary>
     /// Occurs after the command has been executed.
     /// </summary>
-    event EventHandler<SimulationCommandExecutedEventArgs>? CommandExecuted;
+    event EventHandler<SimulationCommandCompletedEventArgs>? CommandCompleted;
+    #endregion
+    
+    #region Methods
+    void AddCommandCompletedHandler(ISimulationCommandCompletedHandler commandCompletedHandler);
+    
+    Task ScheduleCommandAsync(SimulationCommand command);
 
-    // Task ClearCommandQueueAsync();
-
-    // Task WaitForAllQueuedCommandsExecutingAsync(); // to implement this, we can use Task.WhenAll(queuedCommands.Tasks)
+    Task ClearScheduledCommandsAsync();
+    #endregion
 }

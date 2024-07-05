@@ -40,12 +40,12 @@ public class GameOfLifeRenderer : BoundedCellularSimulationRendererBase
     public GameOfLifeRenderer
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
         GameOfLifeManager gameOfLifeManager,
         GameOfLifeRendererOptions options
     )
-        : base(graphicsFactory, benchmarkingService, intervalActionExecutor, gameOfLifeManager, options)
+        : base(graphicsFactory, benchmarker, intervalActionExecutor, gameOfLifeManager, options)
     {
         _gameOfLifeManager = gameOfLifeManager;
         
@@ -54,7 +54,7 @@ public class GameOfLifeRenderer : BoundedCellularSimulationRendererBase
         _aliveCellPaint = GraphicsFactory.CreatePaint();
         _aliveCellPaint.Color = options.AliveCellColor;
         
-        WithDisposables(disposables => disposables.Add(_aliveCellPaint));
+        Disposables.Add(_aliveCellPaint);
     }
 
     protected override async Task RenderAsync(ICanvas canvas)

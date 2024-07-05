@@ -31,27 +31,24 @@ public class UiDensityManager : DisposableObject, IUiDensityManager
     {
         _modernTheme = modernTheme;
 
-        WithDisposables(disposables =>
-        {
-            IDisposable? definitionUiDensitySubscription = null;
-            
-            _modernTheme
-                .GetObservableOnUiThread(ModernTheme.DefinitionProperty)
-                .Where(definition => definition is not null)
-                .Select(definition => definition!)
-                .Subscribe(definition =>
-                {
-                    definitionUiDensitySubscription?.Dispose();
-                    
-                    definitionUiDensitySubscription =
-                        SubscribeOnThemeDefinitionUiDensityChange(definition);
-                    
-                    NotifyDensityChanged();
-                })
-                .DisposeWith(disposables);
-            
-            disposables.Add(Disposable.Create(() => definitionUiDensitySubscription?.Dispose()));
-        });
+        IDisposable? definitionUiDensitySubscription = null;
+        
+        _modernTheme
+            .GetObservableOnUiThread(ModernTheme.DefinitionProperty)
+            .Where(definition => definition is not null)
+            .Select(definition => definition!)
+            .Subscribe(definition =>
+            {
+                definitionUiDensitySubscription?.Dispose();
+                
+                definitionUiDensitySubscription =
+                    SubscribeOnThemeDefinitionUiDensityChange(definition);
+                
+                NotifyDensityChanged();
+            })
+            .DisposeWith(Disposables);
+        
+        Disposables.Add(Disposable.Create(() => definitionUiDensitySubscription?.Dispose()));
 
         return;
         

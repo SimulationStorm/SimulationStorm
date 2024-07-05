@@ -1,14 +1,14 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.Simulation.Presentation.Camera;
 
-public class WorldCameraStateManager(IWorldCamera worldCamera) : ServiceStateManagerBase<WorldCameraState>
+public class WorldCameraSaveManager(IWorldCamera worldCamera) : ServiceSaveManagerBase<WorldCameraSave>
 {
-    protected override WorldCameraState SaveServiceStateImpl() => new(worldCamera.Zoom, worldCamera.Translation);
+    protected override WorldCameraSave SaveServiceCore() => new(worldCamera.Zoom, worldCamera.Translation);
 
-    protected override void RestoreServiceStateImpl(WorldCameraState state)
+    protected override void RestoreServiceSaveCore(WorldCameraSave save)
     {
-        worldCamera.ZoomToViewportCenter(state.Zoom);
-        worldCamera.Translate(state.Translation);
+        worldCamera.ZoomToViewportCenter(save.Zoom);
+        worldCamera.Translate(save.Translation);
     }
 }

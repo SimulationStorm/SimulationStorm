@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using SimulationStorm.Collections.Presentation;
 using SimulationStorm.Collections.Universal;
@@ -11,37 +9,17 @@ using SimulationStorm.Utilities;
 
 namespace SimulationStorm.Simulation.History.Presentation.Services;
 
-public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>, IHistoryManager<TSave>
+public class HistoryManager<TSave>
+(
+    IUniversalCollectionFactory universalCollectionFactory,
+    IIntervalActionExecutor intervalActionExecutor,
+    ISaveableSimulationManager<TSave> simulationManager,
+    HistoryOptions options
+)
+    : CollectionManagerBase<HistoryRecord<TSave>>(universalCollectionFactory, intervalActionExecutor, options),
+        IHistoryManager<TSave>
 {
-    public event EventHandler<SimulationCommandExecutedEventArgs>? SimulationCommandExecutedEventHandled;
-    
-    private readonly ISaveableSimulationManager<TSave> _simulationManager;
-
-    public HistoryManager
-    (
-        IUniversalCollectionFactory universalCollectionFactory,
-        IIntervalActionExecutor intervalActionExecutor,
-        ISaveableSimulationManager<TSave> simulationManager,
-        HistoryOptions options
-    )
-        : base(universalCollectionFactory, intervalActionExecutor, options)
-    {
-        _simulationManager = simulationManager;
-
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => _simulationManager.CommandExecuted += h,
-                    h => _simulationManager.CommandExecuted -= h
-                )
-                .Subscribe(e => _ = HandleSimulationCommandExecutedAsync(e.EventArgs).ConfigureAwait(false))
-                .DisposeWith(disposables);
-        });
-
-        // CreateInitialRecordIfSavingIsEnabledAsync();
-    }
+    public event EventHandler<SimulationCommandCompletedEventArgs>? SimulationCommandCompletedEventHandled;
 
     #region Public methods
     public bool CanGoToPreviousSave() => CanGoToSave(Collection.PointerPosition - 1);
@@ -66,8 +44,8 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
         var record = Collection[saveIndex];
         var save = record.Save;
         
-        await _simulationManager
-            .RestoreStateAsync(save)
+        await simulationManager
+            .RestoreSaveAsync(save)
             .ConfigureAwait(false);
         
         Collection.MovePointer(saveIndex);
@@ -78,14 +56,18 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
         ThrowIfSaveIndexIsInvalid(saveIndex);
         await Task.Run(() => Collection.RemoveAt(saveIndex));
     }
+
+    public async Task HandleSimulationCommandCompletedAsync(SimulationCommandCompletedEventArgs e)
+    {
+        if (!IsSavingNeeded(e.Command))
+            return;
+        
+        await SaveSimulationAndAddRecordToCollectionAsync(e.Command)
+            .ConfigureAwait(false);
+        
+        SimulationCommandCompletedEventHandled?.Invoke(this, e);
+    }
     #endregion
-
-    // protected override void OnIsSavingEnabledChanged()
-    // {
-        // base.OnIsSavingEnabledChanged();
-
-        // CreateInitialRecordIfSavingIsEnabledAsync();
-    // }
 
     #region Private methods
     private void ThrowIfSaveIndexIsInvalid(int saveIndex)
@@ -96,23 +78,14 @@ public class HistoryManager<TSave> : CollectionManagerBase<HistoryRecord<TSave>>
 
     private bool IsValidSaveIndex(int saveIndex) => saveIndex >= 0 && saveIndex < Collection.Count;
 
-    // private Task CreateInitialRecordIfSavingIsEnabledAsync() => IsSavingEnabled
-    //         ? SaveSimulationAndAddRecordToCollectionAsync(new NullCommand(), TimeSpan.Zero).ThrowWhenFaulted()
-    //         : Task.CompletedTask;
-
-    private async Task HandleSimulationCommandExecutedAsync(SimulationCommandExecutedEventArgs e)
-    {
-        if (e.Command is not RestoreStateCommand && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext())
-            await SaveSimulationAndAddRecordToCollectionAsync(e.Command).ConfigureAwait(false);
-        
-        e.Synchronizer.Signal();
-        
-        SimulationCommandExecutedEventHandled?.Invoke(this, e);
-    }
-
+    private bool IsSavingNeeded(SimulationCommand command) =>
+        !IsDisposingOrDisposed
+        && command is not RestoreSaveCommand
+        && IntervalActionExecutor.GetIsExecutionNeededAndMoveNext();
+    
     private async Task SaveSimulationAndAddRecordToCollectionAsync(SimulationCommand command)
     {
-        var benchmarkResult = await _simulationManager
+        var benchmarkResult = await simulationManager
             .SaveAndMeasureAsync()
             .ConfigureAwait(false);
         

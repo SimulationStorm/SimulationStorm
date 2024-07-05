@@ -1,7 +1,7 @@
 ﻿namespace SimulationStorm.Simulation.Statistics.Presentation.SummaryStats.ViewModels;
 
-public class SummaryStatsViewModelStateManager
+public class SummaryStatsViewModelSaveManager
 (
     ISummaryStatsViewModel summaryStatsViewModel
 )
-    : StatsViewModelStateManagerBase<SummaryStatsViewModelState>(summaryStatsViewModel);
+    : StatsViewModelSaveManagerBase<SummaryStatsViewModelSave>(summaryStatsViewModel);

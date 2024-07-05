@@ -6,9 +6,11 @@ using SimulationStorm.Simulation.Presentation.SimulationManager;
 
 namespace SimulationStorm.Simulation.History.Presentation.Services;
 
-public interface IHistoryManager<TSave> : ICollectionManager<HistoryRecord<TSave>>
+public interface IHistoryManager<TSave> :
+    ICollectionManager<HistoryRecord<TSave>>,
+    ISimulationCommandCompletedHandler
 {
-    event EventHandler<SimulationCommandExecutedEventArgs>? SimulationCommandExecutedEventHandled;
+    event EventHandler<SimulationCommandCompletedEventArgs>? SimulationCommandCompletedEventHandled;
     
     bool CanGoToPreviousSave();
     Task GoToPreviousSaveAsync();

@@ -11,10 +11,11 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.AppSaves.Presentation\SimulationStorm.AppSaves.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.LiveChartsExtensions\SimulationStorm.LiveChartsExtensions.csproj" />
       <ProjectReference Include="..\SimulationStorm.Presentation\SimulationStorm.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Graphics\SimulationStorm.Graphics.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation\SimulationStorm.Simulation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Threading.Presentation\SimulationStorm.Threading.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Utilities\SimulationStorm.Utilities.csproj" />
     </ItemGroup>

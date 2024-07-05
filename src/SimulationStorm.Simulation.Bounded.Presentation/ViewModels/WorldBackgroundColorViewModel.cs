@@ -33,17 +33,14 @@ public partial class WorldBackgroundColorViewModel : DisposableObservableObject
     {
         _worldRenderer = worldRenderer;
 
-        WithDisposables(disposables =>
-        {
-            _worldRenderer
-                .WhenValueChanged(x => x.BackgroundColor, false)
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(BackgroundColor));
-                    ResetBackgroundColorCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        _worldRenderer
+            .WhenValueChanged(x => x.BackgroundColor, false)
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(BackgroundColor));
+                ResetBackgroundColorCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 }

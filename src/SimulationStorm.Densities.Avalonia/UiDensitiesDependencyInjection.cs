@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimulationStorm.AppStates.Presentation;
+using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Avalonia;
 using SimulationStorm.Densities.Presentation;
 
@@ -9,5 +9,5 @@ public static class UiDensitiesDependencyInjection
 {
     public static IServiceCollection AddUiDensityManager(this IServiceCollection services) => services
         .AddSingleton<IUiDensityManager>(_ => new UiDensityManager(AvaloniaServiceProvider.GetModernThemeOrThrow()))
-        .AddServiceStateManager<UiDensityStateManager>();
+        .AddServiceSaveManager<UiDensitySaveManager>();
 }

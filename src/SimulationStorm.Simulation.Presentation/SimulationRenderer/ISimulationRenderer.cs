@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using SimulationStorm.Simulation.Presentation.Renderer;
+using SimulationStorm.Simulation.Presentation.SimulationManager;
 
 namespace SimulationStorm.Simulation.Presentation.SimulationRenderer;
 
-public interface ISimulationRenderer : IRenderer, INotifyPropertyChanged
+public interface ISimulationRenderer : IRenderer, ISimulationCommandCompletedHandler, INotifyPropertyChanged
 {
     bool IsRenderingEnabled { get; set; }
     

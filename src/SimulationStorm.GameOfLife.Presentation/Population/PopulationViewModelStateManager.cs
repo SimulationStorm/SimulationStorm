@@ -1,15 +1,15 @@
-﻿using SimulationStorm.AppStates;
+﻿using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.GameOfLife.Presentation.Population;
 
-public class PopulationViewModelStateManager(PopulationViewModel populationViewModel) :
-    ServiceStateManagerBase<PopulationViewModelState>
+public class PopulationViewModelSaveManager(PopulationViewModel populationViewModel) :
+    ServiceSaveManagerBase<PopulationViewModelSave>
 {
-    protected override PopulationViewModelState SaveServiceStateImpl() => new()
+    protected override PopulationViewModelSave SaveServiceCore() => new()
     {
         CellBirthProbability = populationViewModel.CellBirthProbability
     };
 
-    protected override void RestoreServiceStateImpl(PopulationViewModelState state) =>
-        populationViewModel.CellBirthProbability = state.CellBirthProbability;
+    protected override void RestoreServiceSaveCore(PopulationViewModelSave save) =>
+        populationViewModel.CellBirthProbability = save.CellBirthProbability;
 }

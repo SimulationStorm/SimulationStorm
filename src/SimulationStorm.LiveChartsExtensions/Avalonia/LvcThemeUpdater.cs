@@ -15,17 +15,14 @@ public class LvcThemeUpdater : DisposableObject
     {
         _uiThemeManager = uiThemeManager;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => uiThemeManager.ThemeChanged += h,
-                    h => uiThemeManager.ThemeChanged -= h
-                )
-                .Subscribe(_ => UpdateLiveChartsTheme())
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => uiThemeManager.ThemeChanged += h,
+                h => uiThemeManager.ThemeChanged -= h
+            )
+            .Subscribe(_ => UpdateLiveChartsTheme())
+            .DisposeWith(Disposables);
         
         UpdateLiveChartsTheme();
     }

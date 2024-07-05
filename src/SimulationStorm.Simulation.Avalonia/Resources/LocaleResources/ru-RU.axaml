@@ -1,16 +1,16 @@
 ﻿
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="using:System">
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <sys:String x:Key="Strings.Simulation.Rendering.WorldRendering">Отрисовка мира</sys:String>
     <sys:String x:Key="Strings.Simulation.Rendering.SimulationRendering">Отрисовка симуляции</sys:String>
     <sys:String x:Key="Strings.Simulation.Rendering.EnableSimulationRendering">Включить отрисовку симуляции</sys:String>
     <sys:String x:Key="Strings.Simulation.Rendering.RenderingInterval">Интервал отрисовки</sys:String>
     <sys:String x:Key="Strings.Simulation.Rendering.ChangeRenderingSettings">Изменить настройки отрисовки</sys:String>
     <sys:String x:Key="Strings.Simulation.Command">Команда</sys:String>
-    <sys:String x:Key="Strings.Simulation.Common.CommandQueue">Очередь команд</sys:String>
-    <sys:String x:Key="Strings.Simulation.Common.ShowCommandQueue">Отображать очередь команд</sys:String>
-    <sys:String x:Key="Strings.Simulation.Common.ThereAreNoCommandsInQueue">Нет команд в очереди</sys:String>
+    <sys:String x:Key="Strings.Simulation.Common.ScheduledCommands">Запланированные команды</sys:String>
+    <sys:String x:Key="Strings.Simulation.Common.ShowScheduledCommand">Отображать запланированные команд</sys:String>
+    <sys:String x:Key="Strings.Simulation.Common.ThereAreNoScheduledCommands">Нет запланированных команд</sys:String>
     <sys:String x:Key="Strings.Simulation.Camera.Zooming">Масштабирование</sys:String>
     <sys:String x:Key="Strings.Simulation.Camera.ZoomingStep">Шаг масштабирования</sys:String>
     <sys:String x:Key="Strings.Simulation.Camera.Zoom">Масштаб</sys:String>

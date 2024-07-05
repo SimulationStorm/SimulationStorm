@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimulationStorm.AppStates.Presentation;
+using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Collections.Lists;
 using SimulationStorm.Collections.Universal;
 using SimulationStorm.DependencyInjection;
-using SimulationStorm.Exceptions;
-using SimulationStorm.Exceptions.Logging;
-using SimulationStorm.Graphics;
-using SimulationStorm.Graphics.Skia;
+using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.GameOfLife.Presentation.Drawing;
 using SimulationStorm.GameOfLife.Presentation.Management;
 using SimulationStorm.GameOfLife.Presentation.Patterns;
 using SimulationStorm.GameOfLife.Presentation.Population;
 using SimulationStorm.GameOfLife.Presentation.Rendering;
 using SimulationStorm.GameOfLife.Presentation.Rules;
+using SimulationStorm.GameOfLife.Presentation.Stats;
 using SimulationStorm.GameOfLife.Presentation.ViewModels;
-using SimulationStorm.Logging;
+using SimulationStorm.Graphics;
+using SimulationStorm.Graphics.Skia;
+using SimulationStorm.Presentation.StartupOperations;
 using SimulationStorm.Simulation.Bounded.Presentation.Services;
 using SimulationStorm.Simulation.Bounded.Presentation.ViewModels;
 using SimulationStorm.Simulation.Cellular.Presentation.Services;
@@ -26,22 +26,12 @@ using SimulationStorm.Simulation.History.Presentation.ViewModels;
 using SimulationStorm.Simulation.Presentation.Camera;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
 using SimulationStorm.Simulation.Presentation.SimulationRenderer;
+using SimulationStorm.Simulation.Presentation.StatusBar;
 using SimulationStorm.Simulation.Presentation.Viewport;
 using SimulationStorm.Simulation.Presentation.WorldRenderer;
 using SimulationStorm.Simulation.Resetting.Presentation.Services;
 using SimulationStorm.Simulation.Running.Presentation.Services;
 using SimulationStorm.Simulation.Running.Presentation.ViewModels;
-using SimulationStorm.Simulation.Statistics.Presentation;
-using SimulationStorm.Simulation.Statistics.Presentation.Charts;
-using SimulationStorm.ToolPanels.Presentation;
-using SimulationStorm.Utilities;
-using SimulationStorm.Utilities.Benchmarking;
-using System;
-using LiveChartsCore.Kernel.Sketches;
-using SimulationStorm.GameOfLife.DataTypes;
-using SimulationStorm.GameOfLife.Presentation.Stats;
-using SimulationStorm.Presentation.StartupOperations;
-using SimulationStorm.Simulation.Presentation.StatusBar;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.Charts;
 using SimulationStorm.Simulation.Statistics.Presentation.CommandExecutionStats.ViewModels;
@@ -51,6 +41,9 @@ using SimulationStorm.Simulation.Statistics.Presentation.RenderingStats.ViewMode
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats;
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats.Charts;
 using SimulationStorm.Simulation.Statistics.Presentation.SummaryStats.ViewModels;
+using SimulationStorm.ToolPanels.Presentation;
+using SimulationStorm.Utilities;
+using SimulationStorm.Utilities.Benchmarking;
 
 namespace SimulationStorm.GameOfLife.Presentation.Startup;
 
@@ -58,7 +51,7 @@ public static class PresentationDependencyInjection
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services) => services
         // Independent transient services
-        .AddTransient<IBenchmarkingService, BenchmarkingService>()
+        .AddTransient<IBenchmarker, StopwatchBenchmarker>()
         .AddTransient<IIntervalActionExecutor, IntervalActionExecutor>()
         //
         
@@ -82,15 +75,17 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ISummarizableSimulationManager<GameOfLifeSummary>, GameOfLifeManager>()
         .AddSharedSingleton<ICellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
         .AddSharedSingleton<IBoundedCellularAutomationManager<GameOfLifeCellState>, GameOfLifeManager>()
-        .AddAsyncServiceStateManager<GameOfLifeStateManager>()
+        .AddAsyncServiceSaveManager<GameOfLifeSaveManager>()
+        
+        .AddStartupOperation<AddSimulationCommandCompletedHandlersOnStartupOperation>()
         //
 
         // Simulation runner
         .AddSingleton(PresentationConfiguration.SimulationRunnerOptions)
         .AddSingleton<ISimulationRunner, SimulationRunner>()
         .AddSingleton<SimulationRunnerViewModel>()
-        .AddServiceStateManager<SimulationRunnerStateManager>()
-        .AddAppStateRestoringOperation<PauseSimulationOnAppStateRestoringOperation>()
+        .AddServiceSaveManager<SimulationRunnerSaveManager>()
+        .AddAppSaveRestoringOperation<PauseSimulationOnAppSaveRestoringOperation>()
         //
         
         // Tool panels infrastructure
@@ -98,7 +93,7 @@ public static class PresentationDependencyInjection
         .AddSingleton<IToolPanelManager, ToolPanelManager>()
         .AddSingleton<IToolPanelViewModelFactory, ToolPanelViewModelFactory>()
         .AddSingleton<ToolPanelManagerViewModel>()
-        .AddServiceStateManager<ToolPanelStatesManager>()
+        .AddServiceSaveManager<ToolPanelSavesManager>()
         //
         
         // Simulation and world rendering
@@ -107,7 +102,9 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<ISimulationRendererOptions, GameOfLifeRendererOptions>()
         .AddSingleton<GameOfLifeRenderer>()
         .AddSharedSingleton<ISimulationRenderer, GameOfLifeRenderer>()
-        .AddServiceStateManager<GameOfLifeRendererStateManager>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, ISimulationRenderer>()
+        .AddServiceSaveManager<GameOfLifeRendererSaveManager>()
+        
         .AddStartupOperation<RenderSimulationOnStartupOperation>()
         //
         .AddSingleton<IWorldViewport, WorldViewport>()
@@ -115,7 +112,7 @@ public static class PresentationDependencyInjection
         .AddSingleton(PresentationConfiguration.WorldCameraOptions)
         .AddSingleton<IWorldCamera, WorldCamera>()
         .AddSingleton<CameraSettingsViewModel>()
-        .AddServiceStateManager<WorldCameraStateManager>()
+        .AddServiceSaveManager<WorldCameraSaveManager>()
         //
         // World renderer
         .AddSingleton<ICellularWorldRendererOptions>(PresentationConfiguration.CellularWorldRendererOptions)
@@ -124,7 +121,7 @@ public static class PresentationDependencyInjection
         .AddSharedSingleton<IBoundedWorldRenderer, BoundedCellularWorldRenderer>()
         .AddSharedSingleton<ICellularWorldRenderer, BoundedCellularWorldRenderer>()
         .AddSharedSingleton<IBoundedCellularWorldRenderer, BoundedCellularWorldRenderer>()
-        .AddServiceStateManager<BoundedCellularWorldRendererStateManager>()
+        .AddServiceSaveManager<BoundedCellularWorldRendererSaveManager>()
         //
         .AddSingleton<GameOfLifeWorldViewModel>()
         //
@@ -135,7 +132,7 @@ public static class PresentationDependencyInjection
         
         .AddSingleton<GameOfLifeDrawingSettings>()
         .AddSharedSingleton<IDrawingSettings<GameOfLifeCellState>, GameOfLifeDrawingSettings>()
-        .AddServiceStateManager<GameOfLifeDrawingSettingsStateManager>()
+        .AddServiceSaveManager<GameOfLifeDrawingSettingsSaveManager>()
         
         .AddSingleton<IDrawingSettingsViewModel, DrawingSettingsViewModel>()
         .AddSingleton<DrawingToolPanelViewModel>()
@@ -144,43 +141,45 @@ public static class PresentationDependencyInjection
         // History
         .AddSingleton(PresentationConfiguration.HistoryOptions)
         .AddSingleton<IHistoryManager<GameOfLifeSave>, HistoryManager<GameOfLifeSave>>()
-        .AddServiceStateManager<HistoryStateManager<GameOfLifeSave>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, IHistoryManager<GameOfLifeSave>>()
+        .AddServiceSaveManager<HistorySaveManager<GameOfLifeSave>>()
         .AddSingleton<IHistoryViewModel, HistoryViewModel<GameOfLifeSave>>()
         //
 
-        // Statistics
-        // Summary statistics
+        // Stats
+        // Summary stats
         .AddSingleton(PresentationConfiguration.SummaryStatsOptions)
         .AddSharedSingleton<ISummaryStatsOptions, SummaryStatsOptions>()
         .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, SummaryStatsManager<GameOfLifeSummary>>()
+        .AddSharedSingleton<ISimulationCommandCompletedHandler, ISummaryStatsManager<GameOfLifeSummary>>()
         // .AddSingleton<ISummaryStatsManager<GameOfLifeSummary>, HistoryAwareSummaryStatsManager<GameOfLifeSummary, GameOfLifeSave>>()
-        .AddServiceStateManager<SummaryStatsStateManager<GameOfLifeSummary>>()
+        .AddServiceSaveManager<SummaryStatsSaveManager<GameOfLifeSummary>>()
         .AddSingleton<ISummaryStatsViewModel, SummaryStatsViewModel<GameOfLifeSummary>>()
-        .AddServiceStateManager<SummaryStatsViewModelStateManager>()
-        // Summary statistics chart view models
+        .AddServiceSaveManager<SummaryStatsViewModelSaveManager>()
+        // Summary stats chart view models
         .AddSingleton<SummaryStatsChartViewModelFactory>()
         .AddTransient<TableChartViewModel>()
         .AddTransient<PieChartViewModel>()
         .AddTransient<LineChartViewModel>()
         .AddTransient<BarChartViewModel>()
         //
-        // Command execution statistics
+        // Command execution stats
         .AddSingleton(PresentationConfiguration.CommandExecutionStatsOptions)
         .AddSingleton<ICommandExecutionStatsManager, CommandExecutionStatsManager>()
-        .AddServiceStateManager<CommandExecutionStatsStateManager>()
+        .AddServiceSaveManager<CommandExecutionStatsSaveManager>()
         .AddSingleton<CommandExecutionStatsViewModel>()
-        .AddServiceStateManager<CommandExecutionStatsViewModelStateManager>()
+        .AddServiceSaveManager<CommandExecutionStatsViewModelSaveManager>()
         
         .AddSingleton<CommandExecutionChartViewModelFactory>()
         .AddTransient<CommandExecutionLineChartViewModel>()
         .AddTransient<CommandExecutionBarChartViewModel>()
         //
-        // Simulation rendering statistics
+        // Simulation rendering stats
         .AddSingleton(PresentationConfiguration.RenderingStatsOptions)
         .AddSingleton<IRenderingStatsManager, RenderingStatsManager>()
-        .AddServiceStateManager<RenderingStatsStateManager>()
+        .AddServiceSaveManager<RenderingStatsSaveManager>()
         .AddSingleton<RenderingStatsViewModel>()
-        .AddServiceStateManager<RenderingStatsViewModelStateManager>()
+        .AddServiceSaveManager<RenderingStatsViewModelSaveManager>()
 
         .AddSingleton<RenderingChartViewModelFactory>()
         .AddTransient<RenderingLineChartViewModel>()
@@ -190,18 +189,18 @@ public static class PresentationDependencyInjection
         // Simulation tool panel
         .AddSingleton<SimulationToolPanelViewModel>()
         .AddSingleton<IWorldSizeViewModel, WorldSizeViewModel>()
-        .AddServiceStateManager<WorldSizeViewModelStateManager>()
+        .AddServiceSaveManager<WorldSizeViewModelSaveManager>()
         .AddSingleton<IWorldWrappingViewModel, WorldWrappingViewModel<GameOfLifeCellState>>()
         // Population
         .AddSingleton(PresentationConfiguration.PopulationOptions)
         .AddSingleton<PopulationViewModel>()
-        .AddServiceStateManager<PopulationViewModelStateManager>()
+        .AddServiceSaveManager<PopulationViewModelSaveManager>()
         //
         .AddSingleton<AlgorithmViewModel>()
         .AddSingleton<PatternsViewModel>()
         .AddSingleton<RuleViewModel>()
-        .AddSingleton<CommandQueueViewModel>()
-        .AddServiceStateManager<CommandQueueViewModelStateManager>()
+        .AddSingleton<ScheduledCommandsViewModel>()
+        .AddServiceSaveManager<ScheduledCommandsViewModelSaveManager>()
         //
 
         // Rendering tool panel
@@ -215,10 +214,10 @@ public static class PresentationDependencyInjection
         // Status bar
         .AddSingleton(PresentationConfiguration.StatusBarOptions)
         .AddSingleton<StatusBarViewModel>()
-        .AddServiceStateManager<StatusBarStateManager>()
+        .AddServiceSaveManager<StatusBarSaveManager>()
         //
     
-        .AddAppStateManagementServices(PresentationConfiguration.AppStatesOptions)
+        .AddAppSaveManagementServices(PresentationConfiguration.AppSavesOptions)
     
         .AddStartupOperationManager();
 }

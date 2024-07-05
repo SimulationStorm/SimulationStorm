@@ -1,0 +1,25 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.AppSaves.AppSaves">Application saves</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Delete">Delete</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DeleteAllSavesQuestion">Do you really want to delete all saves?</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DeleteAllSaves">Delete all saves</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveDeleted">The saving is deleted.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Confirmation">Confirmation</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AllSavesDeleted">All savings are deleted.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.LoadSave">Load save</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveLoading">Loading…</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveLoaded">The save is loaded.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.DoubleClickToEdit">Double-click to edit</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveChanges">Save changes</sys:String>
+    <sys:String x:Key="Strings.AppSaves.ChangesSaved">The changes are saved.</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Editing">Editing</sys:String>
+    <sys:String x:Key="Strings.AppSaves.CreatingSave">Creating a save</sys:String>
+    <sys:String x:Key="Strings.AppSaves.NewSave">New save</sys:String>
+    <sys:String x:Key="Strings.AppSaves.Save">Save</sys:String>
+    <sys:String x:Key="Strings.AppSaves.SaveApp">Save application</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AppSaving">Saving…</sys:String>
+    <sys:String x:Key="Strings.AppSaves.AppSaved">The application is saved.</sys:String>
+</ResourceDictionary>

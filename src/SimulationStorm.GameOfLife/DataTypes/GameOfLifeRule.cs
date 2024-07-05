@@ -19,53 +19,53 @@ public partial class GameOfLifeRule : IEquatable<GameOfLifeRule>
                      MaxNeighborCount = 8;
 	#endregion
 
-    #region Properties
-    private IReadOnlySet<int> NeighborCountsToBorn { get; }
+    #region Fields
+    private readonly IReadOnlySet<int> _neighborCountsToBorn;
 
-    private IReadOnlySet<int> NeighborCountsToSurvive { get; }
-    #endregion
-
+    private readonly IReadOnlySet<int> _neighborCountsToSurvive;
+    
     [GeneratedRegex("^b(?<born>0?1?2?3?4?5?6?7?8?)\\/s(?<survival>0?1?2?3?4?5?6?7?8?)$",
 	    RegexOptions.IgnoreCase | RegexOptions.Compiled)] private static partial Regex _ruleRegex();
+    #endregion
 
 	public GameOfLifeRule(IReadOnlySet<int> neighborCountsToBorn, IReadOnlySet<int> neighborCountsToSurvive)
 	{
 		ValidateNeighborCounts(neighborCountsToBorn);
 		ValidateNeighborCounts(neighborCountsToSurvive);
 
-		NeighborCountsToBorn = neighborCountsToBorn;
-		NeighborCountsToSurvive = neighborCountsToSurvive;
+		_neighborCountsToBorn = neighborCountsToBorn;
+		_neighborCountsToSurvive = neighborCountsToSurvive;
 	}
 
 	#region Public methods
-    public bool IsBornWhen(int neighborCount) => NeighborCountsToBorn.Contains(neighborCount);
+    public bool IsBornWhen(int neighborCount) => _neighborCountsToBorn.Contains(neighborCount);
 
-    public bool IsSurviveWhen(int neighborCount) => NeighborCountsToSurvive.Contains(neighborCount);
+    public bool IsSurviveWhen(int neighborCount) => _neighborCountsToSurvive.Contains(neighborCount);
 
     public GameOfLifeRule WithNeighborCountToBorn(int neighborCount)
     {
-        var neighborCountsToBorn = new HashSet<int>(NeighborCountsToBorn) { neighborCount };
-        return new GameOfLifeRule(neighborCountsToBorn, NeighborCountsToSurvive);
+        var neighborCountsToBorn = new HashSet<int>(_neighborCountsToBorn) { neighborCount };
+        return new GameOfLifeRule(neighborCountsToBorn, _neighborCountsToSurvive);
     }
 
     public GameOfLifeRule WithoutNeighborCountToBorn(int neighborCount)
     {
-        var neighborCountsToBorn = new HashSet<int>(NeighborCountsToBorn);
+        var neighborCountsToBorn = new HashSet<int>(_neighborCountsToBorn);
         neighborCountsToBorn.Remove(neighborCount);
-        return new GameOfLifeRule(neighborCountsToBorn, NeighborCountsToSurvive);
+        return new GameOfLifeRule(neighborCountsToBorn, _neighborCountsToSurvive);
     }
 
     public GameOfLifeRule WithNeighborCountToSurvive(int neighborCount)
     {
-        var neighborCountsToSurvive = new HashSet<int>(NeighborCountsToSurvive) { neighborCount };
-        return new GameOfLifeRule(NeighborCountsToBorn, neighborCountsToSurvive);
+        var neighborCountsToSurvive = new HashSet<int>(_neighborCountsToSurvive) { neighborCount };
+        return new GameOfLifeRule(_neighborCountsToBorn, neighborCountsToSurvive);
     }
 
     public GameOfLifeRule WithoutNeighborCountToSurvive(int neighborCount)
     {
-        var neighborCountsToSurvive = new HashSet<int>(NeighborCountsToSurvive);
+        var neighborCountsToSurvive = new HashSet<int>(_neighborCountsToSurvive);
         neighborCountsToSurvive.Remove(neighborCount);
-        return new GameOfLifeRule(NeighborCountsToBorn, neighborCountsToSurvive);
+        return new GameOfLifeRule(_neighborCountsToBorn, neighborCountsToSurvive);
     }
 
     public override string ToString()
@@ -73,11 +73,11 @@ public partial class GameOfLifeRule : IEquatable<GameOfLifeRule>
 		var stringBuilder = new StringBuilder();
 
 		stringBuilder.Append('b');
-		foreach (var neighborCount in NeighborCountsToBorn.Order())
+		foreach (var neighborCount in _neighborCountsToBorn.Order())
             stringBuilder.Append(neighborCount);
 
         stringBuilder.Append("/s");
-        foreach (var neighborCount in NeighborCountsToSurvive.Order())
+        foreach (var neighborCount in _neighborCountsToSurvive.Order())
             stringBuilder.Append(neighborCount);
 
 		return stringBuilder.ToString();

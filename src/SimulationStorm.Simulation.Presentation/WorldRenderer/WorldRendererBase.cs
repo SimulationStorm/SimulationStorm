@@ -23,34 +23,31 @@ public abstract class WorldRendererBase : RendererBase, IWorldRenderer
     protected WorldRendererBase
     (
         IGraphicsFactory graphicsFactory,
-        IBenchmarkingService benchmarkingService,
+        IBenchmarker benchmarker,
         IWorldViewport worldViewport,
         IWorldCamera worldCamera
     )
-        : base(graphicsFactory, benchmarkingService)
+        : base(graphicsFactory, benchmarker)
     {
         WorldViewport = worldViewport;
         WorldCamera = worldCamera;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
-                (
-                    h => worldViewport.SizeChanged += h,
-                    h => worldViewport.SizeChanged -= h
-                )
-                .Subscribe(_ => RequestRerender())
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
-                (
-                    h => worldCamera.MatrixChanged += h,
-                    h => worldCamera.MatrixChanged -= h
-                )
-                .Subscribe(_ => RequestRerender())
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
+            (
+                h => worldViewport.SizeChanged += h,
+                h => worldViewport.SizeChanged -= h
+            )
+            .Subscribe(_ => RequestRerender())
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
+            (
+                h => worldCamera.MatrixChanged += h,
+                h => worldCamera.MatrixChanged -= h
+            )
+            .Subscribe(_ => RequestRerender())
+            .DisposeWith(Disposables);
     }
 }

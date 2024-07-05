@@ -10,5 +10,5 @@ public interface ISaveableSimulationManager<TSave> : ISimulationManager
 
     Task<BenchmarkResult<TSave>> SaveAndMeasureAsync();
     
-    Task RestoreStateAsync(TSave save, bool isRestoringFromAppState = false);
+    Task RestoreSaveAsync(TSave save, bool isRestoringFromAppSave = false);
 }

@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.AppSaves.Presentation\SimulationStorm.AppSaves.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Collections.Presentation\SimulationStorm.Collections.Presentation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Collections\SimulationStorm.Collections.csproj" />
       <ProjectReference Include="..\SimulationStorm.LiveChartsExtensions\SimulationStorm.LiveChartsExtensions.csproj" />

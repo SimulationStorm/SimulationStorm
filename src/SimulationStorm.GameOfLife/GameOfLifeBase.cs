@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using DotNext;
 using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.Primitives;
+using SimulationStorm.Simulation;
 using SimulationStorm.Simulation.CellularAutomation;
 
 namespace SimulationStorm.GameOfLife;
 
-public abstract class GameOfLifeBase(WorldWrapping worldWrapping) : IGameOfLife
+public abstract class GameOfLifeBase(WorldWrapping worldWrapping) : SimulationBase, IGameOfLife
 {
     #region Properties
     public abstract Size WorldSize { get; }

@@ -14,7 +14,7 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     public IBitmap? RenderedImage => _bitmapCopy;
 
     #region Events
-    public event EventHandler? RenderingStarted;
+    public event EventHandler? RenderingStarting;
     
     public event EventHandler<RenderingCompletedEventArgs>? RenderingCompleted;
     #endregion
@@ -24,13 +24,13 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     protected abstract Size SizeToRender { get; }
     
     #region Fields
-    private readonly IBenchmarkingService _benchmarkingService;
+    private readonly IBenchmarker _benchmarker;
 
-    private readonly AsyncAutoResetEvent _renderingCycleSynchronizer = new(false);
+    private readonly AsyncAutoResetEvent _renderingLoopSynchronizer = new(false);
 
-    private readonly CancellationTokenSource _renderingCycleCts = new();
+    private readonly CancellationTokenSource _renderingLoopCts = new();
     
-    private readonly Task _renderingCycleTask;
+    private Task _renderingLoopTask = null!;
     
     private IBitmap? _bitmap;
     
@@ -39,94 +39,60 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     private ICanvas? _bitmapCanvas;
     #endregion
 
-    protected RendererBase(IGraphicsFactory graphicsFactory, IBenchmarkingService benchmarkingService)
+    protected RendererBase(IGraphicsFactory graphicsFactory, IBenchmarker benchmarker)
     {
+        _benchmarker = benchmarker;
+        
         GraphicsFactory = graphicsFactory;
-        _benchmarkingService = benchmarkingService;
 
-        _renderingCycleTask = RenderInCycleAsync(_renderingCycleCts.Token);
+        StartRenderingLoop();
     }
 
-    public override async ValueTask DisposeAsync()
+    public void RequestRerender()
     {
-        if (IsDisposed)
-            return;
+        this.ThrowIfDisposingOrDisposed(IsDisposingOrDisposed);
         
-        IsDisposed = true;
-        
-        await _renderingCycleCts
+        _renderingLoopSynchronizer.Set();
+    }
+    
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await _renderingLoopCts
             .CancelAsync()
             .ConfigureAwait(false);
         
-        await _renderingCycleTask
+        await _renderingLoopTask
             .ConfigureAwait(false);
         
-        await _renderingCycleSynchronizer
+        await _renderingLoopSynchronizer
             .DisposeAsync()
             .ConfigureAwait(false);
         
-        _renderingCycleCts.Dispose();
+        _renderingLoopCts.Dispose();
         
         _bitmap?.Dispose();
         _bitmapCanvas?.Dispose();
         _bitmapCopy?.Dispose();
-        
-        await base
-            .DisposeAsync()
-            .ConfigureAwait(false);
-        
-        GC.SuppressFinalize(this);
     }
-
-    #region Rendering cycle
-    public void RequestRerender()
-    {
-        // Todo: At the moment, do so to avoid exception with object disposed exception
-        if (IsDisposed)
-            return;
-        
-        _renderingCycleSynchronizer.Set();
-    }
-
-    private async Task RenderInCycleAsync(CancellationToken cancellationToken)
-    {
-        try
-        {
-            while (true)
-            {
-                await _renderingCycleSynchronizer
-                    .WaitAsync(cancellationToken)
-                    .ConfigureAwait(false);
-                
-                await RenderAndNotifyRenderingCompletedAsync()
-                    .ConfigureAwait(false);
-            }
-        }
-        catch (OperationCanceledException _)
-        {
-            // Do nothing
-        }
-    }
-    #endregion
     
     #region Rendering methods
     protected abstract Task RenderAsync(ICanvas canvas);
 
-    protected virtual async Task RenderAndNotifyRenderingCompletedAsync()
+    protected virtual async Task RenderAndNotifyStartingAndCompletedAsync()
     {
         if (SizeToRender.Width is 0 || SizeToRender.Height is 0)
             return;
         
-        NotifyRenderingStarted();
+        NotifyRenderingStarting();
         
-        var benchmarkResult = await _benchmarkingService
-            .MeasureAsync(RenderCoreAsync)
+        var benchmarkResult = await _benchmarker
+            .MeasureAsync(RenderAsyncCore)
             .ConfigureAwait(false);
         
         NotifyRenderingCompleted(benchmarkResult.ElapsedTime);
     }
 
-    protected async Task RenderCoreAsync()
+    protected async Task RenderAsyncCore()
     {
         RecreateBitmapAndCanvasIfSizeChanged();
         
@@ -140,15 +106,37 @@ public abstract class RendererBase : AsyncDisposableObservableObject, IRenderer
     }
     #endregion
 
-    #region Notifying
-    private void NotifyRenderingStarted() =>
-        RenderingStarted?.Invoke(this, EventArgs.Empty);
+    #region Rendering loop methods
+    private void StartRenderingLoop() => 
+        _renderingLoopTask = RenderInLoopAsync(_renderingLoopCts.Token);
+
+    private async Task RenderInLoopAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            while (true)
+            {
+                await _renderingLoopSynchronizer
+                    .WaitAsync(cancellationToken)
+                    .ConfigureAwait(false);
+                
+                await RenderAndNotifyStartingAndCompletedAsync()
+                    .ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+    #endregion
+
+    #region Notification methods
+    protected void NotifyRenderingStarting() =>
+        RenderingStarting?.Invoke(this, EventArgs.Empty);
     
     protected virtual void NotifyRenderingCompleted(TimeSpan elapsedTime) =>
         RenderingCompleted?.Invoke(this, new RenderingCompletedEventArgs(elapsedTime));    
     #endregion
 
-    #region Bitmap and canvas creation
+    #region Bitmap and canvas creation methods
     private void RecreateBitmapAndCanvasIfSizeChanged()
     {
         if (_bitmap?.Size == SizeToRender)

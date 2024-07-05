@@ -43,29 +43,26 @@ public class WorldCamera : DisposableObject, IWorldCamera
         ZoomChange = options.DefaultZoomChange;
         TranslationChange = options.DefaultTranslationChange;
         
-        WithDisposables(disposables =>
-        {
-            var isInitialized = false;
-            Observable
-                .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
-                (
-                    h => worldViewport.SizeChanged += h,
-                    h => worldViewport.SizeChanged -= h
-                )
-                .Subscribe(_ =>
+        var isInitialized = false;
+        Observable
+            .FromEventPattern<EventHandler<ViewportSizeChangedEventArgs>, ViewportSizeChangedEventArgs>
+            (
+                h => worldViewport.SizeChanged += h,
+                h => worldViewport.SizeChanged -= h
+            )
+            .Subscribe(_ =>
+            {
+                if (!isInitialized)
                 {
-                    if (!isInitialized)
-                    {
-                        ZoomToViewportCenter(options.DefaultZoom);
-                        isInitialized = true;
-                        
-                        return;
-                    }
+                    ZoomToViewportCenter(options.DefaultZoom);
+                    isInitialized = true;
                     
-                    ZoomToViewportCenter(Zoom);
-                })
-                .DisposeWith(disposables);
-        });
+                    return;
+                }
+                
+                ZoomToViewportCenter(Zoom);
+            })
+            .DisposeWith(Disposables);
     }
 
     #region Public methods

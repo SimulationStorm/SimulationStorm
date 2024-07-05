@@ -87,54 +87,51 @@ public partial class MainViewModel : DisposableObservableObject
         _simulationApplicationNameProvider = simulationApplicationNameProvider;
         _notificationManager = notificationManager;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
-                (
-                    h => _localizationManager.CultureChanged += h,
-                    h => _localizationManager.CultureChanged -= h
-                )
-                .Subscribe(_ => OnPropertyChanged(nameof(CurrentCulture)))
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => _uiThemeManager.ThemeChanged += h,
-                    h => _uiThemeManager.ThemeChanged -= h
-                )
-                .Subscribe(_ => OnPropertyChanged(nameof(CurrentTheme)))
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler, EventArgs>
-                (
-                    h => _uiDensityManager.DensityChanged += h,
-                    h => _uiDensityManager.DensityChanged -= h
-                )
-                .Subscribe(_ => OnPropertyChanged(nameof(CurrentDensity)))
-                .DisposeWith(disposables);
-            
-            Observable
-                .FromEventPattern<EventHandler<NavigationContentChangedEventArgs>, NavigationContentChangedEventArgs>
-                (
-                    h => _navigationManager.ContentChanged += h,
-                    h => _navigationManager.ContentChanged -= h
-                )
-                .Subscribe(_ =>
+        Observable
+            .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
+            (
+                h => _localizationManager.CultureChanged += h,
+                h => _localizationManager.CultureChanged -= h
+            )
+            .Subscribe(_ => OnPropertyChanged(nameof(CurrentCulture)))
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => _uiThemeManager.ThemeChanged += h,
+                h => _uiThemeManager.ThemeChanged -= h
+            )
+            .Subscribe(_ => OnPropertyChanged(nameof(CurrentTheme)))
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler, EventArgs>
+            (
+                h => _uiDensityManager.DensityChanged += h,
+                h => _uiDensityManager.DensityChanged -= h
+            )
+            .Subscribe(_ => OnPropertyChanged(nameof(CurrentDensity)))
+            .DisposeWith(Disposables);
+        
+        Observable
+            .FromEventPattern<EventHandler<NavigationContentChangedEventArgs>, NavigationContentChangedEventArgs>
+            (
+                h => _navigationManager.ContentChanged += h,
+                h => _navigationManager.ContentChanged -= h
+            )
+            .Subscribe(_ =>
+            {
+                if (_skipNavigationContentChanged)
                 {
-                    if (_skipNavigationContentChanged)
-                    {
-                        _skipNavigationContentChanged = false;
-                        return;
-                    }
-                    
-                    // ? is used here instead of ! to avoid error when initial navigation to main view
-                    _simulationProcessLock?.Dispose();
-                })
-                .DisposeWith(disposables);
-        });
+                    _skipNavigationContentChanged = false;
+                    return;
+                }
+                
+                // ? is used here instead of ! to avoid error when initial navigation to main view
+                _simulationProcessLock?.Dispose();
+            })
+            .DisposeWith(Disposables);
     }
     
     [RelayCommand]

@@ -126,25 +126,22 @@ public partial class CameraSettingsViewModel : DisposableObservableObject
         _worldCamera = worldCamera;
         _options = options;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
-                (
-                    h => _worldCamera.MatrixChanged += h,
-                    h => _worldCamera.MatrixChanged -= h
-                )
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    OnPropertyChanged(nameof(Zoom));
-                    OnPropertyChanged(nameof(HorizontalTranslation));
-                    OnPropertyChanged(nameof(VerticalTranslation));
-                    
-                    ResetZoomCommand.NotifyCanExecuteChanged();
-                    ResetTranslationCommand.NotifyCanExecuteChanged();
-                })
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<CameraMatrixChangedEventArgs>, CameraMatrixChangedEventArgs>
+            (
+                h => _worldCamera.MatrixChanged += h,
+                h => _worldCamera.MatrixChanged -= h
+            )
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(Zoom));
+                OnPropertyChanged(nameof(HorizontalTranslation));
+                OnPropertyChanged(nameof(VerticalTranslation));
+                
+                ResetZoomCommand.NotifyCanExecuteChanged();
+                ResetTranslationCommand.NotifyCanExecuteChanged();
+            })
+            .DisposeWith(Disposables);
     }
 }

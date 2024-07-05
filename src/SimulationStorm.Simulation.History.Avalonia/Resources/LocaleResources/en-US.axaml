@@ -19,5 +19,5 @@
     <sys:String x:Key="Strings.Simulation.History.GoToNextSave">Go to the next save</sys:String>
     <sys:String x:Key="Strings.Simulation.History.DeleteSave">Delete save</sys:String>
     <sys:String x:Key="Strings.Simulation.History.DeleteAllSaves">Delete all saves</sys:String>
-    <sys:String x:Key="Strings.Simulation.Command.RestoreState">Restore state</sys:String>
+    <sys:String x:Key="Strings.Simulation.Command.RestoreSave">Restore save</sys:String>
 </ResourceDictionary>

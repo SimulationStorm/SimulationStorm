@@ -3,26 +3,26 @@ using SimulationStorm.Simulation.CellularAutomation.Presentation.Services;
 
 namespace SimulationStorm.GameOfLife.Presentation.Drawing;
 
-public class GameOfLifeDrawingSettingsStateManager
+public class GameOfLifeDrawingSettingsSaveManager
 (
     GameOfLifeDrawingSettings drawingSettings
 )
-    : DrawingSettingsStateManager<GameOfLifeCellState, GameOfLifeDrawingSettingsState>(drawingSettings)
+    : DrawingSettingsSaveManager<GameOfLifeCellState, GameOfLifeDrawingSettingsSave>(drawingSettings)
 {
-    protected override GameOfLifeDrawingSettingsState SaveServiceStateImpl()
+    protected override GameOfLifeDrawingSettingsSave SaveServiceCore()
     {
-        var state = base.SaveServiceStateImpl();
+        var state = base.SaveServiceCore();
         state.Pattern = drawingSettings.CurrentPattern;
         state.PlacePatternWithOverlay = drawingSettings.PlacePatternWithOverlay;
 
         return state;
     }
 
-    protected override void RestoreServiceStateImpl(GameOfLifeDrawingSettingsState state)
+    protected override void RestoreServiceSaveCore(GameOfLifeDrawingSettingsSave save)
     {
-        base.RestoreServiceStateImpl(state);
+        base.RestoreServiceSaveCore(save);
 
-        drawingSettings.CurrentPattern = state.Pattern;
-        drawingSettings.PlacePatternWithOverlay = state.PlacePatternWithOverlay;
+        drawingSettings.CurrentPattern = save.Pattern;
+        drawingSettings.PlacePatternWithOverlay = save.PlacePatternWithOverlay;
     }
 }

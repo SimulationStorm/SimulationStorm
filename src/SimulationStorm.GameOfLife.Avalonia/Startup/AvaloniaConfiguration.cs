@@ -28,7 +28,7 @@ public static class AvaloniaConfiguration
             "SimulationStorm.Themes.Avalonia",
             "SimulationStorm.Densities.Avalonia",
             "SimulationStorm.Localization.Avalonia",
-            "SimulationStorm.AppStates.Avalonia",
+            "SimulationStorm.AppSaves.Avalonia",
             "SimulationStorm.Notifications.Avalonia",
             "SimulationStorm.ToolPanels.Avalonia",
             "SimulationStorm.Collections.Avalonia",

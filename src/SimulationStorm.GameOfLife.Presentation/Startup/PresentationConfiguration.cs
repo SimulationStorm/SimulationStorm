@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
-using SimulationStorm.AppStates.Persistence;
+using SimulationStorm.AppSaves.Persistence;
 using SimulationStorm.Collections.StorageControl;
 using SimulationStorm.Graphics;
-using SimulationStorm.GameOfLife.Algorithms;
 using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.GameOfLife.Presentation.Drawing;
 using SimulationStorm.GameOfLife.Presentation.Management;
@@ -57,11 +56,11 @@ public static class PresentationConfiguration
         LogsFileName = $"Logs on {DateTime.Now:dd-MM-yy HH-mm-ss}.txt"
     };
 
-    public static readonly AppStatesOptions AppStatesOptions = new()
+    public static readonly AppSavesOptions AppSavesOptions = new()
     {
         DatabaseDirectoryPath = ApplicationWorkingFilesDirectoryPath,
         DatabaseFileName = "AppStatesDatabase.db",
-        AppStateNameLengthRange = new Range<int>(1, 50)
+        AppSaveNameLengthRange = new Range<int>(1, 50)
     };
     
     public static readonly WorldCameraOptions WorldCameraOptions = new()

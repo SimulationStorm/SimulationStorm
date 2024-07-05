@@ -9,7 +9,7 @@
     xmlns:resettingViews="using:SimulationStorm.Simulation.Resetting.Avalonia.Views"
     xmlns:localization="using:SimulationStorm.Localization.Avalonia"
     xmlns:historyViews="using:SimulationStorm.Simulation.History.Avalonia.Views"
-    xmlns:appStates="using:SimulationStorm.AppStates.Avalonia.Views"
+    xmlns:appStates="using:SimulationStorm.AppSaves.Avalonia.Views"
     xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
     xmlns:themes="using:SimulationStorm.Themes.Avalonia"
     xmlns:startup="using:SimulationStorm.GameOfLife.Avalonia.Startup"
@@ -33,7 +33,7 @@
             
             <controls:ChromedTitleBarExtended.RightContent>
                 <StackPanel Orientation="Horizontal">
-                    <appStates:OpenAppStateManagerButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <appStates:OpenAppSaveManagerButton Theme="{DynamicResource TitleBarButtonExtended}"/>
                     <toolPanels:ToolPanelMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>
                     <localization:LanguageMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>
                     <themes:UiThemeMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>

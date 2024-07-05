@@ -21,20 +21,17 @@ public class CommandExecutionStatsManager : CollectionManagerBase<CommandExecuti
     )
         : base(universalCollectionFactory, intervalActionExecutor, options)
     {
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<SimulationCommandExecutedEventArgs>, SimulationCommandExecutedEventArgs>
-                (
-                    h => simulationManager.CommandExecuted += h,
-                    h => simulationManager.CommandExecuted -= h
-                )
-                .Where(_ => IsSavingEnabled)
-                .Select(e => e.EventArgs)
-                .Where(e => e.Command is not RestoreStateCommand { IsRestoringFromAppState: true })
-                .Select(e => new CommandExecutionResultRecord(e.Command, e.ElapsedTime))
-                .Subscribe(Collection.Add)
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<SimulationCommandCompletedEventArgs>, SimulationCommandCompletedEventArgs>
+            (
+                h => simulationManager.CommandCompleted += h,
+                h => simulationManager.CommandCompleted -= h
+            )
+            .Where(_ => IsSavingEnabled)
+            .Select(e => e.EventArgs)
+            .Where(e => e.Command is not RestoreSaveCommand { IsRestoringFromAppSave: true })
+            .Select(e => new CommandExecutionResultRecord(e.Command, e.ElapsedTime))
+            .Subscribe(Collection.Add)
+            .DisposeWith(Disposables);
     }
 }

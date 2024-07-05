@@ -19,14 +19,11 @@ public class ExceptionHandlersToNotifiersSubscriber : DisposableObject
         IEnumerable<INotifyUnhandledException> unhandledExceptionNotifiers,
         IEnumerable<IHandleUnhandledException> unhandledExceptionHandlers)
     {
-        WithDisposables(disposables =>
-        {
-            SubscribeFirstChanceExceptionHandlers(
-                firstChanceExceptionNotifiers, firstChanceExceptionHandlers, disposables);
-            
-            SubscribeUnhandledExceptionHandlers(
-                unhandledExceptionNotifiers, unhandledExceptionHandlers, disposables);
-        });
+        SubscribeFirstChanceExceptionHandlers(
+            firstChanceExceptionNotifiers, firstChanceExceptionHandlers, Disposables);
+        
+        SubscribeUnhandledExceptionHandlers(
+            unhandledExceptionNotifiers, unhandledExceptionHandlers, Disposables);
     }
 
     #region First chance

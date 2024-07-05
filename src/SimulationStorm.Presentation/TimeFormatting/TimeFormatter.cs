@@ -29,21 +29,18 @@ public class TimeFormatter : DisposableObject, ITimeFormatter
         _localizationManager = localizationManager;
         _options = options;
         
-        WithDisposables(disposables =>
-        {
-            Observable
-                .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
-                (
-                    h => localizationManager.CultureChanged += h,
-                    h => localizationManager.CultureChanged -= h
-                )
-                .Subscribe(_ =>
-                {
-                    UpdateStrings();
-                    NotifyReformattingRequested();
-                })
-                .DisposeWith(disposables);
-        });
+        Observable
+            .FromEventPattern<EventHandler<CultureChangedEventArgs>, CultureChangedEventArgs>
+            (
+                h => localizationManager.CultureChanged += h,
+                h => localizationManager.CultureChanged -= h
+            )
+            .Subscribe(_ =>
+            {
+                UpdateStrings();
+                NotifyReformattingRequested();
+            })
+            .DisposeWith(Disposables);
         
         UpdateStrings();
     }

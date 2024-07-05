@@ -1,0 +1,45 @@
+﻿<controls:Section x:Class="SimulationStorm.Simulation.Avalonia.Views.ScheduledCommandsView"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                  xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                  xmlns:models="using:SimulationStorm.Simulation.Presentation.Models"
+                  xmlns:viewModels="using:SimulationStorm.Simulation.Presentation.SimulationManager"
+                  x:DataType="viewModels:ScheduledCommandsViewModel"
+                  Title="{DynamicResource Strings.Simulation.Common.ScheduledCommands}">
+    <DockPanel Classes="stack-items-vertically">
+        <ToggleSwitch x:Name="ShowCommandQueueToggleSwitch"
+                      Classes="has-bottom-margin theme-solid"
+                      Content="{DynamicResource Strings.Simulation.Common.ShowScheduledCommands}"
+                      IsChecked="{Binding AreScheduledCommandsVisible}"
+                      OffContent="{DynamicResource Strings.Common.No}"
+                      OnContent="{DynamicResource Strings.Common.Yes}"/>
+
+        <Panel IsVisible="{Binding AreScheduledCommandsVisible}"
+               Height="{actipro:ScaledDouble 30}">
+            <TextBlock Classes="has-opacity-transition"
+                       Classes.opaque="{Binding AreThereCommands}"
+                       Text="{DynamicResource Strings.Simulation.Common.ThereAreNoScheduledCommands}"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"/>
+
+            <DataGrid Classes="has-opacity-transition"
+                      Classes.opaque="{Binding !AreThereCommands}"
+                      ItemsSource="{Binding ScheduledCommandModels}"
+                      VerticalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding OrdinalNumber}"
+                                        Header="{DynamicResource Strings.Common.OrdinalNumber}"/>
+
+                    <DataGridTemplateColumn Header="{DynamicResource Strings.Simulation.Command}">
+                        <DataTemplate x:DataType="models:SimulationCommandModel">
+                            <ContentControl Classes="has-left-margin has-right-margin"
+                                            Content="{Binding Command}"
+                                            ContentTemplate="{StaticResource Templates.Simulation.CommandTemplate}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Panel>
+    </DockPanel>
+</controls:Section>

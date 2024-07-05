@@ -60,27 +60,24 @@ public sealed class PieChartViewModel : GameOfLifeChartViewModelBase
         _deadCellsSeries = CreatePieSeries(_deadCellCount, _deadCellsSeriesFillPaint, _deadCellsSeriesLabelPaint);
         _aliveCellsSeries = CreatePieSeries(_aliveCellCount, _aliveCellsSeriesFillPaint, _aliveCellsSeriesLabelPaint);
         
-        WithDisposables(disposables =>
-        {
-            RecordModels
-                .ObserveCollectionChanges()
-                .ObserveOn(uiThreadScheduler)
-                .Subscribe(_ => UpdateCellCountsByLastRecordModel())
-                .DisposeWith(disposables);
-            
-            gameOfLifeRenderer
-                .WhenValueChanged(x => x.CellColors)
-                .Subscribe(_ =>
-                {
-                    UpdateCellPaintColors();
-                    
-                    InvalidationRequested?.Invoke(this, EventArgs.Empty);
-                })
-                .DisposeWith(disposables);
+        RecordModels
+            .ObserveCollectionChanges()
+            .ObserveOn(uiThreadScheduler)
+            .Subscribe(_ => UpdateCellCountsByLastRecordModel())
+            .DisposeWith(Disposables);
+        
+        gameOfLifeRenderer
+            .WhenValueChanged(x => x.CellColors)
+            .Subscribe(_ =>
+            {
+                UpdateCellPaintColors();
+                
+                InvalidationRequested?.Invoke(this, EventArgs.Empty);
+            })
+            .DisposeWith(Disposables);
 
-            disposables.AddRange(_deadCellsSeriesFillPaint, _deadCellsSeriesLabelPaint,
-                _aliveCellsSeriesFillPaint, _aliveCellsSeriesLabelPaint);
-        });
+        Disposables.AddRange(_deadCellsSeriesFillPaint, _deadCellsSeriesLabelPaint,
+            _aliveCellsSeriesFillPaint, _aliveCellsSeriesLabelPaint);
         
         UpdateCellCountsByLastRecordModel();
         UpdateSeriesNames();

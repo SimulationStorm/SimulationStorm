@@ -1,18 +1,18 @@
 ﻿using System.Linq;
-using SimulationStorm.AppStates;
+using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.ToolPanels.Presentation;
 
-public class ToolPanelStatesManager(IToolPanelManager toolPanelManager) : ServiceStateManagerBase<ToolPanelStates>
+public class ToolPanelSavesManager(IToolPanelManager toolPanelManager) : ServiceSaveManagerBase<ToolPanelsSave>
 {
-    protected override ToolPanelStates SaveServiceStateImpl() => new()
+    protected override ToolPanelsSave SaveServiceCore() => new()
     {
         ToolPanelVisibilities = toolPanelManager.ToolPanelVisibilities.ToDictionary()
     };
 
-    protected override void RestoreServiceStateImpl(ToolPanelStates state)
+    protected override void RestoreServiceSaveCore(ToolPanelsSave save)
     {
-        foreach (var (toolPanel, isVisible) in state.ToolPanelVisibilities)
+        foreach (var (toolPanel, isVisible) in save.ToolPanelVisibilities)
         {
             if (isVisible)
                 toolPanelManager.OpenToolPanel(toolPanel);

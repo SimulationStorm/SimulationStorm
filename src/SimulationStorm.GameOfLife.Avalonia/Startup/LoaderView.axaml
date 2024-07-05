@@ -5,7 +5,7 @@
              xmlns:lifeViews="using:SimulationStorm.GameOfLife.Avalonia.Views"
              xmlns:history="using:SimulationStorm.Simulation.History.Avalonia"
              xmlns:stats="using:SimulationStorm.Simulation.Statistics.Avalonia"
-             xmlns:appStates="using:SimulationStorm.AppStates.Avalonia"
+             xmlns:appStates="using:SimulationStorm.AppSaves.Avalonia"
              xmlns:drawing="using:SimulationStorm.GameOfLife.Presentation.Drawing"
              xmlns:dialogs="using:SimulationStorm.Dialogs.Avalonia"
              xmlns:lifeViewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"

@@ -125,15 +125,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Simulation.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Collections.UnitTests", "tests\SimulationStorm.Collections.UnitTests\SimulationStorm.Collections.UnitTests.csproj", "{6CE802E3-7354-4B06-A74E-09AFF42B3A31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppStates", "src\SimulationStorm.AppStates\SimulationStorm.AppStates.csproj", "{42844C96-344E-4F7E-A21B-BBE3E3603B62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppSaves", "src\SimulationStorm.AppSaves\SimulationStorm.AppSaves.csproj", "{42844C96-344E-4F7E-A21B-BBE3E3603B62}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppStates", "AppStates", "{49F87305-6539-491A-87DD-4628C42B2BC3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppSaves", "AppSaves", "{49F87305-6539-491A-87DD-4628C42B2BC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppStates.Avalonia", "src\SimulationStorm.AppStates.Avalonia\SimulationStorm.AppStates.Avalonia.csproj", "{E378B658-34E4-4155-871C-EA93A3380D25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppSaves.Avalonia", "src\SimulationStorm.AppSaves.Avalonia\SimulationStorm.AppSaves.Avalonia.csproj", "{E378B658-34E4-4155-871C-EA93A3380D25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppStates.Persistence", "src\SimulationStorm.AppStates.Persistence\SimulationStorm.AppStates.Persistence.csproj", "{32D62192-F17C-4B14-9389-245010ABB197}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppSaves.Persistence", "src\SimulationStorm.AppSaves.Persistence\SimulationStorm.AppSaves.Persistence.csproj", "{32D62192-F17C-4B14-9389-245010ABB197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppStates.Presentation", "src\SimulationStorm.AppStates.Presentation\SimulationStorm.AppStates.Presentation.csproj", "{CBD3E5DF-89B4-40DE-9DC0-93A365216107}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.AppSaves.Presentation", "src\SimulationStorm.AppSaves.Presentation\SimulationStorm.AppSaves.Presentation.csproj", "{CBD3E5DF-89B4-40DE-9DC0-93A365216107}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Collections", "Collections", "{7EE8B042-D4A9-4EDA-8F4C-C2769DB78E85}"
 EndProject
