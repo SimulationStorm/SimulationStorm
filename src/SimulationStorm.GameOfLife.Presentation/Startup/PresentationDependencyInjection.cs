@@ -93,7 +93,7 @@ public static class PresentationDependencyInjection
         .AddSingleton<IToolPanelManager, ToolPanelManager>()
         .AddSingleton<IToolPanelViewModelFactory, ToolPanelViewModelFactory>()
         .AddSingleton<ToolPanelManagerViewModel>()
-        .AddServiceSaveManager<ToolPanelSavesManager>()
+        .AddServiceSaveManager<ToolPanelsSaveManager>()
         //
         
         // Simulation and world rendering

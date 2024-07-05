@@ -3,7 +3,7 @@ using SimulationStorm.AppSaves;
 
 namespace SimulationStorm.ToolPanels.Presentation;
 
-public class ToolPanelSavesManager(IToolPanelManager toolPanelManager) : ServiceSaveManagerBase<ToolPanelsSave>
+public class ToolPanelsSaveManager(IToolPanelManager toolPanelManager) : ServiceSaveManagerBase<ToolPanelsSave>
 {
     protected override ToolPanelsSave SaveServiceCore() => new()
     {
