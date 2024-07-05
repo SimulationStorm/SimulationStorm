@@ -13,7 +13,7 @@
         <ProjectReference Include="..\SimulationStorm.DependencyInjection\SimulationStorm.DependencyInjection.csproj" />
         <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
         <ProjectReference Include="..\SimulationStorm.Localization.Presentation\SimulationStorm.Localization.Presentation.csproj" />
-        <ProjectReference Include="..\SimulationStorm.Localization.States\SimulationStorm.Localization.States.csproj" />
+        <ProjectReference Include="..\SimulationStorm.Localization.Saves\SimulationStorm.Localization.Saves.csproj" />
     </ItemGroup>
 
     <ItemGroup>

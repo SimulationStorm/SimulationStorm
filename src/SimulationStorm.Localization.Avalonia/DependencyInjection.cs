@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SimulationStorm.AppSaves.Presentation;
 using SimulationStorm.Localization.Presentation;
-using SimulationStorm.Localization.States;
+using SimulationStorm.Localization.Saves;
 
 namespace SimulationStorm.Localization.Avalonia;
 

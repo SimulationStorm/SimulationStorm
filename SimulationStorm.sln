@@ -169,7 +169,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Notificatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Notifications.Avalonia", "src\SimulationStorm.Notifications.Avalonia\SimulationStorm.Notifications.Avalonia.csproj", "{81AF8619-39F2-40D2-B44D-7DC02ED3F0D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Localization.States", "src\SimulationStorm.Localization.States\SimulationStorm.Localization.States.csproj", "{B646BCA9-7998-4F08-A084-D0086FE583B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Localization.Saves", "src\SimulationStorm.Localization.Saves\SimulationStorm.Localization.Saves.csproj", "{B646BCA9-7998-4F08-A084-D0086FE583B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationStorm.Collections.Avalonia", "src\SimulationStorm.Collections.Avalonia\SimulationStorm.Collections.Avalonia.csproj", "{93EDEB9A-6426-405A-BAF7-978A02E8FD31}"
 EndProject
