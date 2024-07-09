@@ -112,7 +112,9 @@ The project is under the active development.
 
 The Pull Request template and contribution guidelines will be created in the near future.
 
-[The project task list](task_list.md).
+This project uses the [GitHub Flow](https://docs.github.com/ru/get-started/using-github/github-flow) branching model.
+
+[The project task list](docs/task_list.md).
 
 ## Tech stack
 
