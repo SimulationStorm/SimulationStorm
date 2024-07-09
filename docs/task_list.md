@@ -1,10 +1,18 @@
 ﻿# Task list
 
-## Social
+## Automation tasks
 
+* Configure a GitHub action to lint and test code before merging pull request
+* Configure a GitHub action to publish project for different platforms on release
+
+## Social tasks
+
+* Add a space in SimulationStorm name everywhere (id est "SimulationStorm" -> "Simulation Storm")?
 * Write a contributing.md
 * Write a pull_request_template.md
 * Create a wiki
+* Add built-in docs / tutorial panel
+* Add credits and licenses dialog panel
 
 ## General purpose modules & libraries
 
@@ -13,11 +21,13 @@
 * Add ability to configure localization manager from XAML?
 * Upgrade localization module by adding ability to separately download language packs via UI?
 * Improve Excel localization helper - or create a custom one
+* Fix: a language could be unchecked in the language context menu flyout...
 
 ### App saves
 
 * Show loading splash screen when simulation save is loading
 * Add ability to delete selected range of saves
+* Store an application version in saves
 
 ### Tool panels
 
@@ -31,6 +41,11 @@
 ### Dialogs
 
 * First opening of dialog manager on laptop does not work as intended
+* Close dialogs via Esc
+
+### Context flyouts
+
+* Mark some context flyout buttons as primary buttons
 
 ### Collections
 
@@ -66,6 +81,7 @@
 * Complete HistoryAwareSummaryStatsManager
 * Show average time of simulation rendering and commands execution?
 * Simplify CommandExecutionStates namespace
+* Add button to apply capacity in rendering and command execution stats (like in summary stats and history)
 
 ### CellularAutomation
 
@@ -98,6 +114,11 @@
 
 * Take our previous art life project and advance its ideas in the future ... but, it will be ultimately another thing: there should not be hardcoded substances and creatures - better, make an environment, where substances and creatures can arise by themselves
 
+## Folder structure
+
+* Rename src to sources?
+* Add nested folders in src for modules?
+
 ## General tasks
 
 * Wait for SkiaSharp 3.0 and Avalonia supporting SkiaSharp 3.0 stable versions or use OpenTK (GL/CL).
@@ -111,6 +132,7 @@
 * Extract some general purpose modules to distinct repositories
 * Is it right, that some small things (buttons, for example) use services directly, passing view model layer? I think, it is not right?
 * Add system resources utilization statistics module using Microsoft.Extensions.Diagnostics.ResourceMonitoring (supports only Windows and Linux)
+* Some classes could be transformed to structs
 
 ## User interface tasks
 
@@ -120,8 +142,6 @@
 * Generalize dialogs/fly outs/tool panels title bar via creating a new control / template
 * Add animations where it is possible and needed
 * Add ability to hide title and status bars
-* Add built-in docs / tutorial
-* Add credits dialog panel
 * Add more hotkeys for buttons
 * Optimize binding directions
 
@@ -157,12 +177,13 @@
 
 ## Icons
 
+* Switch to the another open source icon pack which offers more icons
 * Improve existing TablerIcons Avalonia library, or use svg's
 * The problem with the current TablerIcons library is in that opacities are not animated and some property settings are not correct
 
 ## Actipro
 
-* Use full package (via buying it)?
+* Use the full package via buying it?
 
 ### LiveCharts
 
