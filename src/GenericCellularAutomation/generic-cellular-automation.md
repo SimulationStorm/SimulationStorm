@@ -29,3 +29,6 @@ TCellState = byte / short / int / long - integer
 - add +, - operators to Size/SizeF ?
 - refactor GoL domain using our primitives
 - what about sealing?
+- rename cell to cellPosition
+- remake ChangeWorldSize to property setter
+- extend advanceable simulation adding CanAdvance() ?

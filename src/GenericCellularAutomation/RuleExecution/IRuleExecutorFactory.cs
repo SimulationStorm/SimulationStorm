@@ -6,7 +6,7 @@ namespace GenericCellularAutomation.RuleExecution;
 
 public interface IRuleExecutorFactory
 {
-    IRuleExecutor<TCellState> CreateRuleExecutor<TCellState>(RuleExecutorType type, Rule<TCellState> rule)
+    IRuleExecutor<TCellState> CreateRuleExecutor<TCellState>(RuleExecutorType ruleType, Rule<TCellState> rule)
         where TCellState :
             IComparable,
             IComparable<TCellState>,

@@ -6,9 +6,9 @@ namespace GenericCellularAutomation;
 
 public class CellStateCollection<TCellState> where TCellState : IBinaryInteger<TCellState>
 {
-    public IReadOnlySet<TCellState> CellStateSet { get; set; }
+    public IReadOnlySet<TCellState> CellStateSet { get; }
     
-    public TCellState DefaultCellState { get; set; }
+    public TCellState DefaultCellState { get; }
 
     public CellStateCollection(IReadOnlySet<TCellState> cellStateSet, TCellState defaultCellState)
     {

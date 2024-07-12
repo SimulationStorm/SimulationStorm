@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -11,7 +12,6 @@ using SimulationStorm.Simulation.CellularAutomation;
 
 namespace GenericCellularAutomation;
 
-// Assumption: min possible cell state starts from one
 public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCellularAutomation<TCellState>
     where TCellState : IBinaryInteger<TCellState>, IMinMaxValue<TCellState>
 {
@@ -36,33 +36,39 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
     #endregion
 
     #region Fields
+    #region World
+    private readonly int _innerWorldOffset;
+
+    private Rect _innerWorldRect;
+
+    private TCellState[,] _world = null!;
+    
+    private bool _areCopiedWorldSidesReset;
+    #endregion
+
+    #region Possible cell states
+    private readonly TCellState _emptyCellState = TCellState.Zero;
+
+    private CellStateCollection<TCellState> _possibleCellStateCollection = null!;
+    #endregion
+    
+    #region Rules
     private readonly IRuleExecutorFactory _ruleExecutorFactory;
     
     private readonly IDictionary<Rule<TCellState>, IRuleExecutor<TCellState>> _ruleExecutorByRules =
         new Dictionary<Rule<TCellState>, IRuleExecutor<TCellState>>();
 
-    private RuleSetCollection<TCellState> _ruleSetCollection;
-    
     private readonly Queue<RuleSet<TCellState>> _ruleSetQueue = [];
-
-    private readonly int _innerWorldOffset;
-
-    private Rect _innerWorldRect;
-
-    private TCellState[,] _world;
     
-    private readonly TCellState _emptyCellState = TCellState.Zero;
-
-    private CellStateCollection<TCellState> _possibleCellStateCollection;
-
-    private bool _areCopiedWorldSidesReset;
+    private RuleSetCollection<TCellState> _ruleSetCollection = null!;
+    #endregion
     #endregion
     
     public GenericCellularAutomation
     (
         IRuleExecutorFactory ruleExecutorFactory,
-        int maxCellNeighborhoodRadius,
         Size worldSize,
+        int maxCellNeighborhoodRadius,
         WorldWrapping worldWrapping,
         CellStateCollection<TCellState> possibleCellStateCollection,
         RuleSetCollection<TCellState> ruleSetCollection)
@@ -101,6 +107,8 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
     {
         cellStateCollection.CellStateSet.ForEach(ValidatePossibleCellState);
         _possibleCellStateCollection = cellStateCollection;
+        
+        CheckAndChangeInnerWorldCellStatesToDefault();
     }
 
     private void ValidatePossibleCellState(TCellState possibleCellState)
@@ -109,6 +117,14 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             throw new ArgumentOutOfRangeException(nameof(possibleCellState), possibleCellState,
                 $"The possible cell state must be greater than the {_emptyCellState}.");
     }
+    
+    private void CheckAndChangeInnerWorldCellStatesToDefault() =>
+        ForEachInnerWorldCellInParallel(cellPosition =>
+        {
+            var cellState = _world[cellPosition.X, cellPosition.Y];
+            if (!PossibleCellStateCollection.CellStateSet.Contains(cellState))
+                _world[cellPosition.X, cellPosition.Y] = PossibleCellStateCollection.DefaultCellState;
+        });
     #endregion
     
     #region World wrapping changing
@@ -141,6 +157,7 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             {
                 CopyWorldHorizontalSides();
                 CopyWorldVerticalSides();
+                
                 _areCopiedWorldSidesReset = false;
                 break;
             }
@@ -252,7 +269,6 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
     public void Reset() => ChangeInnerWorldCellsToDefaultState();
 
     #region Advancement
-    // Todo: extend advanceable simulation adding CanAdvance() ?
     public bool CanAdvance() => _ruleSetQueue.Count > 0;
     
     public void Advance()
@@ -260,7 +276,7 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         if (!CanAdvance())
             RecreateRuleSetQueue();
         
-        // Todo: Apply field wrapping
+        ApplyWorldWrapping();
 
         var nextWorld = (TCellState[,])_world.Clone();
 
@@ -269,25 +285,16 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         {
             var ruleExecutor = _ruleExecutorByRules[rule];
 
-            GetInnerWorldCellPositions()
-                .AsParallel()
-                .ForAll(cellPosition =>
-                {
-                    var newCellState = ruleExecutor.CalculateNextCellState(_world, cellPosition);
-                    nextWorld[cellPosition.X, cellPosition.Y] = newCellState;
-                });
+            ForEachInnerWorldCellInParallel(cellPosition =>
+            {
+                var newCellState = ruleExecutor.CalculateNextCellState(_world, cellPosition);
+                nextWorld[cellPosition.X, cellPosition.Y] = newCellState;
+            });
         });
 
         _world = (TCellState[,])nextWorld.Clone();
     }
     #endregion
-    
-    private IEnumerable<Point> GetInnerWorldCellPositions()
-    {
-        for (var x = _innerWorldRect.Left; x < _innerWorldRect.Right; x++)
-            for (var y = _innerWorldRect.Top; y < _innerWorldRect.Bottom; y++)
-                yield return new Point(x, y);
-    }
 
     #region Rule set queue creation
     private void RecreateRuleSetQueue()
@@ -307,18 +314,15 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
 
     public GenericCellularAutomationSummary<TCellState> Summarize()
     {
-        var cellCountByStates = new Dictionary<TCellState, int>();
-        for (var cellState = TCellState.MinValue; cellState < PossibleCellStateCount; cellState++)
-            cellCountByStates[cellState] = 0;
-
-        for (var x = _innerWorldRect.Left; x < _innerWorldRect.Right; x++)
+        var cellCountByStates = new ConcurrentDictionary<TCellState, int>();
+        
+        PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellCountByStates[cellState] = 0);
+        
+        ForEachInnerWorldCellInParallel(cell =>
         {
-            for (var y = _innerWorldRect.Top; y < _innerWorldRect.Bottom; y++)
-            {
-                var cellState = _world[x, y];
-                cellCountByStates[cellState]++;
-            }
-        }
+            var cellState = _world[cell.X, cell.Y];
+            cellCountByStates[cellState]++;
+        });
 
         return new GenericCellularAutomationSummary<TCellState>(cellCountByStates);
     }
@@ -335,11 +339,19 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
     }
     #endregion
 
-    private void ChangeInnerWorldCellsToDefaultState()
+    private void ChangeInnerWorldCellsToDefaultState() =>
+        ForEachInnerWorldCellInParallel(cell =>
+            _world[cell.X, cell.Y] = PossibleCellStateCollection.DefaultCellState);
+    
+    private void ForEachInnerWorldCellInParallel(Action<Point> action) => GetInnerWorldCellPositions()
+        .AsParallel()
+        .ForAll(action);
+
+    private IEnumerable<Point> GetInnerWorldCellPositions()
     {
         for (var x = _innerWorldRect.Left; x < _innerWorldRect.Right; x++)
             for (var y = _innerWorldRect.Top; y < _innerWorldRect.Bottom; y++)
-                _world[x, y] = _defaultCellState;
+                yield return new Point(x, y);
     }
 
     public TCellState GetCellState(Point cell) =>

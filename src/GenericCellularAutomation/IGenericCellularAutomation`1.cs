@@ -20,5 +20,6 @@ public interface IGenericCellularAutomation<TCellState> :
     
     RuleSetCollection<TCellState> RuleSetCollection { get; set; }
 
+    // Todo: index incrementing and resetting
     int NextExecutingRuleSetIndex { get; }
 }
