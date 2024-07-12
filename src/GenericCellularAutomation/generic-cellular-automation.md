@@ -32,3 +32,6 @@ TCellState = byte / short / int / long - integer
 - rename cell to cellPosition
 - remake ChangeWorldSize to property setter
 - extend advanceable simulation adding CanAdvance() ?
+- use compilation variable #if ENABLE_ALL_VALIDATIONS to enable them
+in domain models
+- add utility class in primitives that will contain a method to iterate over all points within Size
