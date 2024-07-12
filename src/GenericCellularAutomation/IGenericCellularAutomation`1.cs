@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using GenericCellularAutomation.Rules;
+using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.CellularAutomation;
 using SimulationStorm.Simulation.History;
 using SimulationStorm.Simulation.Resetting;
@@ -22,4 +24,6 @@ public interface IGenericCellularAutomation<TCellState> :
 
     // Todo: index incrementing and resetting
     int NextExecutingRuleSetIndex { get; }
+
+    IReadOnlyDictionary<TCellState, IEnumerable<Point>> GetAllCellPositionsByStates();
 }

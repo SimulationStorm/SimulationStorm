@@ -5,5 +5,5 @@ namespace GenericCellularAutomation.Presentation.Configurations;
 public static class PredefinedConfigurations<TCellState>
     where TCellState : IBinaryInteger<TCellState>
 {
-    // public Configuration<TCellState>
+    // public Configuration<TCellState> GameOfLife
 }

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using SimulationStorm.Graphics;
 
-namespace GenericCellularAutomation.Presentation;
+namespace GenericCellularAutomation.Presentation.CellStates;
 
 public class CellStateDescriptor<TCellState>(TCellState number, string name, Color color)
     where TCellState : IBinaryInteger<TCellState>

@@ -82,6 +82,23 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         PossibleCellStateCollection = possibleCellStateCollection;
         RuleSetCollection = ruleSetCollection;
     }
+    
+    public IReadOnlyDictionary<TCellState, IEnumerable<Point>> GetAllCellPositionsByStates()
+    {
+        var cellPositionsByStates = new Dictionary<TCellState, ConcurrentBag<Point>>();
+        
+        PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellPositionsByStates[cellState] = []);
+        
+        ForEachInnerWorldCellInParallel(cellPosition =>
+        {
+            var cellState = _world[cellPosition.X, cellPosition.Y];
+            var cellPositions = cellPositionsByStates[cellState];
+            cellPositions.Add(cellPosition);
+        });
+
+        return cellPositionsByStates
+            .ToDictionary(kv => kv.Key, kv => kv.Value as IEnumerable<Point>);
+    }
 
     #region World size changing
     public bool IsValidWorldSize(Size size) => size.Area >= 1;

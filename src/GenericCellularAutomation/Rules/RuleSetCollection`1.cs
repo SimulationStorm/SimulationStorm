@@ -4,14 +4,23 @@ using System.Numerics;
 
 namespace GenericCellularAutomation.Rules;
 
-public sealed class RuleSetCollection<TCellState>(int repetitionCount, IEnumerable<RuleSet<TCellState>> ruleSets)
-    where TCellState : IBinaryInteger<TCellState>
+public sealed class RuleSetCollection<TCellState> where TCellState : IBinaryInteger<TCellState>
 {
     /// <summary>
-    /// Gets how many times <see cref="RuleSets"/> in <see cref="RuleSetCollection{TCellState}"/> should be executed.
+    /// Gets how many times <see cref="RuleSets"/> sequence in <see cref="RuleSetCollection{TCellState}"/> should be executed.
     /// </summary>
-    public int RepetitionCount { get; } = repetitionCount >= 0 ? repetitionCount
-        : throw new ArgumentOutOfRangeException(nameof(repetitionCount));
+    public int RepetitionCount { get; }
 
-    public IEnumerable<RuleSet<TCellState>> RuleSets { get; } = ruleSets;
+    public IEnumerable<RuleSet<TCellState>> RuleSets { get; }
+    
+    public RuleSetCollection(int repetitionCount, IEnumerable<RuleSet<TCellState>> ruleSets)
+    {
+        ValidateRepetitionCount(repetitionCount);
+        RepetitionCount = repetitionCount;
+        
+        RuleSets = ruleSets;
+    }
+    
+    public static void ValidateRepetitionCount(int repetitionCount) =>
+        ArgumentOutOfRangeException.ThrowIfNegative(repetitionCount, nameof(repetitionCount));
 }
