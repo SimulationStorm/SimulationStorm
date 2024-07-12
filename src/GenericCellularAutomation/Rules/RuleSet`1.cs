@@ -5,12 +5,7 @@ using System.Numerics;
 namespace GenericCellularAutomation.Rules;
 
 public sealed class RuleSet<TCellState>(int repetitionCount, IEnumerable<Rule<TCellState>> rules)
-    where TCellState :
-        IComparable,
-        IComparable<TCellState>,
-        IEquatable<TCellState>,
-        IBinaryInteger<TCellState>,
-        IMinMaxValue<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     /// <summary>
     /// Gets how many times <see cref="Rules"/> collection in <see cref="RuleSet{TCellState}"/> should be executed.

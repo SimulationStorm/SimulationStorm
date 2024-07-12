@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
+using GenericCellularAutomation.Neighborhood;
 using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation.Rules;
 
-public sealed class NontotalisticRule<TCellState> : ConditionalRuleBase<TCellState> where TCellState :
-    IComparable,
-    IComparable<TCellState>,
-    IEquatable<TCellState>,
-    IBinaryInteger<TCellState>,
-    IMinMaxValue<TCellState>
+public sealed class NontotalisticRule<TCellState> : ConditionalRuleBase<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     public IReadOnlySet<Point> NeighborCellPositions { get; }
 

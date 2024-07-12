@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace GenericCellularAutomation.Rules;
 
@@ -9,12 +8,7 @@ public class Rule<TCellState>
     TCellState targetCellState,
     TCellState newCellState
 )
-    where TCellState :
-        IComparable,
-        IComparable<TCellState>,
-        IEquatable<TCellState>,
-        IBinaryInteger<TCellState>,
-        IMinMaxValue<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     public double ApplicationProbability { get; } = applicationProbability;
 

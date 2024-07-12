@@ -4,15 +4,11 @@ using System.Numerics;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Primitives;
 
-namespace GenericCellularAutomation;
+namespace GenericCellularAutomation.RuleExecution;
 
+// Todo: rule executor base
 public sealed class StraightforwardRuleExecutor<TCellState> : IRuleExecutor<TCellState>
-    where TCellState :
-        IComparable,
-        IComparable<TCellState>,
-        IEquatable<TCellState>,
-        IBinaryInteger<TCellState>,
-        IMinMaxValue<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     #region Fields
     private readonly Rule<TCellState> _rule;

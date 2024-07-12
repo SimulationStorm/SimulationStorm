@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
+using GenericCellularAutomation.Neighborhood;
 
 namespace GenericCellularAutomation.Rules;
 
-public sealed class TotalisticRule<TCellState> : ConditionalRuleBase<TCellState> where TCellState :
-    IComparable,
-    IComparable<TCellState>,
-    IEquatable<TCellState>,
-    IBinaryInteger<TCellState>,
-    IMinMaxValue<TCellState>
+public sealed class TotalisticRule<TCellState> : ConditionalRuleBase<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     public IReadOnlySet<int> NeighborCellCountSet { get; }
 

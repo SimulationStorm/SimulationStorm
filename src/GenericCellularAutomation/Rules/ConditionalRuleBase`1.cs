@@ -1,5 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using GenericCellularAutomation.Neighborhood;
 
 namespace GenericCellularAutomation.Rules;
 
@@ -12,12 +12,7 @@ public abstract class ConditionalRuleBase<TCellState>
     CellNeighborhood cellNeighborhood
 )
     : Rule<TCellState>(applicationProbability, targetCellState, newCellState)
-    where TCellState :
-        IComparable,
-        IComparable<TCellState>,
-        IEquatable<TCellState>,
-        IBinaryInteger<TCellState>,
-        IMinMaxValue<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     public TCellState NeighborCellState { get; } = neighborCellState;
 

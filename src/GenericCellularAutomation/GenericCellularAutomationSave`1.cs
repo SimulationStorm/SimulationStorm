@@ -1,6 +1,10 @@
-﻿namespace GenericCellularAutomation;
+﻿using System;
+using System.Numerics;
+
+namespace GenericCellularAutomation;
 
 public class GenericCellularAutomationSave<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
     
 }

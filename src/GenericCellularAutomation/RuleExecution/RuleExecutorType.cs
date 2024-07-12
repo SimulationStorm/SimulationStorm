@@ -1,4 +1,4 @@
-﻿namespace GenericCellularAutomation;
+﻿namespace GenericCellularAutomation.RuleExecution;
 
 public enum RuleExecutorType
 {

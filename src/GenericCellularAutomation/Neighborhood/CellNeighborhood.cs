@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SimulationStorm.Primitives;
 
-namespace GenericCellularAutomation;
+namespace GenericCellularAutomation.Neighborhood;
 
 public class CellNeighborhood
 {

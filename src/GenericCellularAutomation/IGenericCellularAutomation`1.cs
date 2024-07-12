@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Simulation.CellularAutomation;
 using SimulationStorm.Simulation.History;
@@ -16,24 +14,11 @@ public interface IGenericCellularAutomation<TCellState> :
     ISummarizableSimulation<GenericCellularAutomationSummary<TCellState>>,
     ISaveableSimulation<GenericCellularAutomationSave<TCellState>>,
     IBoundedCellularAutomation<TCellState>
-        where TCellState :
-            IComparable,
-            IComparable<TCellState>,
-            IEquatable<TCellState>,
-            IBinaryInteger<TCellState>,
-            IMinMaxValue<TCellState>
+    where TCellState : IBinaryInteger<TCellState>
 {
-    TCellState PossibleCellStateCount { get; set; }
-    
-    TCellState MaxPossibleCellStateCount { get; }
-    
-    TCellState DefaultCellState { get; set; }
+    CellStateCollection<TCellState> PossibleCellStateCollection { get; set; }
     
     RuleSetCollection<TCellState> RuleSetCollection { get; set; }
 
-    // Next rule collection index
-    int ExecutingRuleCollectionIndex { get; }
-
-    // Next rule index
-    int ExecutingRuleIndex { get; }
+    int NextExecutingRuleSetIndex { get; }
 }
