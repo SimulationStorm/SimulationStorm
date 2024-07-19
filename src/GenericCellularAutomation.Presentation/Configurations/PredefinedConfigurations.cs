@@ -1,9 +1,6 @@
-﻿using System.Numerics;
+﻿namespace GenericCellularAutomation.Presentation.Configurations;
 
-namespace GenericCellularAutomation.Presentation.Configurations;
-
-public static class PredefinedConfigurations<TCellState>
-    where TCellState : IBinaryInteger<TCellState>
+public static class PredefinedConfigurations
 {
-    // public Configuration<TCellState> GameOfLife
+    // public Configuration GameOfLife
 }

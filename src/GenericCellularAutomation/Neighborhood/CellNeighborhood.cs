@@ -4,7 +4,7 @@ using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation.Neighborhood;
 
-public class CellNeighborhood
+public sealed class CellNeighborhood
 {
     #region Constants
     private const int MinRadius = 1;

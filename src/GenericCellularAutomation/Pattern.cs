@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation;
@@ -18,13 +17,12 @@ namespace GenericCellularAutomation;
  * - the last option is more adaptive and supports all possible state words, numbers and abbreviations...
  */
 
-public class Pattern<TCellState>(Size size, IDictionary<Point, TCellState> cellStateByPositions)
-    where TCellState : IBinaryInteger<TCellState>
+public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPositions)
 {
     public Size Size { get; } = size;
 
     #region Public methods
-    public TCellState GetCellState(Point cell)
+    public byte GetCellState(Point cell)
     {
         // ArgumentOutOfRangeException.ThrowIfLessThan(cell.X, 0, nameof(cell.X));
         // ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(cell.X, Width, nameof(cell.X));
@@ -35,10 +33,10 @@ public class Pattern<TCellState>(Size size, IDictionary<Point, TCellState> cellS
         return cellStateByPositions[cell];
     }
 
-    public static Pattern<TCellState> FromString
+    public static Pattern FromString
     (
         string patternString,
-        IDictionary<string, TCellState> cellStateByNames,
+        IDictionary<string, byte> cellStateByNames,
         char cellStateNameSeparator = '|',
         char lineSeparator = '\n')
     {
@@ -47,7 +45,7 @@ public class Pattern<TCellState>(Size size, IDictionary<Point, TCellState> cellS
 
         var patternSize = new Size(lines[0].Count, lines.Count);
 
-        var cellStateByPositions = new Dictionary<Point, TCellState>();
+        var cellStateByPositions = new Dictionary<Point, byte>();
         
         for (var x = 0; x < patternSize.Width; x++)
         {
@@ -62,14 +60,14 @@ public class Pattern<TCellState>(Size size, IDictionary<Point, TCellState> cellS
             }
         }
 
-        return new Pattern<TCellState>(patternSize, cellStateByPositions);
+        return new Pattern(patternSize, cellStateByPositions);
     }
     #endregion
 
     private static IReadOnlyList<IReadOnlyList<string>> ValidatePatternStringAndGetCellStateByLineNumbers
     (
         string patternString,
-        IDictionary<string, TCellState> cellStateByNames,
+        IDictionary<string, byte> cellStateByNames,
         char cellStateNameSeparator,
         char lineSeparator)
     {

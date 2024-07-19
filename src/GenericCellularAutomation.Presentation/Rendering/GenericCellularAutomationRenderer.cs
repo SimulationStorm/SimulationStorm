@@ -7,6 +7,7 @@ using DotNext.Collections.Generic;
 using DynamicData;
 using DynamicData.Binding;
 using GenericCellularAutomation.Presentation.CellStates;
+using GenericCellularAutomation.Presentation.Management;
 using SimulationStorm.Graphics;
 using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.Presentation.SimulationRenderer;
@@ -15,7 +16,7 @@ using SimulationStorm.Utilities.Benchmarking;
 
 namespace GenericCellularAutomation.Presentation.Rendering;
 
-public class GenericCellularAutomationRenderer : SimulationRendererBase
+public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
 {
     protected override Size SizeToRender => _genericCellularAutomationManager.WorldSize;
 

@@ -35,3 +35,4 @@ TCellState = byte / short / int / long - integer
 - use compilation variable #if ENABLE_ALL_VALIDATIONS to enable them
 in domain models
 - add utility class in primitives that will contain a method to iterate over all points within Size
+- rename IndexedObject to IndexedObservableObject

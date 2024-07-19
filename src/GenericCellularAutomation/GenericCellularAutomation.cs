@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using DotNext.Collections.Generic;
 using GenericCellularAutomation.RuleExecution;
 using GenericCellularAutomation.Rules;
@@ -12,17 +11,16 @@ using SimulationStorm.Simulation.CellularAutomation;
 
 namespace GenericCellularAutomation;
 
-public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCellularAutomation<TCellState>
-    where TCellState : IBinaryInteger<TCellState>, IMinMaxValue<TCellState>
+public sealed class GenericCellularAutomation : SimulationBase, IGenericCellularAutomation
 {
     #region Properties
-    public CellStateCollection<TCellState> PossibleCellStateCollection
+    public CellStateCollection PossibleCellStateCollection
     {
         get => _possibleCellStateCollection;
         set => SetPossibleCellStateCollection(value);
     }
 
-    public RuleSetCollection<TCellState> RuleSetCollection
+    public RuleSetCollection RuleSetCollection
     {
         get => _ruleSetCollection;
         set => SetRuleSetCollection(value);
@@ -41,26 +39,26 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
 
     private Rect _innerWorldRect;
 
-    private TCellState[,] _world = null!;
+    private byte[,] _world = null!;
     
     private bool _areCopiedWorldSidesReset;
     #endregion
 
     #region Possible cell states
-    private readonly TCellState _emptyCellState = TCellState.Zero;
+    private const byte EmptyCellState = 0;
 
-    private CellStateCollection<TCellState> _possibleCellStateCollection = null!;
+    private CellStateCollection _possibleCellStateCollection = null!;
     #endregion
     
     #region Rules
     private readonly IRuleExecutorFactory _ruleExecutorFactory;
     
-    private readonly IDictionary<Rule<TCellState>, IRuleExecutor<TCellState>> _ruleExecutorByRules =
-        new Dictionary<Rule<TCellState>, IRuleExecutor<TCellState>>();
+    private readonly IDictionary<Rule, IRuleExecutor> _ruleExecutorByRules =
+        new Dictionary<Rule, IRuleExecutor>();
 
-    private readonly Queue<RuleSet<TCellState>> _ruleSetQueue = [];
+    private readonly Queue<RuleSet> _ruleSetQueue = [];
     
-    private RuleSetCollection<TCellState> _ruleSetCollection = null!;
+    private RuleSetCollection _ruleSetCollection = null!;
     #endregion
     #endregion
     
@@ -70,8 +68,8 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         Size worldSize,
         int maxCellNeighborhoodRadius,
         WorldWrapping worldWrapping,
-        CellStateCollection<TCellState> possibleCellStateCollection,
-        RuleSetCollection<TCellState> ruleSetCollection)
+        CellStateCollection possibleCellStateCollection,
+        RuleSetCollection ruleSetCollection)
     {
         _ruleExecutorFactory = ruleExecutorFactory;
         _innerWorldOffset = maxCellNeighborhoodRadius;
@@ -83,9 +81,9 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         RuleSetCollection = ruleSetCollection;
     }
     
-    public IReadOnlyDictionary<TCellState, IEnumerable<Point>> GetAllCellPositionsByStates()
+    public IReadOnlyDictionary<byte, IEnumerable<Point>> GetAllCellPositionsByStates()
     {
-        var cellPositionsByStates = new Dictionary<TCellState, ConcurrentBag<Point>>();
+        var cellPositionsByStates = new Dictionary<byte, ConcurrentBag<Point>>();
         
         PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellPositionsByStates[cellState] = []);
         
@@ -113,14 +111,14 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
 
         WorldSize = new Size(newWorldSize.Width + _innerWorldOffset * 2, newWorldSize.Height + _innerWorldOffset * 2);
 
-        _world = new TCellState[WorldSize.Width, WorldSize.Height];
+        _world = new byte[WorldSize.Width, WorldSize.Height];
         
         ChangeInnerWorldCellsToDefaultState();
     }
     #endregion
 
     #region Possible cell state collection setting
-    private void SetPossibleCellStateCollection(CellStateCollection<TCellState> cellStateCollection)
+    private void SetPossibleCellStateCollection(CellStateCollection cellStateCollection)
     {
         cellStateCollection.CellStateSet.ForEach(ValidatePossibleCellState);
         _possibleCellStateCollection = cellStateCollection;
@@ -128,18 +126,18 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         CheckAndChangeInnerWorldCellStatesToDefault();
     }
 
-    private void ValidatePossibleCellState(TCellState possibleCellState)
+    private void ValidatePossibleCellState(byte possibleCellState)
     {
-        if (possibleCellState <= _emptyCellState)
+        if (possibleCellState <= EmptyCellState)
             throw new ArgumentOutOfRangeException(nameof(possibleCellState), possibleCellState,
-                $"The possible cell state must be greater than the {_emptyCellState}.");
+                $"The possible cell state must be greater than the {EmptyCellState}.");
     }
     
     private void CheckAndChangeInnerWorldCellStatesToDefault() =>
         ForEachInnerWorldCellInParallel(cellPosition =>
         {
             var cellState = _world[cellPosition.X, cellPosition.Y];
-            if (!PossibleCellStateCollection.CellStateSet.Contains(cellState))
+            if (!PossibleCellStateCollection.CellStateSet.Contains((byte)cellState))
                 _world[cellPosition.X, cellPosition.Y] = PossibleCellStateCollection.DefaultCellState;
         });
     #endregion
@@ -217,9 +215,9 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             for (var i = 0; i < _innerWorldOffset; i++)
             {
                 // Reset left side
-                _world[i, y] = _emptyCellState;
+                _world[i, y] = EmptyCellState;
                 // Reset right side
-                _world[_innerWorldRect.Right + i, y] = _emptyCellState;
+                _world[_innerWorldRect.Right + i, y] = EmptyCellState;
             }
         }
 
@@ -229,16 +227,16 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             for (var i = 0; i < _innerWorldOffset; i++)
             {
                 //Reset top
-                _world[x, i] = _emptyCellState;
+                _world[x, i] = EmptyCellState;
                 // Reset bottom
-                _world[x, _innerWorldRect.Bottom + i] = _emptyCellState;
+                _world[x, _innerWorldRect.Bottom + i] = EmptyCellState;
             }
         }
     }
     #endregion
 
     #region Setting RuleSet collection
-    private void SetRuleSetCollection(RuleSetCollection<TCellState> ruleSetCollection)
+    private void SetRuleSetCollection(RuleSetCollection ruleSetCollection)
     {
         ValidateRuleSetCollection(ruleSetCollection);
         _ruleSetCollection = ruleSetCollection;
@@ -246,24 +244,24 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         CreateRuleExecutorByRules();
     }
     
-    private void ValidateRuleSetCollection(RuleSetCollection<TCellState> ruleSetCollection) =>
+    private void ValidateRuleSetCollection(RuleSetCollection ruleSetCollection) =>
         ruleSetCollection.RuleSets.ForEach(ValidateRuleSet);
 
-    private void ValidateRuleSet(RuleSet<TCellState> ruleSet) =>
+    private void ValidateRuleSet(RuleSet ruleSet) =>
         ruleSet.Rules.ForEach(ValidateRule);
 
-    private void ValidateRule(Rule<TCellState> rule)
+    private void ValidateRule(Rule rule)
     {
         ValidateCellState(rule.TargetCellState);
         ValidateCellState(rule.NewCellState);
 
-        if (rule is ConditionalRuleBase<TCellState> conditionalRule)
+        if (rule is ConditionalRuleBase conditionalRule)
             ValidateCellState(conditionalRule.NeighborCellState);
     }
 
-    private void ValidateCellState(TCellState cellState)
+    private void ValidateCellState(byte cellState)
     {
-        if (!PossibleCellStateCollection.CellStateSet.Contains(cellState))
+        if (!PossibleCellStateCollection.CellStateSet.Contains((byte)cellState))
             throw new ArgumentException(
                 $"The {nameof(cellState)} must be in the ${nameof(PossibleCellStateCollection)}.",
                 nameof(cellState));
@@ -279,7 +277,7 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             ruleSet.Rules.ForEach(rule => _ruleExecutorByRules[rule] = CreateRuleExecutorByRule(rule)));
     }
 
-    private IRuleExecutor<TCellState> CreateRuleExecutorByRule(Rule<TCellState> rule) =>
+    private IRuleExecutor CreateRuleExecutorByRule(Rule rule) =>
         _ruleExecutorFactory.CreateRuleExecutor(RuleExecutorType.Straightforward, rule);
     #endregion
 
@@ -295,7 +293,7 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         
         ApplyWorldWrapping();
 
-        var nextWorld = (TCellState[,])_world.Clone();
+        var nextWorld = (byte[,])_world.Clone();
 
         var ruleSet = _ruleSetQueue.Dequeue();
         ruleSet.Rules.ForEach(rule =>
@@ -309,7 +307,7 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             });
         });
 
-        _world = (TCellState[,])nextWorld.Clone();
+        _world = (byte[,])nextWorld.Clone();
     }
     #endregion
 
@@ -322,16 +320,16 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
         ruleSets.ForEach(_ruleSetQueue.Enqueue);
     }
     
-    private IEnumerable<RuleSet<TCellState>> CreateRuleSetStream() => Enumerable
+    private IEnumerable<RuleSet> CreateRuleSetStream() => Enumerable
         .Repeat(RuleSetCollection.RuleSets, RuleSetCollection.RepetitionCount)
             .SelectMany(ruleSets => ruleSets)
         .Select(ruleSet => Enumerable.Repeat(ruleSet, ruleSet.RepetitionCount))
             .SelectMany(ruleSets => ruleSets);
     #endregion
 
-    public GenericCellularAutomationSummary<TCellState> Summarize()
+    public GenericCellularAutomationSummary Summarize()
     {
-        var cellCountByStates = new ConcurrentDictionary<TCellState, int>();
+        var cellCountByStates = new ConcurrentDictionary<byte, int>();
         
         PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellCountByStates[cellState] = 0);
         
@@ -341,16 +339,16 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
             cellCountByStates[cellState]++;
         });
 
-        return new GenericCellularAutomationSummary<TCellState>(cellCountByStates);
+        return new GenericCellularAutomationSummary(cellCountByStates);
     }
 
     #region Saving / restoring
-    public GenericCellularAutomationSave<TCellState> Save()
+    public GenericCellularAutomationSave Save()
     {
         throw new NotImplementedException();
     }
 
-    public void RestoreState(GenericCellularAutomationSave<TCellState> save)
+    public void RestoreState(GenericCellularAutomationSave save)
     {
         throw new NotImplementedException();
     }
@@ -371,9 +369,9 @@ public class GenericCellularAutomation<TCellState> : SimulationBase, IGenericCel
                 yield return new Point(x, y);
     }
 
-    public TCellState GetCellState(Point cell) =>
+    public byte GetCellState(Point cell) =>
         _world[cell.X + _innerWorldOffset, cell.Y + _innerWorldOffset];
 
-    public void SetCellState(Point cell, TCellState newState) =>
+    public void SetCellState(Point cell, byte newState) =>
         _world[cell.X + _innerWorldOffset, cell.Y + _innerWorldOffset] = newState;
 }

@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Numerics;
 using GenericCellularAutomation.Rules;
 
 namespace GenericCellularAutomation.RuleExecution;
 
-public class RuleExecutorFactory : IRuleExecutorFactory
+public sealed class RuleExecutorFactory : IRuleExecutorFactory
 {
-    public IRuleExecutor<TCellState> CreateRuleExecutor<TCellState>(RuleExecutorType ruleType, Rule<TCellState> rule)
-        where TCellState :
-            IComparable,
-            IComparable<TCellState>,
-            IEquatable<TCellState>,
-            IBinaryInteger<TCellState>,
-            IMinMaxValue<TCellState>
-        => ruleType switch
+    public IRuleExecutor CreateRuleExecutor(RuleExecutorType ruleType, Rule rule) => ruleType switch
     {
-        RuleExecutorType.Straightforward => new StraightforwardRuleExecutor<TCellState>(rule),
-        _ => throw new NotImplementedException()
+        RuleExecutorType.Straightforward => new StraightforwardRuleExecutor(rule),
+        _ => throw new NotSupportedException()
     };
 }

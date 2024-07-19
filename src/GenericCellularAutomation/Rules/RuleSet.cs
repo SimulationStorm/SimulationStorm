@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace GenericCellularAutomation.Rules;
 
-public sealed class RuleSet<TCellState> where TCellState : IBinaryInteger<TCellState>
+public sealed class RuleSet
 {
     /// <summary>
-    /// Gets how many times <see cref="Rules"/> sequence in <see cref="RuleSet{TCellState}"/> should be executed.
+    /// Gets how many times <see cref="Rules"/> sequence in <see cref="RuleSet"/> should be executed.
     /// </summary>
     public int RepetitionCount { get; }
 
-    public IEnumerable<Rule<TCellState>> Rules { get; }
+    public IEnumerable<Rule> Rules { get; }
 
-    public RuleSet(int repetitionCount, IEnumerable<Rule<TCellState>> rules)
+    public RuleSet(int repetitionCount, IEnumerable<Rule> rules)
     {
         ValidateRepetitionCount(repetitionCount);
         RepetitionCount = repetitionCount;

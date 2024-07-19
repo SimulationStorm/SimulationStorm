@@ -1,15 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using GenericCellularAutomation.Presentation.Common;
 using SimulationStorm.Graphics;
 
 namespace GenericCellularAutomation.Presentation.CellStates;
 
-public partial class CellStateModel : ObservableObject
+public sealed partial class CellStateModel : NamedIndexedObservableObject
 {
     public byte CellState { get; init; }
 
     [ObservableProperty] private bool _isDefault;
     
-    [ObservableProperty] private string _name;
-
     [ObservableProperty] private Color _color;
 }

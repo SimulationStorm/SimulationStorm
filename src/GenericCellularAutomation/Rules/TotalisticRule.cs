@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
 using GenericCellularAutomation.Neighborhood;
 
 namespace GenericCellularAutomation.Rules;
 
-public sealed class TotalisticRule<TCellState> : ConditionalRuleBase<TCellState>
-    where TCellState : IBinaryInteger<TCellState>
+public sealed class TotalisticRule : ConditionalRuleBase
 {
     public IReadOnlySet<int> NeighborCellCountSet { get; }
 
     public TotalisticRule
     (
         double applicationProbability,
-        TCellState targetCellState,
-        TCellState newCellState,
-        TCellState neighborCellState,
+        byte targetCellState,
+        byte newCellState,
+        byte neighborCellState,
         CellNeighborhood cellNeighborhood,
         IReadOnlySet<int> neighborCellCountSet
     )
