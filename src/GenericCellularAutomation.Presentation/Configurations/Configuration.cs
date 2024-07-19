@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GenericCellularAutomation.Presentation.CellStates;
+using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Patterns;
-using GenericCellularAutomation.Presentation.Rules;
 using GenericCellularAutomation.Presentation.Rules.Descriptors;
 
 namespace GenericCellularAutomation.Presentation.Configurations;
@@ -9,18 +9,18 @@ namespace GenericCellularAutomation.Presentation.Configurations;
 public sealed class Configuration
 (
     string name,
-    CellStateCollectionDescriptor cellStateCollectionDescriptor,
-    RuleSetCollectionDescriptor ruleSetCollectionDescriptor,
-    IEnumerable<PatternDescriptorCategory> patternDescriptorCategories)
+    CellStateCollectionDescriptor possibleCellStateCollection,
+    RuleSetCollectionDescriptor ruleSetCollection,
+    IEnumerable<PatternDescriptorCategory> patternCategories)
 {
     public string Name { get; } = name;
 
-    public CellStateCollectionDescriptor CellStateCollectionDescriptor { get; } =
-        cellStateCollectionDescriptor;
+    public CellStateCollectionDescriptor PossibleCellStateCollection { get; } =
+        possibleCellStateCollection;
         
-    public RuleSetCollectionDescriptor RuleSetCollectionDescriptor { get; } =
-        ruleSetCollectionDescriptor;
+    public RuleSetCollectionDescriptor RuleSetCollection { get; } =
+        ruleSetCollection;
 
-    public IEnumerable<PatternDescriptorCategory> PatternDescriptorCategories { get; } =
-        patternDescriptorCategories;
+    public IEnumerable<PatternDescriptorCategory> PatternCategories { get; } =
+        patternCategories;
 }

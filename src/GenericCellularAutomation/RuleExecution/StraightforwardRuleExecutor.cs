@@ -10,8 +10,6 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
 {
     #region Fields
     private readonly Rule _rule;
-    private readonly TotalisticRule? _totalisticRule;
-    private readonly NontotalisticRule? _nontotalisticRule;
     
     private readonly NextCellStateCalculator _nextCellStateCalculator;
     #endregion
@@ -19,9 +17,6 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
     public StraightforwardRuleExecutor(Rule rule)
     {
         _rule = rule;
-        _totalisticRule = rule as TotalisticRule;
-        _nontotalisticRule = rule as NontotalisticRule;
-
         _nextCellStateCalculator = GetNextCellStateCalculatorByRule(rule);
     }
 
@@ -29,10 +24,10 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
         _nextCellStateCalculator(world, cellPosition);
 
     #region Private methods
-    private NextCellStateCalculator GetNextCellStateCalculatorByRule(Rule rule) => rule switch
+    private NextCellStateCalculator GetNextCellStateCalculatorByRule(Rule rule) => rule.Type switch
     {
-        TotalisticRule => CalculateNextCellStateUsingTotalisticRule,
-        NontotalisticRule => CalculateNextCellStateUsingNontotalisticRule,
+        RuleType.Totalistic => CalculateNextCellStateUsingTotalisticRule,
+        RuleType.Nontotalistic => CalculateNextCellStateUsingNontotalisticRule,
         _ => CalculateNextCellStateUsingUnconditionalRule
     };
 
@@ -58,7 +53,7 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
     private bool ShouldTotalisticRuleBeApplied(byte[,] world, Point cellPosition)
     {
         var cellNeighborCountInSpecifiedState = CountCellNeighborsInSpecifiedState(world, cellPosition);
-        return _totalisticRule!.NeighborCellCountSet.Contains(cellNeighborCountInSpecifiedState);
+        return _rule.NeighborCellCountSet!.Contains(cellNeighborCountInSpecifiedState);
     }
     
     private bool ShouldNontotalisticRuleBeApplied(byte[,] world, Point cellPosition) =>
@@ -66,23 +61,23 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
 
     private int CountCellNeighborsInSpecifiedState(byte[,] world, Point targetCellPosition)
     {
-        var positionShifts = _totalisticRule!.CellNeighborhood.UsedPositions;
+        var positionShifts = _rule.CellNeighborhood!.UsedPositions;
         return positionShifts.Count(positionShift =>
         {
             var neighborCellPosition = targetCellPosition + positionShift;
             var neighborCellState = world[neighborCellPosition.X, neighborCellPosition.Y];
-            return neighborCellState == _totalisticRule.NeighborCellState;
+            return neighborCellState == _rule.NeighborCellState;
         });
     }
     
     private bool AreAllCellNeighborsHasSpecifiedState(byte[,] world, Point targetCellPosition)
     {
-        var positionShifts = _nontotalisticRule!.NeighborCellPositions;
+        var positionShifts = _rule.NeighborCellPositionSet!;
         return positionShifts.All(positionShift =>
         {
             var neighborCellPosition = targetCellPosition + positionShift;
             var neighborCellState = world[neighborCellPosition.X, neighborCellPosition.Y];
-            return neighborCellState == _nontotalisticRule.NeighborCellState;
+            return neighborCellState == _rule.NeighborCellState;
         });
     }
     #endregion

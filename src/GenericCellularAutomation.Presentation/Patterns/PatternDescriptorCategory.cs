@@ -2,9 +2,9 @@
 
 namespace GenericCellularAutomation.Presentation.Patterns;
 
-public class PatternDescriptorCategory(string name, IEnumerable<PatternDescriptor> patternDescriptors)
+public class PatternDescriptorCategory(string name, IEnumerable<PatternDescriptor> patterns)
 {
     public string Name { get; } = name;
 
-    public IEnumerable<PatternDescriptor> PatternDescriptors { get; } = patternDescriptors;
+    public IEnumerable<PatternDescriptor> Patterns { get; } = patterns;
 }

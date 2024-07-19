@@ -255,13 +255,13 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
         ValidateCellState(rule.TargetCellState);
         ValidateCellState(rule.NewCellState);
 
-        if (rule is ConditionalRuleBase conditionalRule)
-            ValidateCellState(conditionalRule.NeighborCellState);
+        if (rule.Type is RuleType.Totalistic or RuleType.Nontotalistic)
+            ValidateCellState(rule.NeighborCellState!.Value);
     }
 
     private void ValidateCellState(byte cellState)
     {
-        if (!PossibleCellStateCollection.CellStateSet.Contains((byte)cellState))
+        if (!PossibleCellStateCollection.CellStateSet.Contains(cellState))
             throw new ArgumentException(
                 $"The {nameof(cellState)} must be in the ${nameof(PossibleCellStateCollection)}.",
                 nameof(cellState));

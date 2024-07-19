@@ -1,25 +1,12 @@
 ﻿using System.Collections.Generic;
-using GenericCellularAutomation.Rules;
 
 namespace GenericCellularAutomation.Presentation.Rules.Descriptors;
 
-public sealed class RuleSetDescriptor
+public sealed class RuleSetDescriptor(string name, int repetitionCount, IEnumerable<RuleDescriptor> rules)
 {
-    #region Properties
-    public string Name { get; }
-    
-    public int RepetitionCount { get; }
+    public string Name { get; } = name;
 
-    public IEnumerable<RuleDescriptor> RuleDescriptors { get; }
-    #endregion
-    
-    public RuleSetDescriptor(string name, int repetitionCount, IEnumerable<RuleDescriptor> ruleDescriptors)
-    {
-        Name = name;
-        
-        RuleSet.ValidateRepetitionCount(repetitionCount);
-        RepetitionCount = repetitionCount;
-        
-        RuleDescriptors = ruleDescriptors;
-    }
+    public int RepetitionCount { get; } = repetitionCount;
+
+    public IEnumerable<RuleDescriptor> Rules { get; } = rules;
 }

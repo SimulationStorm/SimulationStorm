@@ -8,5 +8,5 @@ public sealed partial class RuleSetModel : NamedIndexedObservableObject
 {
     [ObservableProperty] private int _repetitionCount;
 
-    public ObservableCollection<Models.RuleModel> RuleModels { get; } = [];
+    public ObservableCollection<RuleModel> RuleModels { get; } = [];
 }

@@ -1,6 +1,6 @@
 ﻿namespace GenericCellularAutomation.Presentation.Rules;
 
-public class RuleBuilder
+public sealed partial class RuleSetsViewModel
 {
     
 }

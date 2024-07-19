@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GenericCellularAutomation.Neighborhood;
+using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.Common;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Primitives;
@@ -14,13 +15,13 @@ public sealed partial class RuleModel : NamedIndexedObservableObject
     #region Unconditional
     [ObservableProperty] private double _applicationProbability;
 
-    [ObservableProperty] private byte _targetCellState;
+    [ObservableProperty] private CellStateModel _targetCellState = null!;
     
-    [ObservableProperty] private byte _newCellState;
+    [ObservableProperty] private CellStateModel _newCellState = null!;
     #endregion
 
     #region Conditional
-    [ObservableProperty] private byte? _neighborCellState;
+    [ObservableProperty] private CellStateModel? _neighborCellState;
 
     [ObservableProperty] private CellNeighborhood? _cellNeighborhood;
     #endregion

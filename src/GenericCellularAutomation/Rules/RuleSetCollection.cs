@@ -14,12 +14,9 @@ public sealed class RuleSetCollection
     
     public RuleSetCollection(int repetitionCount, IEnumerable<RuleSet> ruleSets)
     {
-        ValidateRepetitionCount(repetitionCount);
+        ArgumentOutOfRangeException.ThrowIfNegative(repetitionCount, nameof(repetitionCount));
         RepetitionCount = repetitionCount;
         
         RuleSets = ruleSets;
     }
-    
-    public static void ValidateRepetitionCount(int repetitionCount) =>
-        ArgumentOutOfRangeException.ThrowIfNegative(repetitionCount, nameof(repetitionCount));
 }
