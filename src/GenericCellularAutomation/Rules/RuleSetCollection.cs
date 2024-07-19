@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenericCellularAutomation.Rules;
 
@@ -18,5 +19,21 @@ public sealed class RuleSetCollection
         RepetitionCount = repetitionCount;
         
         RuleSets = ruleSets;
+    }
+
+    public RuleSetCollection WithRuleSet(RuleSet ruleSet)
+    {
+        if (RuleSets.Contains(ruleSet))
+            throw new ArgumentException("The rule set is already in the collection.", nameof(ruleSet));
+
+        return new RuleSetCollection(RepetitionCount, RuleSets.Append(ruleSet));
+    }
+    
+    public RuleSetCollection WithoutRuleSet(RuleSet ruleSet)
+    {
+        if (!RuleSets.Contains(ruleSet))
+            throw new ArgumentException("The rule set is not in the collection.", nameof(ruleSet));
+
+        return new RuleSetCollection(RepetitionCount, RuleSets.Where(rs => rs != ruleSet));
     }
 }

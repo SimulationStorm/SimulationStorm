@@ -14,10 +14,10 @@ namespace GenericCellularAutomation;
 public sealed class GenericCellularAutomation : SimulationBase, IGenericCellularAutomation
 {
     #region Properties
-    public CellStateCollection PossibleCellStateCollection
+    public CellStateCollection CellStateCollection
     {
-        get => _possibleCellStateCollection;
-        set => SetPossibleCellStateCollection(value);
+        get => _cellStateCollection;
+        set => SetCellStateCollection(value);
     }
 
     public RuleSetCollection RuleSetCollection
@@ -47,7 +47,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
     #region Possible cell states
     private const byte EmptyCellState = 0;
 
-    private CellStateCollection _possibleCellStateCollection = null!;
+    private CellStateCollection _cellStateCollection = null!;
     #endregion
     
     #region Rules
@@ -77,7 +77,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
         ChangeWorldSize(worldSize);
         WorldWrapping = worldWrapping;
         
-        PossibleCellStateCollection = possibleCellStateCollection;
+        CellStateCollection = possibleCellStateCollection;
         RuleSetCollection = ruleSetCollection;
     }
     
@@ -85,7 +85,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
     {
         var cellPositionsByStates = new Dictionary<byte, ConcurrentBag<Point>>();
         
-        PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellPositionsByStates[cellState] = []);
+        CellStateCollection.CellStateSet.ForEach(cellState => cellPositionsByStates[cellState] = []);
         
         ForEachInnerWorldCellInParallel(cellPosition =>
         {
@@ -118,15 +118,15 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
     #endregion
 
     #region Possible cell state collection setting
-    private void SetPossibleCellStateCollection(CellStateCollection cellStateCollection)
+    private void SetCellStateCollection(CellStateCollection cellStateCollection)
     {
         cellStateCollection.CellStateSet.ForEach(ValidatePossibleCellState);
-        _possibleCellStateCollection = cellStateCollection;
+        _cellStateCollection = cellStateCollection;
         
         CheckAndChangeInnerWorldCellStatesToDefault();
     }
 
-    private void ValidatePossibleCellState(byte possibleCellState)
+    private static void ValidatePossibleCellState(byte possibleCellState)
     {
         if (possibleCellState <= EmptyCellState)
             throw new ArgumentOutOfRangeException(nameof(possibleCellState), possibleCellState,
@@ -137,8 +137,8 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
         ForEachInnerWorldCellInParallel(cellPosition =>
         {
             var cellState = _world[cellPosition.X, cellPosition.Y];
-            if (!PossibleCellStateCollection.CellStateSet.Contains((byte)cellState))
-                _world[cellPosition.X, cellPosition.Y] = PossibleCellStateCollection.DefaultCellState;
+            if (!CellStateCollection.CellStateSet.Contains(cellState))
+                _world[cellPosition.X, cellPosition.Y] = CellStateCollection.DefaultCellState;
         });
     #endregion
     
@@ -261,9 +261,9 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
 
     private void ValidateCellState(byte cellState)
     {
-        if (!PossibleCellStateCollection.CellStateSet.Contains(cellState))
+        if (!CellStateCollection.CellStateSet.Contains(cellState))
             throw new ArgumentException(
-                $"The {nameof(cellState)} must be in the ${nameof(PossibleCellStateCollection)}.",
+                $"The {nameof(cellState)} must be in the ${nameof(CellStateCollection)}.",
                 nameof(cellState));
     }
     #endregion
@@ -331,7 +331,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
     {
         var cellCountByStates = new ConcurrentDictionary<byte, int>();
         
-        PossibleCellStateCollection.CellStateSet.ForEach(cellState => cellCountByStates[cellState] = 0);
+        CellStateCollection.CellStateSet.ForEach(cellState => cellCountByStates[cellState] = 0);
         
         ForEachInnerWorldCellInParallel(cell =>
         {
@@ -356,7 +356,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
 
     private void ChangeInnerWorldCellsToDefaultState() =>
         ForEachInnerWorldCellInParallel(cell =>
-            _world[cell.X, cell.Y] = PossibleCellStateCollection.DefaultCellState);
+            _world[cell.X, cell.Y] = CellStateCollection.DefaultCellState);
     
     private void ForEachInnerWorldCellInParallel(Action<Point> action) => GetInnerWorldCellPositions()
         .AsParallel()

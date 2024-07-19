@@ -16,8 +16,14 @@ public interface IGenericCellularAutomation :
     ISaveableSimulation<GenericCellularAutomationSave>,
     IBoundedCellularAutomation<byte>
 {
-    CellStateCollection PossibleCellStateCollection { get; set; }
+    /// <summary>
+    /// Gets or sets the possible cell state collection.
+    /// </summary>
+    CellStateCollection CellStateCollection { get; set; }
     
+    /// <summary>
+    /// Gets or sets the rule set collection.
+    /// </summary>
     RuleSetCollection RuleSetCollection { get; set; }
 
     // Todo: index incrementing and resetting

@@ -1,34 +1,28 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DotNext.Collections.Generic;
 using GenericCellularAutomation.Presentation.Management;
 using SimulationStorm.Graphics;
 
 namespace GenericCellularAutomation.Presentation.CellStates;
 
-public partial class CellStatesViewModel : ObservableObject
+public partial class CellStatesViewModel
+(
+    GenericCellularAutomationManager gcaManager,
+    GenericCellularAutomationSettings settings,
+    GenericCellularAutomationOptions options
+)
+    : ObservableObject
 {
     #region Properties
     [ObservableProperty] private bool _randomizeNewCellStateColor;
     #endregion
     
-    #region Fields
-    private readonly GenericCellularAutomationManager _gcaManager;
-
-    private readonly GenericCellularAutomationSettings _settings;
-    #endregion
-    
-    public CellStatesViewModel
-    (
-        GenericCellularAutomationManager gcaManager,
-        GenericCellularAutomationSettings settings)
-    {
-        _gcaManager = gcaManager;
-        _settings = settings;
-    }
-    
     #region Commands
     [RelayCommand(CanExecute = nameof(CanAddCellState))]
-    private void AddCellState()
+    private async Task AddCellStateAsync()
     {
         var cellState = (byte)0;
         
@@ -39,23 +33,57 @@ public partial class CellStatesViewModel : ObservableObject
             Color = RandomizeNewCellStateColor ? ColorUtils.GenerateRandomColor() : default
         };
 
-        _gcaManager.PossibleCellStateCollection =
-            _gcaManager.PossibleCellStateCollection.WithCellState(cellState);
+        await gcaManager
+            .ChangeCellStateCollectionAsync(gcaManager.CellStateCollection
+                .WithCellState(cellState))
+            .ConfigureAwait(false);
         
-        _settings.CellStateModels.Add(cellStateModel);
+        settings.CellStateModels.Add(cellStateModel);
+        
+        NotifyCommandsCanExecuteChanged();
     }
-    private bool CanAddCellState() => true;
+    private bool CanAddCellState() => settings.CellStateModels.Count < options.MaxCellStateCount;
 
     [RelayCommand(CanExecute = nameof(CanRemoveCellState))]
-    private void RemoveCellState(CellStateModel cellStateModel)
+    private async Task RemoveCellStateAsync(CellStateModel cellStateModel)
     {
         var cellState = cellStateModel.CellState;
 
-        _gcaManager.PossibleCellStateCollection =
-            _gcaManager.PossibleCellStateCollection.WithoutCellState(cellState);
+        await gcaManager
+            .ChangeCellStateCollectionAsync(gcaManager.CellStateCollection
+                .WithoutCellState(cellState))
+            .ConfigureAwait(false);
         
-        _settings.CellStateModels.Remove(cellStateModel);
+        settings.CellStateModels.Remove(cellStateModel);
+        
+        NotifyCommandsCanExecuteChanged();
     }
-    private bool CanRemoveCellState() => true;
+    private bool CanRemoveCellState(CellStateModel cellStateModel) =>
+        settings.CellStateModels.Count > 1 && !cellStateModel.IsDefault;
+
+    [RelayCommand(CanExecute = nameof(CanMarkCellStateAsDefault))]
+    private async Task MarkCellStateAsDefaultAsync(CellStateModel cellStateModel)
+    {
+        await gcaManager
+            .ChangeCellStateCollectionAsync(gcaManager.CellStateCollection
+                .WithDefaultCellState(cellStateModel.CellState))
+            .ConfigureAwait(false);
+        
+        settings.CellStateModels
+            .Where(csm => csm != cellStateModel)
+            .ForEach(csm => csm.IsDefault = false);
+        
+        cellStateModel.IsDefault = true;
+        
+        NotifyCommandsCanExecuteChanged();
+    }
+    private static bool CanMarkCellStateAsDefault(CellStateModel cellStateModel) => !cellStateModel.IsDefault;
+    
+    private void NotifyCommandsCanExecuteChanged()
+    {
+        AddCellStateCommand.NotifyCanExecuteChanged();
+        RemoveCellStateCommand.NotifyCanExecuteChanged();
+        MarkCellStateAsDefaultCommand.NotifyCanExecuteChanged();
+    }
     #endregion
 }
