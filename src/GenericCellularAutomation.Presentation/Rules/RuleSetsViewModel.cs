@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GenericCellularAutomation.Presentation.Management;
 using GenericCellularAutomation.Presentation.Rules.Models;
-using GenericCellularAutomation.Rules;
+using SimulationStorm.Localization.Presentation;
 
 namespace GenericCellularAutomation.Presentation.Rules;
 
@@ -12,59 +12,63 @@ public sealed partial class RuleSetsViewModel
 (
     GenericCellularAutomationManager gcaManager,
     GenericCellularAutomationSettings gcaSettings,
-    GenericCellularAutomationOptions options
+    ILocalizationManager localizationManager,
+    RulesAndRuleSetsOptions options
 )
     : ObservableObject
 {
     #region Properties
     [ObservableProperty] private int _repetitionCount;
+
+    public ObservableCollection<RuleSetModel> RuleSetModels { get; } = [];
     #endregion
 
     #region Commands
     [RelayCommand(CanExecute = nameof(CanAddRuleSet))]
-    private async Task AddRuleSetAsync()
+    private void AddRuleSet()
     {
         var ruleSetModel = new RuleSetModel
         {
-            
+            Index = RuleSetModels.Count,
+            Name = GetNewRuleSetName(),
+            RepetitionCount = options.RuleSetRepetitionCountRange.Minimum,
+            RuleModels = {  }
         };
         
-        // Todo: which should be created first?
-        var ruleSet = new RuleSet();
-        
-        await gcaManager
-            .ChangeRuleSetCollectionAsync(gcaManager.RuleSetCollection
-                .WithRuleSet(ruleSet))
-            .ConfigureAwait(false); 
-        
-        gcaSettings.RuleSetModels.Add(ruleSetModel);
+        RuleSetModels.Add(ruleSetModel);
         
         NotifyCommandsCanExecuteChanged();
     }
-    private bool CanAddRuleSet() => gcaSettings.RuleSetModels.Count < options.MaxRuleSetCount;
+    private bool CanAddRuleSet() => RuleSetModels.Count < options.MaxRuleSetCount;
 
     [RelayCommand(CanExecute = nameof(CanRemoveRuleSet))]
-    private async Task RemoveRuleSetAsync(RuleSetModel ruleSetModel)
+    private void RemoveRuleSet(RuleSetModel ruleSetModel)
     {
-        var ruleSetIndex = gcaSettings.RuleSetModels.IndexOf(ruleSetModel);
-        // Todo: consider using IReadOnlyList instead of IEnumerable everywhere...
-        var ruleSet = gcaManager.RuleSetCollection.RuleSets.ElementAt(ruleSetIndex);
-
-        await gcaManager
-            .ChangeRuleSetCollectionAsync(gcaManager.RuleSetCollection
-                .WithoutRuleSet(ruleSet))
-            .ConfigureAwait(false);
-
-        gcaSettings.RuleSetModels.Remove(ruleSetModel);
+        RuleSetModels.Remove(ruleSetModel);
         
         NotifyCommandsCanExecuteChanged();
     }
-    private bool CanRemoveRuleSet() => gcaSettings.RuleSetModels.Count > 1;
+    private bool CanRemoveRuleSet() => RuleSetModels.Count > 1;
+
+    [RelayCommand(CanExecute = nameof(CanApplyChanges))]
+    private async Task ApplyChangesAsync()
+    {
+        
+    }
+
+    private bool CanApplyChanges()
+    {
+        
+    }
 
     private void NotifyCommandsCanExecuteChanged()
     {
         AddRuleSetCommand.NotifyCanExecuteChanged();
         RemoveRuleSetCommand.NotifyCanExecuteChanged();
+        ApplyChangesCommand.NotifyCanExecuteChanged();
     }
     #endregion
+
+    private string GetNewRuleSetName() =>
+        localizationManager.GetLocalizedString("Simulation.Gca.NewRuleSet");
 }

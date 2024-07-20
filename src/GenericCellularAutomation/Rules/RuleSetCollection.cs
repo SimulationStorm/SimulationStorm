@@ -33,22 +33,6 @@ public sealed class RuleSetCollection
         UsedCellStates = GetCellStatesUsedInRuleSets(RuleSets);
     }
 
-    public RuleSetCollection WithRuleSet(RuleSet ruleSet)
-    {
-        if (RuleSets.Contains(ruleSet))
-            throw new ArgumentException("The rule set is already in the collection.", nameof(ruleSet));
-
-        return new RuleSetCollection(RepetitionCount, RuleSets.Append(ruleSet));
-    }
-    
-    public RuleSetCollection WithoutRuleSet(RuleSet ruleSet)
-    {
-        if (!RuleSets.Contains(ruleSet))
-            throw new ArgumentException("The rule set is not in the collection.", nameof(ruleSet));
-
-        return new RuleSetCollection(RepetitionCount, RuleSets.Where(rs => rs != ruleSet));
-    }
-
     private static IReadOnlySet<byte> GetCellStatesUsedInRuleSets(IEnumerable<RuleSet> ruleSets)
     {
         var usedCellStates = new HashSet<byte>();

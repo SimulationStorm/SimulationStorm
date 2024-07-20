@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Avalonia"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\GenericCellularAutomation.Presentation\GenericCellularAutomation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="Avalonia.Controls.ColorPicker">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\avalonia.controls.colorpicker\11.1.0-beta2\lib\net8.0\Avalonia.Controls.ColorPicker.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

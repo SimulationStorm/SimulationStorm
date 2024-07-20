@@ -12,6 +12,7 @@ using GenericCellularAutomation.Presentation.Management;
 using GenericCellularAutomation.Presentation.Management.Commands;
 using SimulationStorm.Graphics;
 using SimulationStorm.Localization.Presentation;
+using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
 using SimulationStorm.Utilities.Disposing;
 
@@ -23,6 +24,8 @@ public partial class CellStatesViewModel : DisposableObservableObject
     [ObservableProperty] private bool _randomizeNewCellStateColor;
 
     public ObservableCollection<CellStateModel> CellStateModels { get; } = [];
+
+    public Range<int> CellStateNameLengthRange => _options.CellStateNameLengthRange;
     #endregion
 
     #region Fields
@@ -32,7 +35,7 @@ public partial class CellStatesViewModel : DisposableObservableObject
 
     private readonly ILocalizationManager _localizationManager;
     
-    private readonly GenericCellularAutomationOptions _options;
+    private readonly CellStatesOptions _options;
     #endregion
     
     public CellStatesViewModel
@@ -40,7 +43,7 @@ public partial class CellStatesViewModel : DisposableObservableObject
         GenericCellularAutomationManager gcaManager,
         GenericCellularAutomationSettings gcaSettings,
         ILocalizationManager localizationManager,
-        GenericCellularAutomationOptions options)
+        CellStatesOptions options)
     {
         _gcaManager = gcaManager;
         _gcaSettings = gcaSettings;
@@ -60,6 +63,7 @@ public partial class CellStatesViewModel : DisposableObservableObject
     {
         var cellStateModel = new CellStateModel
         {
+            Index = CellStateModels.Count,
             CellState = GetNewCellState(),
             Name = GetNewCellStateName(),
             Color = RandomizeNewCellStateColor ? ColorUtils.GenerateRandomColor() : default

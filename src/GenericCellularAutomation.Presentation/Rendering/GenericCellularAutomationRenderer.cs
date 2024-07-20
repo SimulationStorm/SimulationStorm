@@ -7,6 +7,7 @@ using DotNext.Collections.Generic;
 using DynamicData;
 using DynamicData.Binding;
 using GenericCellularAutomation.Presentation.CellStates;
+using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Management;
 using SimulationStorm.Graphics;
 using SimulationStorm.Primitives;
@@ -18,13 +19,10 @@ namespace GenericCellularAutomation.Presentation.Rendering;
 
 public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
 {
-    protected override Size SizeToRender => _genericCellularAutomationManager.WorldSize;
+    protected override Size SizeToRender => _gcaManager.WorldSize;
 
     #region Fields
-    private readonly GenericCellularAutomationManager _genericCellularAutomationManager;
-
-    private readonly IDictionary<CellStateModel, IDisposable> _cellStateModelSubscriptions =
-        new Dictionary<CellStateModel, IDisposable>();
+    private readonly GenericCellularAutomationManager _gcaManager;
 
     private readonly IDictionary<byte, IPaint> _paintByCellStates = new Dictionary<byte, IPaint>();
     #endregion
@@ -34,28 +32,24 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
         IGraphicsFactory graphicsFactory,
         IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
-        GenericCellularAutomationManager genericCellularAutomationManager,
+        GenericCellularAutomationManager gcaManager,
         GenericCellularAutomationSettings settings,
         ISimulationRendererOptions options
     )
         : base(graphicsFactory, benchmarker, intervalActionExecutor, options)
     {
-        _genericCellularAutomationManager = genericCellularAutomationManager;
+        _gcaManager = gcaManager;
         
-        settings.CellStateModels.ForEach(OnCellStateModelAdded);
-
-        settings.CellStateModels
-            .ToObservableChangeSet()
-            .OnItemAdded(OnCellStateModelAdded)
-            .OnItemRemoved(OnCellStateModelRemoved)
-            .Subscribe()
+        settings
+            .WhenValueChanged(x => x.CellStateCollectionDescriptor)
+            .Subscribe(UpdatePaintByCellStates!)
             .DisposeWith(Disposables);
     }
 
     #region Protected methods
     protected override async Task RenderAsync(ICanvas canvas)
     {
-        var cellPositionsByStates = await _genericCellularAutomationManager.GetAllCellPositionsByStatesAsync();
+        var cellPositionsByStates = await _gcaManager.GetAllCellPositionsByStatesAsync();
 
         foreach (var (cellState, cellPositions) in cellPositionsByStates)
         {
@@ -67,49 +61,29 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
 
     protected override ValueTask DisposeAsyncCore()
     {
-        foreach (var (_, subscription) in _cellStateModelSubscriptions)
-            subscription.Dispose();
-        
-        foreach (var (_, cellPaint) in _paintByCellStates)
-            cellPaint.Dispose();
-        
+        DisposeAndClearCellPaints();
         return base.DisposeAsyncCore();
     }
     #endregion
 
-    #region Private methods
-    private void OnCellStateModelAdded(CellStateModel cellStateModel)
+    private void UpdatePaintByCellStates(CellStateCollectionDescriptor cellStateCollectionDescriptor)
     {
-        var subscription = SubscribeOnCellStateModelColorChange(cellStateModel);
-        _cellStateModelSubscriptions[cellStateModel] = subscription;
-    }
-
-    private void OnCellStateModelRemoved(CellStateModel cellStateModel)
-    {
-        var subscription = _cellStateModelSubscriptions[cellStateModel];
-        _cellStateModelSubscriptions.Remove(cellStateModel);
-        subscription.Dispose();
-
-        var paint = _paintByCellStates[cellStateModel.CellState];
-        _paintByCellStates.Remove(cellStateModel.CellState);
-        paint.Dispose();
-    }
-
-    private IDisposable SubscribeOnCellStateModelColorChange(CellStateModel cellStateModel) => cellStateModel
-        .WhenValueChanged(x => x.Color)
-        .Subscribe(newColor =>
+        DisposeAndClearCellPaints();
+                
+        foreach (var cellStateDescriptor in cellStateCollectionDescriptor!.CellStateDescriptors)
         {
-            var cellState = cellStateModel.CellState;
-
-            if (!_paintByCellStates.TryGetValue(cellState, out var cellPaint))
-            {
-                cellPaint = GraphicsFactory.CreatePaint();
-                _paintByCellStates[cellState] = cellPaint;
-            }
-
-            cellPaint.Color = newColor;
+            var cellPaint = GraphicsFactory.CreatePaint();
+            cellPaint.Color = cellStateDescriptor.Color;
             
-            RequestRerender();
-        });
-    #endregion
+            _paintByCellStates[cellStateDescriptor.CellState] = cellPaint;
+        }
+    }
+
+    private void DisposeAndClearCellPaints()
+    {
+        foreach (var (_, cellPaint) in _paintByCellStates)
+            cellPaint.Dispose();
+        
+        _paintByCellStates.Clear();
+    }
 }

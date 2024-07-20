@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="GenericCellularAutomation.Avalonia.Views.CellStatesView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:graphics="using:SimulationStorm.Graphics.Avalonia.Converters"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             xmlns:viewModels="using:GenericCellularAutomation.Presentation.CellStates"
+             x:Name="Root"
+             x:DataType="viewModels:CellStatesViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <Button Content="{DynamicResource Strings.Simulation.Gca.AddCellState}"
+                Command="{Binding AddCellStateCommand}"/>
+        
+        <ItemsControl ItemsSource="{Binding CellStateModels}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Classes="stack-items-vertically">
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Common.Name}"/>
+                        <TextBox helpers:TextBoxHelper.IsPastingDisabled="True"
+                                 Classes="has-bottom-margin"
+                                 ContextFlyout="{x:Null}"
+                                 MaxLength="{Binding #Root.((viewModels:CellStatesViewModel)DataContext).CellStateNameLengthRange.Maximum,
+                                                     Mode=OneTime}"
+                                 Text="{Binding Name}"/>
+
+                        <TextBlock Classes="theme-form-control-label"
+                                   Text="{DynamicResource Strings.Common.Color}"/>
+                        <ColorPicker Color="{Binding Color,
+                                                     Converter={x:Static graphics:GraphicsConverters.ColorToAvaloniaConverter}}"/>
+
+                        <Button helpers:IconHelper.Icon="IconX"
+                                Classes="theme-subtle danger"
+                                Command="{Binding #Root.((viewModels:CellStatesViewModel)DataContext).RemoveCellStateCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip.Tip="{DynamicResource Strings.Common.Delete}"/>
+                        
+                        <Button Command="{Binding #Root.((viewModels:CellStatesViewModel)DataContext).MarkCellStateAsDefaultCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip.Tip="{DynamicResource Strings.Simulation.Gca.MarkCellStateAsDefault}"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>
