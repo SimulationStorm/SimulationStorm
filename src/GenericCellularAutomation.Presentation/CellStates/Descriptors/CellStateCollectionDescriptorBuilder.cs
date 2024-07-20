@@ -14,6 +14,12 @@ public sealed class CellStateCollectionDescriptorBuilder : IFluentBuilder<CellSt
     #endregion
 
     #region Methods
+    public CellStateCollectionDescriptorBuilder HasCellState(CellStateDescriptor cellState)
+    {
+        _cellStates.Add(cellState);
+        return this;
+    }
+    
     public CellStateCollectionDescriptorBuilder HasCellStates(params CellStateDescriptor[] cellStates)
     {
         _cellStates.AddAll(cellStates);

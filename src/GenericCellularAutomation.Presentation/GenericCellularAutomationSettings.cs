@@ -1,12 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using GenericCellularAutomation.Presentation.CellStates;
-using GenericCellularAutomation.Presentation.Rules.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 
 namespace GenericCellularAutomation.Presentation;
 
-public sealed class GenericCellularAutomationSettings
+public sealed partial class GenericCellularAutomationSettings : ObservableObject
 {
-    public ObservableCollection<CellStateModel> CellStateModels { get; } = [];
-
-    public ObservableCollection<RuleSetModel> RuleSetModels { get; } = [];
+    // Todo: initialize this...
+    [ObservableProperty] private CellStateCollectionDescriptor _cellStateCollectionDescriptor = null!;
 }

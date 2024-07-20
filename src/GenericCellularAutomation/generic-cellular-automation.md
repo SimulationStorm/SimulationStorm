@@ -36,3 +36,4 @@ TCellState = byte / short / int / long - integer
 in domain models
 - add utility class in primitives that will contain a method to iterate over all points within Size
 - rename IndexedObject to IndexedObservableObject
+- in GoL manager reset simulation instance after algorithm change

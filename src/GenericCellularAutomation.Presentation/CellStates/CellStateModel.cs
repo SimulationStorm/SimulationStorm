@@ -9,6 +9,6 @@ public sealed partial class CellStateModel : NamedIndexedObservableObject
     public byte CellState { get; init; }
 
     [ObservableProperty] private bool _isDefault;
-    
+
     [ObservableProperty] private Color _color;
 }

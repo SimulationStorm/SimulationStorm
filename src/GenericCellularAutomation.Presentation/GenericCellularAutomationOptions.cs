@@ -6,6 +6,9 @@ public sealed class GenericCellularAutomationOptions
 {
     public Range<int> CellStateNameLengthRange { get; init; }
     
+    /// <summary>
+    /// Must be less than 255...
+    /// </summary>
     public int MaxCellStateCount { get; init; }
 
     public int MaxRuleCountInRuleSet { get; init; }

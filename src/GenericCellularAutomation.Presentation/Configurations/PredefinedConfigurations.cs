@@ -11,9 +11,10 @@ namespace GenericCellularAutomation.Presentation.Configurations;
 public static class PredefinedConfigurations
 {
     public static readonly Configuration
-        GameOfLife = BuildGameOfLife();
+        GameOfLife = BuildGameOfLifeConfiguration();
 
-    private static Configuration BuildGameOfLife()
+    #region Configuration builders
+    private static Configuration BuildGameOfLifeConfiguration()
     {
         var deadCell = new CellStateDescriptorBuilder()
             .HasCellState(1)
@@ -116,4 +117,5 @@ public static class PredefinedConfigurations
                 )
             .Build();
     }
+    #endregion
 }

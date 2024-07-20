@@ -20,7 +20,12 @@ public interface IGenericCellularAutomation :
     /// Gets or sets the possible cell state collection.
     /// </summary>
     CellStateCollection CellStateCollection { get; set; }
-    
+
+    /// <summary>
+    /// Gets the minimum and the maximum possible cell state.
+    /// </summary>
+    Range<byte> CellStateRange { get; }
+
     /// <summary>
     /// Gets or sets the rule set collection.
     /// </summary>

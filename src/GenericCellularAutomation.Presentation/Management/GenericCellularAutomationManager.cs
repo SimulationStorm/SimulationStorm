@@ -11,14 +11,16 @@ namespace GenericCellularAutomation.Presentation.Management;
 public sealed class GenericCellularAutomationManager : SimulationManagerBase
 {
     #region Properties
-    public Size WorldSize => _gca.WorldSize;
+    public Size WorldSize => _simulation.WorldSize;
     
-    public CellStateCollection CellStateCollection { get; }
+    public CellStateCollection CellStateCollection { get; private set; } = null!;
     
-    public RuleSetCollection RuleSetCollection { get; }
+    public Range<byte> CellStateRange { get; }
+    
+    public RuleSetCollection RuleSetCollection { get; private set; } = null!;
     #endregion
 
-    private readonly IGenericCellularAutomation _gca;
+    private readonly IGenericCellularAutomation _simulation;
     
     public GenericCellularAutomationManager
     (
@@ -27,12 +29,15 @@ public sealed class GenericCellularAutomationManager : SimulationManagerBase
     )
         : base(benchmarker)
     {
-        _gca = gcaFactory.CreateGenericCellularAutomation();
+        _simulation = gcaFactory.CreateGenericCellularAutomation();
+        
+        RememberSimulationPropertyValues();
+        ResetSimulationInstance(_simulation);
     }
 
     #region Reading methods
     public Task<IReadOnlyDictionary<byte, IEnumerable<Point>>> GetAllCellPositionsByStatesAsync() =>
-        WithSimulationReadLockAsync(() => _gca.GetAllCellPositionsByStates());
+        WithSimulationReadLockAsync(() => _simulation.GetAllCellPositionsByStates());
     #endregion
 
     #region Writing methods
@@ -42,9 +47,41 @@ public sealed class GenericCellularAutomationManager : SimulationManagerBase
     public Task ChangeRuleSetCollectionAsync(RuleSetCollection newRuleSetCollection) =>
         ScheduleCommandAsync(new ChangeRuleSetCollectionCommand(newRuleSetCollection));
     #endregion
-    
+
+    #region Commands execution
     protected override void ExecuteCommand(SimulationCommand command)
     {
-        
+        switch (command)
+        {
+            case ChangeCellStateCollectionCommand changeCellStateCollectionCommand:
+            {
+                ExecuteChangeCellStateCollection(changeCellStateCollectionCommand);
+                break;
+            }
+            case ChangeRuleSetCollectionCommand changeRuleSetCollectionCommand:
+            {
+                ExecuteChangeRuleSetCollection(changeRuleSetCollectionCommand);
+                break;
+            }
+        }
+    }
+
+    private void ExecuteChangeCellStateCollection(ChangeCellStateCollectionCommand command)
+    {
+        _simulation.CellStateCollection = command.NewCellStateCollection;
+        CellStateCollection = _simulation.CellStateCollection;
+    }
+    
+    private void ExecuteChangeRuleSetCollection(ChangeRuleSetCollectionCommand command)
+    {
+        _simulation.RuleSetCollection = command.NewRuleSetCollection;
+        RuleSetCollection = _simulation.RuleSetCollection;
+    }
+    #endregion
+
+    private void RememberSimulationPropertyValues()
+    {
+        CellStateCollection = _simulation.CellStateCollection;
+        RuleSetCollection = _simulation.RuleSetCollection;
     }
 }
