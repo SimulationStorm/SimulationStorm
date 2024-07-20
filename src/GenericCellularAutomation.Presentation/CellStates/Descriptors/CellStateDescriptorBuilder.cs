@@ -6,12 +6,20 @@ namespace GenericCellularAutomation.Presentation.CellStates.Descriptors;
 public sealed class CellStateDescriptorBuilder : IFluentBuilder<CellStateDescriptor>
 {
     #region Fields
+    private byte _cellState;
+    
     private string _name = string.Empty;
 
     private Color _color;
     #endregion
 
     #region Methods
+    public CellStateDescriptorBuilder HasCellState(byte cellState)
+    {
+        _cellState = cellState;
+        return this;
+    }
+    
     public CellStateDescriptorBuilder HasName(string name)
     {
         _name = name;
@@ -24,6 +32,6 @@ public sealed class CellStateDescriptorBuilder : IFluentBuilder<CellStateDescrip
         return this;
     }
 
-    public CellStateDescriptor Build() => new(_name, _color);
+    public CellStateDescriptor Build() => new(_cellState, _name, _color);
     #endregion
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using DotNext.Collections.Generic;
 using GenericCellularAutomation.Neighborhood;
-using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Common;
 using GenericCellularAutomation.Rules;
@@ -97,14 +96,17 @@ public sealed class RuleDescriptorBuilder : IFluentBuilder<RuleDescriptor>
     public RuleDescriptor Build() => new
     (
         _name,
-        _type,
-        _applicationProbability,
-        _targetCellState,
-        _newCellState,
-        _neighborCellState,
-        _cellNeighborhood,
-        (IReadOnlySet<int>)_neighborCellCountSet,
-        (IReadOnlySet<Point>)_neighborCellPositionSet
+        new Rule
+        (
+            _type,
+            _applicationProbability,
+            _targetCellState.CellState,
+            _newCellState.CellState,
+            _neighborCellState?.CellState,
+            _cellNeighborhood,
+            (IReadOnlySet<int>)_neighborCellCountSet,
+            (IReadOnlySet<Point>)_neighborCellPositionSet
+        )
     );
     #endregion
 }

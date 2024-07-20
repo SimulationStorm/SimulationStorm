@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DotNext.Collections.Generic;
-using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Common;
 using GenericCellularAutomation.Presentation.Patterns;

@@ -5,24 +5,22 @@ using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation;
 
-/*
- * Pattern concept:
- * 010
- * 111
- * 010
- * - or -
- * alive|alive|alive
- * dead|dead|dead
- * alive|dead|alive
- * - the last option is more adaptive and supports all possible state words, numbers and abbreviations...
- */
-
-public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPositions)
+public sealed class Pattern
 {
-    public Size Size { get; } = size;
+    private readonly IReadOnlyDictionary<Point, byte> _cellStateByPositions;
+
+    public Pattern(Size size, IReadOnlyDictionary<Point, byte> cellStateByPositions)
+    {
+        Size = size;
+
+        ValidateCellStateByPositions(size, cellStateByPositions);
+        _cellStateByPositions = cellStateByPositions;
+    }
+
+    public Size Size { get; }
 
     #region Public methods
-    public byte GetCellState(Point cell)
+    public byte GetCellState(Point cellPosition)
     {
         // ArgumentOutOfRangeException.ThrowIfLessThan(cell.X, 0, nameof(cell.X));
         // ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(cell.X, Width, nameof(cell.X));
@@ -30,18 +28,18 @@ public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPosit
         // ArgumentOutOfRangeException.ThrowIfLessThan(cell.Y, 0, nameof(cell.Y));
         // ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(cell.Y, Height, nameof(cell.Y));
 
-        return cellStateByPositions[cell];
+        return _cellStateByPositions[cellPosition];
     }
 
-    public static Pattern FromString
+    public static Pattern FromScheme
     (
-        string patternString,
+        string scheme,
         IDictionary<string, byte> cellStateByNames,
         char cellStateNameSeparator = '|',
         char lineSeparator = '\n')
     {
-        var lines = ValidatePatternStringAndGetCellStateByLineNumbers(
-            patternString, cellStateByNames, cellStateNameSeparator, lineSeparator);
+        var lines = ValidatePatternSchemeAndGetCellStateByLineNumbers(
+            scheme, cellStateByNames, cellStateNameSeparator, lineSeparator);
 
         var patternSize = new Size(lines[0].Count, lines.Count);
 
@@ -64,14 +62,14 @@ public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPosit
     }
     #endregion
 
-    private static IReadOnlyList<IReadOnlyList<string>> ValidatePatternStringAndGetCellStateByLineNumbers
+    private static IReadOnlyList<IReadOnlyList<string>> ValidatePatternSchemeAndGetCellStateByLineNumbers
     (
-        string patternString,
+        string scheme,
         IDictionary<string, byte> cellStateByNames,
         char cellStateNameSeparator,
         char lineSeparator)
     {
-        var lines = patternString
+        var lines = scheme
             .Split(lineSeparator)
             .Select(line => line
                 .Trim())
@@ -83,7 +81,7 @@ public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPosit
             .All(line => line.Length == firstLineWidth);
         
         if (!areAllLinesHasTheSameLength)
-            throw new ArgumentException("All pattern lines must have the same length.", nameof(patternString));
+            throw new ArgumentException("All pattern lines must have the same length.", nameof(scheme));
 
         var cellStateNameByLineNumbers = lines
             .Select(line => line
@@ -96,9 +94,21 @@ public sealed class Pattern(Size size, IDictionary<Point, byte> cellStateByPosit
         
         if (!areAllCellStateNamesValid)
             throw new ArgumentException(
-                $"All cell state names in the {nameof(patternString)} must be present in the {cellStateByNames}.",
-                nameof(patternString));
+                $"All cell state names in the {nameof(scheme)} must be present in the {cellStateByNames}.",
+                nameof(scheme));
         
         return cellStateNameByLineNumbers;
+    }
+
+    private static void ValidateCellStateByPositions
+    (
+        Size patternSize,
+        IReadOnlyDictionary<Point, byte> cellStateByPositions)
+    {
+        var patternRect = new Rect(0, 0, patternSize.Width, patternSize.Height);
+        if (!cellStateByPositions.Keys.All(patternRect.Contains))
+            throw new ArgumentException(
+                "All cell positions must be within a pattern size.",
+                nameof(cellStateByPositions));
     }
 }

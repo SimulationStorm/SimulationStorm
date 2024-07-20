@@ -1,6 +1,9 @@
-﻿using GenericCellularAutomation.Presentation.CellStates.Descriptors;
+﻿using System.Collections.Generic;
+using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Neighborhood;
+using GenericCellularAutomation.Presentation.Patterns;
 using GenericCellularAutomation.Presentation.Rules.Descriptors;
+using GenericCellularAutomation.Rules;
 using SimulationStorm.Graphics;
 
 namespace GenericCellularAutomation.Presentation.Configurations;
@@ -13,14 +16,22 @@ public static class PredefinedConfigurations
     private static Configuration BuildGameOfLife()
     {
         var deadCell = new CellStateDescriptorBuilder()
+            .HasCellState(1)
             .HasName("Dead")
             .HasColor(KnownColors.Black)
             .Build();
         
         var aliveCell = new CellStateDescriptorBuilder()
+            .HasCellState(2)
             .HasName("Alive")
             .HasColor(KnownColors.White)
             .Build();
+
+        var cellStatesByName = new Dictionary<string, CellStateDescriptor>
+        {
+            [" "] = deadCell,
+            ["+"] = aliveCell
+        };
 
         return new ConfigurationBuilder()
             .HasName("GameOfLife")
@@ -39,6 +50,7 @@ public static class PredefinedConfigurations
                             .HasRules(
                                 new RuleDescriptorBuilder()
                                     .HasName("PopulateRandomly")
+                                    .HasType(RuleType.Unconditional)
                                     .HasTargetCellState(deadCell)
                                     .HasNewCellState(aliveCell)
                                     .HasApplicationProbability(0.5)
@@ -50,8 +62,10 @@ public static class PredefinedConfigurations
                             .HasRules(
                                 new RuleDescriptorBuilder()
                                     .HasName("BornRule")
+                                    .HasType(RuleType.Totalistic)
                                     .HasTargetCellState(deadCell)
                                     .HasNewCellState(aliveCell)
+                                    .HasApplicationProbability(1)
                                     .HasNeighborCellState(aliveCell)
                                     .HasCellNeighborhood(
                                         PredefinedNeighborhoodTemplates.Moore
@@ -60,8 +74,10 @@ public static class PredefinedConfigurations
                                     .Build(),
                                 new RuleDescriptorBuilder()
                                     .HasName("SurvivalRule")
+                                    .HasType(RuleType.Totalistic)
                                     .HasTargetCellState(aliveCell)
                                     .HasNewCellState(deadCell)
+                                    .HasApplicationProbability(1)
                                     .HasCellNeighborhood(
                                         PredefinedNeighborhoodTemplates.Moore
                                             .BuildNeighborhood(radius: 1))
@@ -71,7 +87,33 @@ public static class PredefinedConfigurations
                             .Build())
                     .Build()
                 )
-            .HasPatternCategories()
+            .HasPatternCategories(
+                new PatternDescriptorCategoryBuilder()
+                    .HasName("StaticPatterns")
+                    .HasPatterns(
+                        new PatternDescriptorBuilder()
+                            .HasName("Block")
+                            .HasScheme("""
+                                       ++
+                                       ++
+                                       """)
+                            .HasSchemeCellStateNames(cellStatesByName)
+                            .Build())
+                    .Build(),
+                new PatternDescriptorCategoryBuilder()
+                    .HasName("Oscillators")
+                    .HasPatterns(
+                        new PatternDescriptorBuilder()
+                            .HasName("Test")
+                            .HasScheme("""
+                                        |+| 
+                                       +| |+
+                                       +| |+
+                                       """)
+                            .HasSchemeCellStateNames(cellStatesByName)
+                            .Build())
+                    .Build()
+                )
             .Build();
     }
 }
