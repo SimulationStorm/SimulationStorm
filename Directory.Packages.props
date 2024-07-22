@@ -13,8 +13,6 @@
   <ItemGroup>
     <!-- Runtime code compilation -->
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0"/>
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0"/>
-    <PackageVersion Include="Microsoft.CodeAnalysis.Scripting" Version="4.10.0"/>
     <!---->
     <!--Logging-->
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="$(MsExtensionsVersion)" />

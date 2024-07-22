@@ -15,8 +15,6 @@
     <ItemGroup>
       <PackageReference Include="DotNext" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.Scripting"/>
     </ItemGroup>
     
 </Project>
