@@ -1,13 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel;
 using GenericCellularAutomation.Rules;
 
 namespace GenericCellularAutomation.RuleExecution;
 
 public sealed class RuleExecutorFactory : IRuleExecutorFactory
 {
-    public IRuleExecutor CreateRuleExecutor(RuleExecutorType ruleType, Rule rule) => ruleType switch
+    public IRuleExecutor CreateRuleExecutor(RuleExecutorType type, Rule rule) => type switch
     {
         RuleExecutorType.Straightforward => new StraightforwardRuleExecutor(rule),
-        _ => throw new NotSupportedException()
+        RuleExecutorType.Compiled => new CompiledRuleExecutor(rule),
+        _ => throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(RuleExecutorType))
     };
 }

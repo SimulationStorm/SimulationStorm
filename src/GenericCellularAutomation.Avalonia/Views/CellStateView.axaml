@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="GenericCellularAutomation.Avalonia.Views.CellStateView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:graphics="using:SimulationStorm.Graphics.Avalonia.Converters"
+             xmlns:helpers="using:SimulationStorm.Avalonia.Helpers"
+             x:Name="Root">
+    <DockPanel Classes="stack-items-vertically">
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.Common.Name}"/>
+        <TextBox helpers:TextBoxHelper.IsPastingDisabled="True"
+                 Classes="has-bottom-margin"
+                 ContextFlyout="{x:Null}"
+                 MaxLength="{Binding #Root.MaxNameLength,
+                                     Mode=OneTime}"
+                 Text="{Binding #Root.CellStateModel.Name}"/>
+
+        <TextBlock Classes="theme-form-control-label"
+                   Text="{DynamicResource Strings.Common.Color}"/>
+        <ColorPicker Color="{Binding #Root.CellStateModel.Color,
+                                     Converter={x:Static graphics:GraphicsConverters.ColorToAvaloniaConverter}}"/>
+
+        <Button helpers:IconHelper.Icon="IconX"
+                Classes="theme-subtle danger"
+                Command="{Binding #Root.DeleteCommand}"
+                CommandParameter="{Binding #Root.CellStateModel}"
+                ToolTip.Tip="{DynamicResource Strings.Common.Delete}"/>
+
+        <Button Command="{Binding #Root.MarkAsDefaultCommand}"
+                CommandParameter="{Binding #Root.CellStateModel}"
+                ToolTip.Tip="{DynamicResource Strings.Simulation.Gca.MarkCellStateAsDefault}"/>
+    </DockPanel>
+</UserControl>

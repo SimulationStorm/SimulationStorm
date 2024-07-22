@@ -278,7 +278,7 @@ public sealed class GenericCellularAutomation : SimulationBase, IGenericCellular
     }
 
     private IRuleExecutor CreateRuleExecutorByRule(Rule rule) =>
-        _ruleExecutorFactory.CreateRuleExecutor(RuleExecutorType.Straightforward, rule);
+        _ruleExecutorFactory.CreateRuleExecutor(rule);
     #endregion
 
     public void Reset() => ChangeInnerWorldCellsToDefaultState();

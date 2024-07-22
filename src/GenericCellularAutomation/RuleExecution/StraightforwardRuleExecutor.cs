@@ -5,7 +5,6 @@ using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation.RuleExecution;
 
-// Todo: rule executor base
 public sealed class StraightforwardRuleExecutor : IRuleExecutor
 {
     #region Fields
@@ -57,7 +56,7 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
     }
     
     private bool ShouldNontotalisticRuleBeApplied(byte[,] world, Point cellPosition) =>
-        AreAllCellNeighborsHasSpecifiedState(world, cellPosition);
+        AreSpecifiedCellNeighborsHasSpecifiedState(world, cellPosition);
 
     private int CountCellNeighborsInSpecifiedState(byte[,] world, Point targetCellPosition)
     {
@@ -70,7 +69,7 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
         });
     }
     
-    private bool AreAllCellNeighborsHasSpecifiedState(byte[,] world, Point targetCellPosition)
+    private bool AreSpecifiedCellNeighborsHasSpecifiedState(byte[,] world, Point targetCellPosition)
     {
         var positionShifts = _rule.NeighborCellPositionSet!;
         return positionShifts.All(positionShift =>

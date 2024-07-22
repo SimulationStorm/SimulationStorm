@@ -3,5 +3,5 @@
 public enum RuleExecutorType
 {
     Straightforward,
-    Efficient
+    Compiled
 }

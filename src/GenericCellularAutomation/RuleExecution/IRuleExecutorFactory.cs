@@ -4,5 +4,5 @@ namespace GenericCellularAutomation.RuleExecution;
 
 public interface IRuleExecutorFactory
 {
-    IRuleExecutor CreateRuleExecutor(RuleExecutorType ruleType, Rule rule);
+    IRuleExecutor CreateRuleExecutor(RuleExecutorType type, Rule rule);
 }
