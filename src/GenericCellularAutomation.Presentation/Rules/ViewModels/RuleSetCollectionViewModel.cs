@@ -58,10 +58,10 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         _localizationManager = localizationManager;
         _options = options;
         
+        UpdateCellStateModelsFromSettings();
+        
         // Todo: create main options object that will contain Configurations and default Configuration:
         // GcaManager will create impl using it, rule set collection view model also will use it for init purposes.
-        
-        UpdateCellStateModelsFromSettings();
         InitializeRuleSetCollection();
 
         gcaManager
