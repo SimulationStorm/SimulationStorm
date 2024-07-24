@@ -1,0 +1,8 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GenericCellularAutomation.Avalonia.Views.RuleView"
+             xmlns:models="using:GenericCellularAutomation.Presentation.Rules.Models"
+             x:DataType="models:RuleModel"
+             x:Name="Root">
+    
+</UserControl>

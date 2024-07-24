@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GenericCellularAutomation.Neighborhood;
 using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.Common;
+using GenericCellularAutomation.Presentation.Rules.Descriptors;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Primitives;
 
@@ -33,4 +35,16 @@ public sealed partial class RuleModel : NamedIndexedObservableObject
     #region Nontotalistic
     public ObservableCollection<Point> NeighborCellPositionCollection { get; } = [];
     #endregion
+
+    public Rule ToRule() => new
+    (
+        Type,
+        ApplicationProbability,
+        TargetCellState.CellState,
+        NewCellState.CellState,
+        NeighborCellState?.CellState,
+        CellNeighborhood,
+        Type is RuleType.Totalistic ? NeighborCellCountCollection.ToHashSet() : null,
+        Type is RuleType.Nontotalistic ? NeighborCellPositionCollection.ToHashSet() : null
+    );
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using DotNext.Collections.Generic;
 using GenericCellularAutomation.Presentation.Common;
 
@@ -10,7 +9,7 @@ public sealed class RuleSetCollectionDescriptorBuilder : IFluentBuilder<RuleSetC
     #region Fields
     private int _repetitionCount;
 
-    private readonly ICollection<RuleSetDescriptor> _ruleSets = new Collection<RuleSetDescriptor>();
+    private readonly IList<RuleSetDescriptor> _ruleSets = new List<RuleSetDescriptor>();
     #endregion
 
     #region Methods
@@ -26,6 +25,6 @@ public sealed class RuleSetCollectionDescriptorBuilder : IFluentBuilder<RuleSetC
         return this;
     }
 
-    public RuleSetCollectionDescriptor Build() => new(_repetitionCount, _ruleSets);
+    public RuleSetCollectionDescriptor Build() => new(_repetitionCount, (IReadOnlyList<RuleSetDescriptor>)_ruleSets);
     #endregion
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using DotNext.Collections.Generic;
 using GenericCellularAutomation.Presentation.Common;
 
@@ -8,7 +7,7 @@ namespace GenericCellularAutomation.Presentation.CellStates.Descriptors;
 public sealed class CellStateCollectionDescriptorBuilder : IFluentBuilder<CellStateCollectionDescriptor>
 {
     #region Fields
-    private readonly ICollection<CellStateDescriptor> _cellStates = new Collection<CellStateDescriptor>();
+    private readonly IList<CellStateDescriptor> _cellStates = new List<CellStateDescriptor>();
 
     private CellStateDescriptor _defaultCellState = null!;
     #endregion
@@ -32,6 +31,7 @@ public sealed class CellStateCollectionDescriptorBuilder : IFluentBuilder<CellSt
         return this;
     }
 
-    public CellStateCollectionDescriptor Build() => new(_cellStates, _defaultCellState);
+    public CellStateCollectionDescriptor Build() =>
+        new((IReadOnlyList<CellStateDescriptor>)_cellStates, _defaultCellState);
     #endregion
 }

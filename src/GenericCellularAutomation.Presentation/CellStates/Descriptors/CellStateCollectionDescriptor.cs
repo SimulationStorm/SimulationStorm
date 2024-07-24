@@ -5,18 +5,18 @@ namespace GenericCellularAutomation.Presentation.CellStates.Descriptors;
 
 public sealed class CellStateCollectionDescriptor
 (
-    IEnumerable<CellStateDescriptor> cellStateDescriptors,
-    CellStateDescriptor defaultCellStateDescriptor)
+    IReadOnlyList<CellStateDescriptor> cellStates,
+    CellStateDescriptor defaultCellState)
 {
-    public IEnumerable<CellStateDescriptor> CellStateDescriptors { get; } = cellStateDescriptors;
+    public IReadOnlyList<CellStateDescriptor> CellStates { get; } = cellStates;
 
-    public CellStateDescriptor DefaultCellStateDescriptor { get; } = defaultCellStateDescriptor;
+    public CellStateDescriptor DefaultCellState { get; } = defaultCellState;
 
     public CellStateCollection ToCellStateCollection() => new
     (
-        CellStateDescriptors
+        CellStates
             .Select(csd => csd.CellState)
             .ToHashSet(),
-        DefaultCellStateDescriptor.CellState
+        DefaultCellState.CellState
     );
 }

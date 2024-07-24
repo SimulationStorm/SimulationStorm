@@ -70,7 +70,7 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
     {
         DisposeAndClearCellPaints();
                 
-        foreach (var cellStateDescriptor in cellStateCollectionDescriptor!.CellStateDescriptors)
+        foreach (var cellStateDescriptor in cellStateCollectionDescriptor!.CellStates)
         {
             var cellPaint = GraphicsFactory.CreatePaint();
             cellPaint.Color = cellStateDescriptor.Color;

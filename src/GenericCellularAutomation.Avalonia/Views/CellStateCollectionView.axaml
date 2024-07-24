@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="GenericCellularAutomation.Avalonia.Views.CellStateCollectionView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="using:GenericCellularAutomation.Presentation.CellStates"
+             xmlns:views="using:GenericCellularAutomation.Avalonia.Views"
+             x:Name="Root"
+             x:DataType="viewModels:CellStateCollectionViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <Button Command="{Binding AddCellStateCommand}"
+                Content="{DynamicResource Strings.Simulation.Gca.AddCellState}"/>
+
+        <ItemsControl ItemsSource="{Binding CellStateModels}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <views:CellStateView CellStateModel="{Binding}"
+                                         DeleteCommand="{Binding #Root.((viewModels:CellStateCollectionViewModel)DataContext).RemoveCellStateCommand}"
+                                         MarkAsDefaultCommand="{Binding #Root.((viewModels:CellStateCollectionViewModel)DataContext).MarkCellStateAsDefaultCommand}"
+                                         MaxNameLength="{Binding #Root.((viewModels:CellStateCollectionViewModel)DataContext).CellStateNameLengthRange.Maximum}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>

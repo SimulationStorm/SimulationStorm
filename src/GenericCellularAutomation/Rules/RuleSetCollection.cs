@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DotNext.Collections.Generic;
 
 namespace GenericCellularAutomation.Rules;
@@ -16,7 +15,7 @@ public sealed class RuleSetCollection
     /// <summary>
     /// Gets rule sets included in the rule set collection.
     /// </summary>
-    public IEnumerable<RuleSet> RuleSets { get; }
+    public IReadOnlyList<RuleSet> RuleSets { get; }
 
     /// <summary>
     /// Gets cell states used in rules in the rule sets.
@@ -24,7 +23,7 @@ public sealed class RuleSetCollection
     public IReadOnlySet<byte> UsedCellStates { get; }
     #endregion
     
-    public RuleSetCollection(int repetitionCount, IEnumerable<RuleSet> ruleSets)
+    public RuleSetCollection(int repetitionCount, IReadOnlyList<RuleSet> ruleSets)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(repetitionCount, nameof(repetitionCount));
         RepetitionCount = repetitionCount;

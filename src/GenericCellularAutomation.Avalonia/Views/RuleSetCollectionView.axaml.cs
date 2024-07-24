@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace GenericCellularAutomation.Avalonia.Views;
 
-public partial class CellStatesView : UserControl
+public partial class RuleSetCollectionView : UserControl
 {
-    public CellStatesView()
+    public RuleSetCollectionView()
     {
         InitializeComponent();
     }

@@ -14,11 +14,12 @@ using SimulationStorm.Graphics;
 using SimulationStorm.Localization.Presentation;
 using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
+using SimulationStorm.Threading.Presentation;
 using SimulationStorm.Utilities.Disposing;
 
 namespace GenericCellularAutomation.Presentation.CellStates;
 
-public partial class CellStatesViewModel : DisposableObservableObject
+public sealed partial class CellStateCollectionViewModel : DisposableObservableObject
 {
     #region Properties
     [ObservableProperty] private bool _randomizeNewCellStateColor;
@@ -37,12 +38,14 @@ public partial class CellStatesViewModel : DisposableObservableObject
     
     private readonly CellStatesOptions _options;
     #endregion
-    
-    public CellStatesViewModel
+
+    #region Initializing
+    public CellStateCollectionViewModel
     (
         GenericCellularAutomationManager gcaManager,
         GenericCellularAutomationSettings gcaSettings,
         ILocalizationManager localizationManager,
+        IUiThreadScheduler uiThreadScheduler,
         CellStatesOptions options)
     {
         _gcaManager = gcaManager;
@@ -50,13 +53,36 @@ public partial class CellStatesViewModel : DisposableObservableObject
         _localizationManager = localizationManager;
         _options = options;
 
+        InitializeCellStateModelsFromSettings();
+        
         _gcaManager
             .CommandCompletedObservable()
             .Where(e => e.Command is ChangeRuleSetCollectionCommand)
+            .ObserveOn(uiThreadScheduler)
             .Subscribe(_ => NotifyCommandsCanExecuteChanged())
             .DisposeWith(Disposables);
     }
-    
+
+    private void InitializeCellStateModelsFromSettings()
+    {
+        var cellStateCollection = _gcaSettings.CellStateCollectionDescriptor;
+        var defaultCellStateDescriptor = cellStateCollection.DefaultCellState;
+        
+        cellStateCollection.CellStates
+            .ForEach(csd =>
+            {
+                CellStateModels.Add(new CellStateModel
+                {
+                    Index = CellStateModels.Count,
+                    CellState = csd.CellState,
+                    Name = csd.Name,
+                    Color = csd.Color,
+                    IsDefault = csd == defaultCellStateDescriptor
+                });
+            });
+    }
+    #endregion
+
     #region Commands
     [RelayCommand(CanExecute = nameof(CanAddCellState))]
     private void AddCellState()
@@ -100,9 +126,8 @@ public partial class CellStatesViewModel : DisposableObservableObject
     }
     private static bool CanMarkCellStateAsDefault(CellStateModel cellStateModel) => !cellStateModel.IsDefault;
 
-    // Todo: observe all cell state models and notify apply changes can execute changed
-    [RelayCommand(CanExecute = nameof(CanApplyChanges))]
-    private async Task ApplyChangesAsync()
+    [RelayCommand]
+    private Task ApplyChangesAsync() => Task.Run(async () =>
     {
         var cellStateCollectionDescriptor = BuildCellStateCollectionDescriptor();
         
@@ -112,18 +137,13 @@ public partial class CellStatesViewModel : DisposableObservableObject
             .ChangeCellStateCollectionAsync(cellStateCollectionDescriptor
                 .ToCellStateCollection())
             .ConfigureAwait(false);
-    }
-    private bool CanApplyChanges()
-    {
-        
-    }
-    
+    });
+
     private void NotifyCommandsCanExecuteChanged()
     {
         AddCellStateCommand.NotifyCanExecuteChanged();
         RemoveCellStateCommand.NotifyCanExecuteChanged();
         MarkCellStateAsDefaultCommand.NotifyCanExecuteChanged();
-        ApplyChangesCommand.NotifyCanExecuteChanged();
     }
     #endregion
 
@@ -138,7 +158,7 @@ public partial class CellStatesViewModel : DisposableObservableObject
                 return cellState;
         }
 
-        throw new InvalidOperationException("There is no more unoccupied cell state number.");
+        throw new InvalidOperationException("There is no more available cell state number.");
     }
 
     private string GetNewCellStateName() =>
@@ -150,16 +170,14 @@ public partial class CellStatesViewModel : DisposableObservableObject
         
         CellStateModels.ForEach(cellStateModel =>
         {
-            var cellStateDescriptor = new CellStateDescriptorBuilder()
-                .HasCellState(cellStateModel.CellState)
-                .HasName(cellStateModel.Name)
-                .HasColor(cellStateModel.Color)
-                .Build();
+            var cellStateDescriptor = cellStateModel.ToCellStateDescriptor();
 
             if (cellStateModel.IsDefault)
-                cellStateCollectionDescriptorBuilder.HasDefaultCellState(cellStateDescriptor);
+                cellStateCollectionDescriptorBuilder
+                    .HasDefaultCellState(cellStateDescriptor);
             else
-                cellStateCollectionDescriptorBuilder.HasCellState(cellStateDescriptor);
+                cellStateCollectionDescriptorBuilder
+                    .HasCellState(cellStateDescriptor);
         });
 
         return cellStateCollectionDescriptorBuilder.Build();

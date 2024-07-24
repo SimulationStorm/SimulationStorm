@@ -1,0 +1,15 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GenericCellularAutomation.Avalonia.Views.RuleSetView"
+             xmlns:viewModels="using:GenericCellularAutomation.Presentation.Rules.ViewModels"
+             xmlns:views="using:GenericCellularAutomation.Avalonia.Views"
+             x:DataType="viewModels:RuleSetViewModel"
+             x:Name="Root">
+    <DockPanel Classes="stack-items-vertically">
+        <ItemsControl ItemsSource="{Binding RuleModels}">
+            <DataTemplate>
+                <views:RuleView CellStateModels="{Binding #Root.((viewModels:RuleSetCollectionViewModel)DataContext).CellStateModels}"/>
+            </DataTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>
