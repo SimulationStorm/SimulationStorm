@@ -1,5 +1,4 @@
-﻿using SimulationStorm.GameOfLife.Algorithms;
-using SimulationStorm.GameOfLife.DataTypes;
+﻿using SimulationStorm.GameOfLife.DataTypes;
 using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.Bounded.Presentation.Services;
 using SimulationStorm.Simulation.CellularAutomation;

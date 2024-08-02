@@ -38,7 +38,7 @@ public sealed class PatternDescriptorBuilder : IFluentBuilder<PatternDescriptor>
     public PatternDescriptor Build() => new
     (
         _name,
-        Pattern.FromScheme
+        GcaPattern.FromScheme
         (
             _scheme,
             _cellStateByNames.ToDictionary(kv => kv.Key, kv => kv.Value.CellState)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GenericCellularAutomation.Presentation.Management.Commands;
+using GenericCellularAutomation.RuleExecution;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Primitives;
 using SimulationStorm.Simulation.Presentation.SimulationManager;
@@ -8,7 +9,7 @@ using SimulationStorm.Utilities.Benchmarking;
 
 namespace GenericCellularAutomation.Presentation.Management;
 
-public sealed class GenericCellularAutomationManager : SimulationManagerBase
+public sealed class GcaManager : SimulationManagerBase
 {
     #region Properties
     public Size WorldSize => _simulation.WorldSize;
@@ -22,14 +23,25 @@ public sealed class GenericCellularAutomationManager : SimulationManagerBase
 
     private readonly IGenericCellularAutomation _simulation;
     
-    public GenericCellularAutomationManager
+    public GcaManager
     (
         IBenchmarker benchmarker,
-        IGenericCellularAutomationFactory gcaFactory
+        IRuleExecutorFactory ruleExecutorFactory,
+        IGcaFactory gcaFactory,
+        GcaOptions options
     )
         : base(benchmarker)
     {
-        _simulation = gcaFactory.CreateGenericCellularAutomation();
+        _simulation = gcaFactory.CreateGenericCellularAutomation
+        (
+            ruleExecutorFactory,
+            options.WorldSize,
+            options.MaxCellNeighborhoodRadius,
+            options.MaxCellState,
+            options.WorldWrapping,
+            options.Configuration.CellStateCollection.ToCellStateCollection(),
+            options.Configuration.RuleSetCollection.ToRuleSetCollection()
+        );
         
         RememberSimulationPropertyValues();
         ResetSimulationInstance(_simulation);

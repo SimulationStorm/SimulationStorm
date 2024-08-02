@@ -5,17 +5,19 @@ using SimulationStorm.Simulation.CellularAutomation;
 
 namespace GenericCellularAutomation;
 
-public sealed class GenericCellularAutomationFactory : IGenericCellularAutomationFactory
+public sealed class GcaFactory : IGcaFactory
 {
     public IGenericCellularAutomation CreateGenericCellularAutomation
     (
         IRuleExecutorFactory ruleExecutorFactory,
         Size worldSize,
         int maxCellNeighborhoodRadius,
+        byte maxCellState,
         WorldWrapping worldWrapping,
-        CellStateCollection possibleCellStateCollection,
-        RuleSetCollection ruleSetCollection
-    )
-        => new GenericCellularAutomation(ruleExecutorFactory, worldSize,
-            maxCellNeighborhoodRadius, worldWrapping, possibleCellStateCollection, ruleSetCollection);
+        CellStateCollection cellStateCollection,
+        RuleSetCollection ruleSetCollection)
+    {
+        return new GenericCellularAutomation(ruleExecutorFactory, worldSize,
+            maxCellNeighborhoodRadius, maxCellState, worldWrapping, cellStateCollection, ruleSetCollection);
+    }
 }

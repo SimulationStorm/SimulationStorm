@@ -13,7 +13,7 @@ public sealed class ConfigurationBuilder : IFluentBuilder<Configuration>
     #region Fields
     private string _name = string.Empty;
 
-    private CellStateCollectionDescriptor _possibleCellStateCollection = null!;
+    private CellStateCollectionDescriptor _cellStateCollection = null!;
 
     private RuleSetCollectionDescriptor _ruleSetCollection = null!;
 
@@ -22,16 +22,15 @@ public sealed class ConfigurationBuilder : IFluentBuilder<Configuration>
     #endregion
 
     #region Methods
-
     public ConfigurationBuilder HasName(string name)
     {
         _name = name;
         return this;
     }
 
-    public ConfigurationBuilder HasPossibleCellStateCollection(CellStateCollectionDescriptor cellStateCollection)
+    public ConfigurationBuilder HasCellStateCollection(CellStateCollectionDescriptor cellStateCollection)
     {
-        _possibleCellStateCollection = cellStateCollection;
+        _cellStateCollection = cellStateCollection;
         return this;
     }
     
@@ -47,6 +46,6 @@ public sealed class ConfigurationBuilder : IFluentBuilder<Configuration>
         return this;
     }
 
-    public Configuration Build() => new(_name, _possibleCellStateCollection, _ruleSetCollection, _patternCategories);
+    public Configuration Build() => new(_name, _cellStateCollection, _ruleSetCollection, _patternCategories);
     #endregion
 }

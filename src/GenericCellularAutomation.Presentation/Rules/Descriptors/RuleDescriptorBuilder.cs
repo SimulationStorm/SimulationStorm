@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using DotNext.Collections.Generic;
-using GenericCellularAutomation.Neighborhood;
 using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Common;
 using GenericCellularAutomation.Rules;

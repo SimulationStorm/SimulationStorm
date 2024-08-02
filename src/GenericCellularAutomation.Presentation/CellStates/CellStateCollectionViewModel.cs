@@ -30,9 +30,9 @@ public sealed partial class CellStateCollectionViewModel : DisposableObservableO
     #endregion
 
     #region Fields
-    private readonly GenericCellularAutomationManager _gcaManager;
+    private readonly GcaManager _gcaManager;
 
-    private readonly GenericCellularAutomationSettings _gcaSettings;
+    private readonly GcaSettings _gcaSettings;
 
     private readonly ILocalizationManager _localizationManager;
     
@@ -42,8 +42,8 @@ public sealed partial class CellStateCollectionViewModel : DisposableObservableO
     #region Initializing
     public CellStateCollectionViewModel
     (
-        GenericCellularAutomationManager gcaManager,
-        GenericCellularAutomationSettings gcaSettings,
+        GcaManager gcaManager,
+        GcaSettings gcaSettings,
         ILocalizationManager localizationManager,
         IUiThreadScheduler uiThreadScheduler,
         CellStatesOptions options)

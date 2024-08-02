@@ -5,15 +5,16 @@ using SimulationStorm.Simulation.CellularAutomation;
 
 namespace GenericCellularAutomation;
 
-public interface IGenericCellularAutomationFactory
+public interface IGcaFactory
 {
     IGenericCellularAutomation CreateGenericCellularAutomation
     (
         IRuleExecutorFactory ruleExecutorFactory,
         Size worldSize,
         int maxCellNeighborhoodRadius,
+        byte maxCellState,
         WorldWrapping worldWrapping,
-        CellStateCollection possibleCellStateCollection,
+        CellStateCollection cellStateCollection,
         RuleSetCollection ruleSetCollection
     );
 }

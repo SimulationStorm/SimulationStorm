@@ -35,34 +35,32 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
     #endregion
 
     #region Fields
-    private readonly GenericCellularAutomationManager _gcaManager;
+    private readonly GcaManager _gcaManager;
 
-    private readonly GenericCellularAutomationSettings _gcaSettings;
+    private readonly GcaSettings _gcaSettings;
 
     private readonly ILocalizationManager _localizationManager;
     
-    private readonly RulesOptions _options;
+    private readonly RulesOptions _rulesOptions;
     #endregion
 
     #region Initializing
     public RuleSetCollectionViewModel
     (
-        GenericCellularAutomationManager gcaManager,
-        GenericCellularAutomationSettings gcaSettings,
+        GcaManager gcaManager,
+        GcaSettings gcaSettings,
         ILocalizationManager localizationManager,
         IUiThreadScheduler uiThreadScheduler,
-        RulesOptions options)
+        GcaOptions gcaOptions,
+        RulesOptions rulesOptions)
     {
         _gcaManager = gcaManager;
         _gcaSettings = gcaSettings;
         _localizationManager = localizationManager;
-        _options = options;
+        _rulesOptions = rulesOptions;
         
         UpdateCellStateModelsFromSettings();
-        
-        // Todo: create main options object that will contain Configurations and default Configuration:
-        // GcaManager will create impl using it, rule set collection view model also will use it for init purposes.
-        InitializeRuleSetCollection();
+        InitializeRuleSetCollection(gcaOptions.Configuration.RuleSetCollection);
 
         gcaManager
             .CommandCompletedObservable()
@@ -165,7 +163,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         {
             Index = RuleSetViewModels.Count,
             Name = GetNewRuleSetName(),
-            RepetitionCount = _options.RuleSetRepetitionCountRange.Minimum
+            RepetitionCount = _rulesOptions.RuleSetRepetitionCountRange.Minimum
         };
 
         // Todo: what about creating default rule model?
@@ -174,7 +172,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         
         NotifyCommandsCanExecuteChanged();
     }
-    private bool CanAddRuleSet() => RuleSetViewModels.Count < _options.MaxRuleSetCount;
+    private bool CanAddRuleSet() => RuleSetViewModels.Count < _rulesOptions.MaxRuleSetCount;
 
     [RelayCommand(CanExecute = nameof(CanRemoveRuleSet))]
     private void RemoveRuleSet(RuleSetViewModel ruleSetViewModel)

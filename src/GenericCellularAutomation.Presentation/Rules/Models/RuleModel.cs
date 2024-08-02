@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using GenericCellularAutomation.Neighborhood;
 using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.Common;
-using GenericCellularAutomation.Presentation.Rules.Descriptors;
 using GenericCellularAutomation.Rules;
 using SimulationStorm.Primitives;
 
@@ -12,6 +10,7 @@ namespace GenericCellularAutomation.Presentation.Rules.Models;
 
 public sealed partial class RuleModel : NamedIndexedObservableObject
 {
+    #region Properties
     [ObservableProperty] private RuleType _type;
 
     #region Unconditional
@@ -34,6 +33,7 @@ public sealed partial class RuleModel : NamedIndexedObservableObject
     
     #region Nontotalistic
     public ObservableCollection<Point> NeighborCellPositionCollection { get; } = [];
+    #endregion
     #endregion
 
     public Rule ToRule() => new

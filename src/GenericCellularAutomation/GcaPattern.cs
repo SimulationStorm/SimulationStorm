@@ -5,11 +5,11 @@ using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation;
 
-public sealed class Pattern
+public sealed class GcaPattern
 {
     private readonly IReadOnlyDictionary<Point, byte> _cellStateByPositions;
 
-    public Pattern(Size size, IReadOnlyDictionary<Point, byte> cellStateByPositions)
+    public GcaPattern(Size size, IReadOnlyDictionary<Point, byte> cellStateByPositions)
     {
         Size = size;
 
@@ -31,7 +31,7 @@ public sealed class Pattern
         return _cellStateByPositions[cellPosition];
     }
 
-    public static Pattern FromScheme
+    public static GcaPattern FromScheme
     (
         string scheme,
         IDictionary<string, byte> cellStateByNames,
@@ -58,7 +58,7 @@ public sealed class Pattern
             }
         }
 
-        return new Pattern(patternSize, cellStateByPositions);
+        return new GcaPattern(patternSize, cellStateByPositions);
     }
     #endregion
 

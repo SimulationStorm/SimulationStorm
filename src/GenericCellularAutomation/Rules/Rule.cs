@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GenericCellularAutomation.Neighborhood;
 using SimulationStorm.Primitives;
 
 namespace GenericCellularAutomation.Rules;

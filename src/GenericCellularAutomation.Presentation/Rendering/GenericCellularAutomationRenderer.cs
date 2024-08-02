@@ -22,7 +22,7 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
     protected override Size SizeToRender => _gcaManager.WorldSize;
 
     #region Fields
-    private readonly GenericCellularAutomationManager _gcaManager;
+    private readonly GcaManager _gcaManager;
 
     private readonly IDictionary<byte, IPaint> _paintByCellStates = new Dictionary<byte, IPaint>();
     #endregion
@@ -32,8 +32,8 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
         IGraphicsFactory graphicsFactory,
         IBenchmarker benchmarker,
         IIntervalActionExecutor intervalActionExecutor,
-        GenericCellularAutomationManager gcaManager,
-        GenericCellularAutomationSettings settings,
+        GcaManager gcaManager,
+        GcaSettings settings,
         ISimulationRendererOptions options
     )
         : base(graphicsFactory, benchmarker, intervalActionExecutor, options)
