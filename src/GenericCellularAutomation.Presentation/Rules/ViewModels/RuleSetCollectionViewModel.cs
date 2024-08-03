@@ -27,39 +27,44 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
     [ObservableProperty] private int _repetitionCount;
 
     public ObservableCollection<RuleSetViewModel> RuleSetViewModels { get; } = [];
-    
-    /// <summary>
-    /// To be used by RuleView's.
-    /// </summary>
-    public ObservableCollection<CellStateModel> CellStateModels { get; } = [];
     #endregion
 
     #region Fields
+    private readonly ILocalizationManager _localizationManager;
+    
+    private readonly IRuleSetViewModelFactory _ruleSetViewModelFactory;
+    
     private readonly GcaManager _gcaManager;
 
     private readonly GcaSettings _gcaSettings;
-
-    private readonly ILocalizationManager _localizationManager;
     
     private readonly RulesOptions _rulesOptions;
+    
+    private readonly ObservableCollection<CellStateModel> _cellStateModels = [];
+
+    private readonly ReadOnlyObservableCollection<CellStateModel> _readOnlyCellStateModels;
     #endregion
 
     #region Initializing
     public RuleSetCollectionViewModel
     (
+        ILocalizationManager localizationManager,
+        IRuleSetViewModelFactory ruleSetViewModelFactory,
         GcaManager gcaManager,
         GcaSettings gcaSettings,
-        ILocalizationManager localizationManager,
         IUiThreadScheduler uiThreadScheduler,
         GcaOptions gcaOptions,
         RulesOptions rulesOptions)
     {
+        _localizationManager = localizationManager;
+        _ruleSetViewModelFactory = ruleSetViewModelFactory;
         _gcaManager = gcaManager;
         _gcaSettings = gcaSettings;
-        _localizationManager = localizationManager;
         _rulesOptions = rulesOptions;
         
         UpdateCellStateModelsFromSettings();
+        _readOnlyCellStateModels = new ReadOnlyObservableCollection<CellStateModel>(_cellStateModels);
+        
         InitializeRuleSetCollection(gcaOptions.Configuration.RuleSetCollection);
 
         gcaManager
@@ -76,13 +81,11 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         
         ruleSetCollectionDescriptor.RuleSets.ForEach(ruleSetDescriptor =>
         {
-            var ruleSetViewModel = new RuleSetViewModel
-            {
-                Index = RuleSetViewModels.Count,
-                Name = ruleSetDescriptor.Name,
-                RepetitionCount = ruleSetDescriptor.RepetitionCount
-            };
-            
+            var ruleSetViewModel = CreateRuleSetViewModel();
+            ruleSetViewModel.Index = RuleSetViewModels.Count;
+            ruleSetViewModel.Name = ruleSetDescriptor.Name;
+            ruleSetViewModel.RepetitionCount = ruleSetDescriptor.RepetitionCount;
+
             ruleSetDescriptor.Rules.ForEach(ruleDescriptor =>
             {
                 var rule = ruleDescriptor.Rule;
@@ -100,10 +103,19 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
                     CellNeighborhood = rule.CellNeighborhood,
                 };
 
-                if (rule.Type is RuleType.Totalistic)
-                    ruleModel.NeighborCellCountCollection.Add(rule.NeighborCellCountSet!);
-                else if (rule.Type is RuleType.Nontotalistic)
-                    ruleModel.NeighborCellPositionCollection.Add(rule.NeighborCellPositionSet!);
+                switch (rule.Type)
+                {
+                    case RuleType.Totalistic:
+                    {
+                        ruleModel.NeighborCellCountCollection.Add(rule.NeighborCellCountSet!);
+                        break;
+                    }
+                    case RuleType.Nontotalistic:
+                    {
+                        ruleModel.NeighborCellPositionCollection.Add(rule.NeighborCellPositionSet!);
+                        break;
+                    }
+                }
                 
                 ruleSetViewModel.RuleModels.Add(ruleModel);
             });
@@ -114,7 +126,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         return;
 
         CellStateModel GetCellStateModel(byte cellState) =>
-            CellStateModels.First(csm => csm.CellState == cellState);
+            _cellStateModels.First(csm => csm.CellState == cellState);
     }
 
     private void UpdateCellStateModelsFromSettings()
@@ -122,16 +134,17 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         var cellStateDescriptors = _gcaSettings.CellStateCollectionDescriptor.CellStates;
 
         // Remove old cell state models.
-        CellStateModels
+        _cellStateModels
             .ExceptBy(cellStateDescriptors
                 .Select(csd => csd.CellState), csm => csm.CellState)
             .ToArray()
-            .ForEach(csm => CellStateModels.Remove(csm));
+            .ForEach(csm =>
+                _cellStateModels.Remove(csm));
 
         // Update existing cell state models.
         cellStateDescriptors.ForEach(csd =>
         {
-            var cellStateModel = CellStateModels
+            var cellStateModel = _cellStateModels
                 .FirstOrDefault(csm => csm.CellState == csd.CellState);
 
             if (cellStateModel is null)
@@ -143,7 +156,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
 
         // Add new cell state models.
         cellStateDescriptors
-            .Where(csd => CellStateModels
+            .Where(csd => _cellStateModels
                 .All(csm => csd.CellState != csm.CellState))
             .Select(csd => new CellStateModel
             {
@@ -151,7 +164,8 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
                 Name = csd.Name,
                 Color = csd.Color
             })
-            .ForEach(newCsm => CellStateModels.Add(newCsm));
+            .ForEach(newCsm =>
+                _cellStateModels.Add(newCsm));
     }
     #endregion
 
@@ -159,20 +173,11 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
     [RelayCommand(CanExecute = nameof(CanAddRuleSet))]
     private void AddRuleSet()
     {
-        var ruleSetViewModel = new RuleSetViewModel
-        {
-            Index = RuleSetViewModels.Count,
-            Name = GetNewRuleSetName(),
-            RepetitionCount = _rulesOptions.RuleSetRepetitionCountRange.Minimum
-        };
-
-        // Todo: what about creating default rule model?
-        
-        RuleSetViewModels.Add(ruleSetViewModel);
-        
+        AddNewRuleSetViewModel();
         NotifyCommandsCanExecuteChanged();
     }
-    private bool CanAddRuleSet() => RuleSetViewModels.Count < _rulesOptions.MaxRuleSetCount;
+    private bool CanAddRuleSet() =>
+        RuleSetViewModels.Count < _rulesOptions.MaxRuleSetCount;
 
     [RelayCommand(CanExecute = nameof(CanRemoveRuleSet))]
     private void RemoveRuleSet(RuleSetViewModel ruleSetViewModel)
@@ -180,7 +185,32 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         RuleSetViewModels.Remove(ruleSetViewModel);
         NotifyCommandsCanExecuteChanged();
     }
-    private bool CanRemoveRuleSet() => RuleSetViewModels.Count > 1;
+    private bool CanRemoveRuleSet() =>
+        RuleSetViewModels.Count > 1;
+    
+    [RelayCommand(CanExecute = nameof(CanMoveRuleSetForward))]
+    private void MoveRuleSetForward(RuleSetViewModel ruleSetViewModel)
+    {
+        var newIndex = ruleSetViewModel.Index + 1;
+        RuleSetViewModels.Move(ruleSetViewModel.Index, newIndex);
+        ruleSetViewModel.Index = newIndex;
+        
+        NotifyMoveCommandsCanExecuteChanged();
+    }
+    private bool CanMoveRuleSetForward(RuleSetViewModel ruleSetViewModel) =>
+        ruleSetViewModel.Index < RuleSetViewModels.Count - 1;
+
+    [RelayCommand(CanExecute = nameof(CanMoveRuleSetBack))]
+    private void MoveRuleSetBack(RuleSetViewModel ruleSetViewModel)
+    {
+        var newIndex = ruleSetViewModel.Index - 1;
+        RuleSetViewModels.Move(ruleSetViewModel.Index, newIndex);
+        ruleSetViewModel.Index = newIndex;
+        
+        NotifyMoveCommandsCanExecuteChanged();
+    }
+    private bool CanMoveRuleSetBack(RuleSetViewModel ruleSetViewModel) =>
+        ruleSetViewModel.Index > 0;
 
     [RelayCommand]
     private Task ApplyChangesAsync() => Task.Run(async () =>
@@ -194,11 +224,24 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
 
     private void NotifyCommandsCanExecuteChanged()
     {
+        NotifyAddRemoveCommandsCanExecuteChanged();
+        NotifyMoveCommandsCanExecuteChanged();
+    }
+    
+    private void NotifyMoveCommandsCanExecuteChanged()
+    {
+        MoveRuleSetForwardCommand.NotifyCanExecuteChanged();
+        MoveRuleSetBackCommand.NotifyCanExecuteChanged();
+    }
+
+    private void NotifyAddRemoveCommandsCanExecuteChanged()
+    {
         AddRuleSetCommand.NotifyCanExecuteChanged();
         RemoveRuleSetCommand.NotifyCanExecuteChanged();
     }
     #endregion
 
+    #region Private methods
     private RuleSetCollection BuildRuleSetCollection() => new
     (
         RepetitionCount,
@@ -207,6 +250,24 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
             .ToArray()
     );
 
+    #region New rule set creation
+    private void AddNewRuleSetViewModel()
+    {
+        var ruleSetViewModel = CreateRuleSetViewModel();
+        ruleSetViewModel.Index = RuleSetViewModels.Count;
+        ruleSetViewModel.Name = GetNewRuleSetName();
+        ruleSetViewModel.RepetitionCount = _rulesOptions.RuleSetRepetitionCountRange.Minimum;
+
+        ruleSetViewModel.AddNewRuleModel();
+        
+        RuleSetViewModels.Add(ruleSetViewModel);
+    }
+    
+    private RuleSetViewModel CreateRuleSetViewModel() =>
+        _ruleSetViewModelFactory.CreateRuleSetViewModel(_readOnlyCellStateModels);
+
     private string GetNewRuleSetName() =>
         _localizationManager.GetLocalizedString("Simulation.Gca.NewRuleSet");
+    #endregion
+    #endregion
 }

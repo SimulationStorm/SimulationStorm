@@ -4,7 +4,7 @@ namespace GenericCellularAutomation.Presentation.Rules;
 
 public sealed class RulesOptions
 {
-    public int MaxRuleCountInRuleSet { get; init; }
+    public int MaxRuleCount { get; init; }
 
     public int MaxRuleSetCount { get; init; }
 

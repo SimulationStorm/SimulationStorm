@@ -1,13 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 
 namespace GenericCellularAutomation.Avalonia.Views;
 
 public partial class RuleSetCollectionView : UserControl
 {
-    public RuleSetCollectionView()
-    {
-        InitializeComponent();
-    }
+    public RuleSetCollectionView() => InitializeComponent();
 }

@@ -8,7 +8,7 @@
     <DockPanel Classes="stack-items-vertically">
         <ItemsControl ItemsSource="{Binding RuleSetViewModels}">
             <DataTemplate>
-                <views:RuleSetView CellStateModels="{Binding #Root.((viewModels:RuleSetCollectionViewModel)DataContext).CellStateModels}"/>
+                <views:RuleSetView/>
             </DataTemplate>
         </ItemsControl>
     </DockPanel>

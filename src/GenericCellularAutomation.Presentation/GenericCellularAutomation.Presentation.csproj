@@ -9,6 +9,7 @@
       <ProjectReference Include="..\SimulationStorm.Graphics\SimulationStorm.Graphics.csproj" />
       <ProjectReference Include="..\SimulationStorm.Primitives\SimulationStorm.Primitives.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.Bounded.Presentation\SimulationStorm.Simulation.Bounded.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.CellularAutomation\SimulationStorm.Simulation.CellularAutomation.csproj" />
       <ProjectReference Include="..\SimulationStorm.Simulation.Presentation\SimulationStorm.Simulation.Presentation.csproj" />
     </ItemGroup>
 

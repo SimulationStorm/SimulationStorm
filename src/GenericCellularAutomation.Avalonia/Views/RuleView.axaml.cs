@@ -8,7 +8,7 @@ namespace GenericCellularAutomation.Avalonia.Views;
 public partial class RuleView : UserControl
 {
     public static readonly StyledProperty<ObservableCollection<CellStateModel>> CellStateModelsProperty =
-        RuleSetView.CellStateModelsProperty.AddOwner<RuleView>();
+        AvaloniaProperty.Register<RuleView, ObservableCollection<CellStateModel>>(nameof(CellStateModels));
 
     public ObservableCollection<CellStateModel> CellStateModels
     {
