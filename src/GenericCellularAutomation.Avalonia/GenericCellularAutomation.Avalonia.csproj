@@ -11,13 +11,58 @@
     
     <ItemGroup>
       <ProjectReference Include="..\GenericCellularAutomation.Presentation\GenericCellularAutomation.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.AppSaves.Avalonia\SimulationStorm.AppSaves.Avalonia.csproj" />
       <ProjectReference Include="..\SimulationStorm.Avalonia\SimulationStorm.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Densities.Avalonia\SimulationStorm.Densities.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Dialogs.Avalonia\SimulationStorm.Dialogs.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.GameOfLife.Presentation\SimulationStorm.GameOfLife.Presentation.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Localization.Avalonia\SimulationStorm.Localization.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Notifications.Avalonia\SimulationStorm.Notifications.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Avalonia\SimulationStorm.Simulation.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Bounded.Avalonia\SimulationStorm.Simulation.Bounded.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Cellular.Avalonia\SimulationStorm.Simulation.Cellular.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.CellularAutomation.Avalonia\SimulationStorm.Simulation.CellularAutomation.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.History.Avalonia\SimulationStorm.Simulation.History.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Resetting.Avalonia\SimulationStorm.Simulation.Resetting.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Running.Avalonia\SimulationStorm.Simulation.Running.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Simulation.Statistics.Avalonia\SimulationStorm.Simulation.Statistics.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Themes.Avalonia\SimulationStorm.Themes.Avalonia.csproj" />
+      <ProjectReference Include="..\SimulationStorm.Threading.Avalonia\SimulationStorm.Threading.Avalonia.csproj" />
     </ItemGroup>
     
     <ItemGroup>
-      <Reference Include="Avalonia.Controls.ColorPicker">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\avalonia.controls.colorpicker\11.1.0-beta2\lib\net8.0\Avalonia.Controls.ColorPicker.dll</HintPath>
-      </Reference>
+      <Compile Update="Startup\App.axaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Startup\LoaderWindow.axaml.cs">
+        <DependentUpon>LoaderWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Startup\LoaderView.axaml.cs">
+        <DependentUpon>LoaderView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Logotype.axaml.cs">
+        <DependentUpon>Logotype.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\MainView.axaml.cs">
+        <DependentUpon>MainView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\SimulationToolPanelView.axaml.cs">
+        <DependentUpon>SimulationToolPanelView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\RenderingToolPanelView.axaml.cs">
+        <DependentUpon>RenderingToolPanelView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
-
+    
+    <ItemGroup>
+      <AvaloniaResource Include="Resources\LocaleResources\LocalizationHelper.xlsm" />
+    </ItemGroup>
+    
 </Project>

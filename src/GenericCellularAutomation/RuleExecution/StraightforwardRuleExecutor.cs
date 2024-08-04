@@ -19,7 +19,7 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
         _nextCellStateCalculator = GetNextCellStateCalculatorByRule(rule);
     }
 
-    public byte CalculateNextCellState(byte[,] world, Point cellPosition) =>
+    public GcaCellState CalculateNextCellState(GcaCellState[,] world, Point cellPosition) =>
         _nextCellStateCalculator(world, cellPosition);
 
     #region Private methods
@@ -30,35 +30,35 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
         _ => CalculateNextCellStateUsingUnconditionalRule
     };
 
-    private byte CalculateNextCellStateUsingUnconditionalRule(byte[,] world, Point cellPosition) =>
+    private GcaCellState CalculateNextCellStateUsingUnconditionalRule(GcaCellState[,] world, Point cellPosition) =>
         ShouldUnconditionalRuleBeApplied(world, cellPosition)
             ? _rule.NewCellState : _rule.TargetCellState;
 
-    private byte CalculateNextCellStateUsingTotalisticRule(byte[,] world, Point cellPosition) =>
+    private GcaCellState CalculateNextCellStateUsingTotalisticRule(GcaCellState[,] world, Point cellPosition) =>
         ShouldUnconditionalRuleBeApplied(world, cellPosition) && ShouldTotalisticRuleBeApplied(world, cellPosition)
             ? _rule.NewCellState : _rule.TargetCellState;
     
-    private byte CalculateNextCellStateUsingNontotalisticRule(byte[,] world, Point cellPosition) =>
+    private GcaCellState CalculateNextCellStateUsingNontotalisticRule(GcaCellState[,] world, Point cellPosition) =>
         ShouldUnconditionalRuleBeApplied(world, cellPosition) && ShouldNontotalisticRuleBeApplied(world, cellPosition)
             ? _rule.NewCellState : _rule.TargetCellState;
 
-    private bool ShouldUnconditionalRuleBeApplied(byte[,] world, Point cellPosition)
+    private bool ShouldUnconditionalRuleBeApplied(GcaCellState[,] world, Point cellPosition)
     {
         var currentCellState = world[cellPosition.X, cellPosition.Y];
         return currentCellState == _rule.TargetCellState
                && Random.Shared.NextDouble() > _rule.ApplicationProbability;
     }
     
-    private bool ShouldTotalisticRuleBeApplied(byte[,] world, Point cellPosition)
+    private bool ShouldTotalisticRuleBeApplied(GcaCellState[,] world, Point cellPosition)
     {
         var cellNeighborCountInSpecifiedState = CountCellNeighborsInSpecifiedState(world, cellPosition);
         return _rule.NeighborCellCountSet!.Contains(cellNeighborCountInSpecifiedState);
     }
     
-    private bool ShouldNontotalisticRuleBeApplied(byte[,] world, Point cellPosition) =>
+    private bool ShouldNontotalisticRuleBeApplied(GcaCellState[,] world, Point cellPosition) =>
         AreSpecifiedCellNeighborsHasSpecifiedState(world, cellPosition);
 
-    private int CountCellNeighborsInSpecifiedState(byte[,] world, Point targetCellPosition)
+    private int CountCellNeighborsInSpecifiedState(GcaCellState[,] world, Point targetCellPosition)
     {
         var positionShifts = _rule.CellNeighborhood!.UsedPositions;
         return positionShifts.Count(positionShift =>
@@ -69,7 +69,7 @@ public sealed class StraightforwardRuleExecutor : IRuleExecutor
         });
     }
     
-    private bool AreSpecifiedCellNeighborsHasSpecifiedState(byte[,] world, Point targetCellPosition)
+    private bool AreSpecifiedCellNeighborsHasSpecifiedState(GcaCellState[,] world, Point targetCellPosition)
     {
         var positionShifts = _rule.NeighborCellPositionSet!;
         return positionShifts.All(positionShift =>

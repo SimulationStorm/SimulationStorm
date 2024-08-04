@@ -2,9 +2,9 @@
 
 namespace GenericCellularAutomation.Presentation.CellStates.Descriptors;
 
-public sealed class CellStateDescriptor(byte cellState, string name, Color color)
+public sealed class CellStateDescriptor(GcaCellState cellState, string name, Color color)
 {
-    public byte CellState { get; } = cellState;
+    public GcaCellState CellState { get; } = cellState;
 
     public string Name { get; } = name;
 

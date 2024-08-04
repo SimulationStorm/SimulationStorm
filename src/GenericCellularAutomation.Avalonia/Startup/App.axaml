@@ -1,0 +1,20 @@
+<Application x:Class="GenericCellularAutomation.Avalonia.Startup.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:actiproThemes="using:ActiproSoftware.UI.Avalonia.Themes.Generation"
+             RequestedThemeVariant="Default">
+    <Application.Styles>
+        <StyleInclude Source="avares://SimulationStorm.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Themes.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="avares://SimulationStorm.Dialogs.Avalonia/Styles.axaml"/>
+
+        <actipro:ModernTheme Includes="NativeColorPicker, NativeDataGrid">
+            <actipro:ModernTheme.Definition>
+                <actiproThemes:ThemeDefinition DefaultFontFamily="{StaticResource NunitoFont}"
+                                               HeadingFontFamily="{StaticResource NunitoFont}"
+                                               SpinnerHasHorizontalOrientation="True"/>
+            </actipro:ModernTheme.Definition>
+        </actipro:ModernTheme>
+    </Application.Styles>
+</Application>

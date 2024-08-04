@@ -2,4 +2,4 @@
 
 namespace GenericCellularAutomation.RuleExecution;
 
-public delegate byte NextCellStateCalculator(byte[,] world, Point cell);
+public delegate GcaCellState NextCellStateCalculator(GcaCellState[,] world, Point cell);

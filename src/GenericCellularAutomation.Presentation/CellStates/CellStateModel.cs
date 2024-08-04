@@ -8,7 +8,7 @@ namespace GenericCellularAutomation.Presentation.CellStates;
 public sealed partial class CellStateModel : NamedIndexedObservableObject
 {
     #region Properties
-    public byte CellState { get; init; }
+    public GcaCellState CellState { get; init; }
 
     [ObservableProperty] private bool _isDefault;
 

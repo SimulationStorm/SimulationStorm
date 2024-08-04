@@ -5,7 +5,7 @@ using GenericCellularAutomation.Presentation.CellStates;
 
 namespace GenericCellularAutomation.Avalonia.Views;
 
-public partial class CellStateView : UserControl
+public sealed partial class CellStateView : UserControl
 {
     #region Avalonia properties
     public static readonly StyledProperty<CellStateModel?> CellStateModelProperty =

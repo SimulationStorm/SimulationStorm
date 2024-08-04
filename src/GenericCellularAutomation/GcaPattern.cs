@@ -7,9 +7,9 @@ namespace GenericCellularAutomation;
 
 public sealed class GcaPattern
 {
-    private readonly IReadOnlyDictionary<Point, byte> _cellStateByPositions;
+    private readonly IReadOnlyDictionary<Point, GcaCellState> _cellStateByPositions;
 
-    public GcaPattern(Size size, IReadOnlyDictionary<Point, byte> cellStateByPositions)
+    public GcaPattern(Size size, IReadOnlyDictionary<Point, GcaCellState> cellStateByPositions)
     {
         Size = size;
 
@@ -20,7 +20,7 @@ public sealed class GcaPattern
     public Size Size { get; }
 
     #region Public methods
-    public byte GetCellState(Point cellPosition)
+    public GcaCellState GetCellState(Point cellPosition)
     {
         // ArgumentOutOfRangeException.ThrowIfLessThan(cell.X, 0, nameof(cell.X));
         // ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(cell.X, Width, nameof(cell.X));
@@ -34,7 +34,7 @@ public sealed class GcaPattern
     public static GcaPattern FromScheme
     (
         string scheme,
-        IDictionary<string, byte> cellStateByNames,
+        IDictionary<string, GcaCellState> cellStateByNames,
         char cellStateNameSeparator = '|',
         char lineSeparator = '\n')
     {
@@ -43,7 +43,7 @@ public sealed class GcaPattern
 
         var patternSize = new Size(lines[0].Count, lines.Count);
 
-        var cellStateByPositions = new Dictionary<Point, byte>();
+        var cellStateByPositions = new Dictionary<Point, GcaCellState>();
         
         for (var x = 0; x < patternSize.Width; x++)
         {
@@ -65,7 +65,7 @@ public sealed class GcaPattern
     private static IReadOnlyList<IReadOnlyList<string>> ValidatePatternSchemeAndGetCellStateByLineNumbers
     (
         string scheme,
-        IDictionary<string, byte> cellStateByNames,
+        IDictionary<string, GcaCellState> cellStateByNames,
         char cellStateNameSeparator,
         char lineSeparator)
     {
@@ -103,7 +103,7 @@ public sealed class GcaPattern
     private static void ValidateCellStateByPositions
     (
         Size patternSize,
-        IReadOnlyDictionary<Point, byte> cellStateByPositions)
+        IReadOnlyDictionary<Point, GcaCellState> cellStateByPositions)
     {
         var patternRect = new Rect(0, 0, patternSize.Width, patternSize.Height);
         if (!cellStateByPositions.Keys.All(patternRect.Contains))

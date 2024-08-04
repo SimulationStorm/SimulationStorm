@@ -1,0 +1,25 @@
+<toolPanels:ToolPanelControl x:Class="GenericCellularAutomation.Avalonia.Views.SimulationToolPanelView"
+                           xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                           xmlns:boundedViews="using:SimulationStorm.Simulation.Bounded.Avalonia.Views"
+                           xmlns:cellularViews="using:SimulationStorm.Simulation.CellularAutomation.Avalonia.Views"
+                           xmlns:commonViews="using:SimulationStorm.Simulation.Avalonia.Views"
+                           xmlns:runningViews="using:SimulationStorm.Simulation.Running.Avalonia.Views"
+                           xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
+                           xmlns:lifeAutViewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"
+                           xmlns:commandExecutionStats="using:SimulationStorm.Simulation.Statistics.Avalonia.CommandExecutionStats"
+                           x:DataType="lifeAutViewModels:SimulationToolPanelViewModel"
+                           MinWidth="{actipro:ScaledDouble 69}"
+                           MaxWidth="{actipro:ScaledDouble 72}">
+    <ScrollViewer>
+        <DockPanel Classes="stack-items-vertically sections-container"
+                   VerticalAlignment="Top">
+            <runningViews:SimulationRunnerSettingsView/>
+            <boundedViews:WorldSizeView MeasureUnitText="{DynamicResource Strings.Simulation.Cellular.MeasureUnits.Cells}"/>
+            <cellularViews:WorldWrappingView/>
+            <commonViews:ScheduledCommandsView/>
+            <commandExecutionStats:CommandExecutionStatsView/>
+        </DockPanel>
+    </ScrollViewer>
+</toolPanels:ToolPanelControl>

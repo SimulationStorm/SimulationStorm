@@ -12,13 +12,13 @@ public sealed class Rule
     #region Unconditional
     public double ApplicationProbability { get; }
 
-    public byte TargetCellState { get; }
+    public GcaCellState TargetCellState { get; }
 
-    public byte NewCellState { get; }
+    public GcaCellState NewCellState { get; }
     #endregion
 
     #region Conditional
-    public byte? NeighborCellState { get; }
+    public GcaCellState? NeighborCellState { get; }
 
     public CellNeighborhood? CellNeighborhood { get; }
     #endregion
@@ -36,9 +36,9 @@ public sealed class Rule
     (
         RuleType type,
         double applicationProbability,
-        byte targetCellState,
-        byte newCellState,
-        byte? neighborCellState = null,
+        GcaCellState targetCellState,
+        GcaCellState newCellState,
+        GcaCellState? neighborCellState = null,
         CellNeighborhood? cellNeighborhood = null,
         IReadOnlySet<int>? neighborCellCountSet = null,
         IReadOnlySet<Point>? neighborCellPositionSet = null)

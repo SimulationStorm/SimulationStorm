@@ -14,13 +14,13 @@ public interface IGenericCellularAutomation :
     IResettableSimulation,
     ISummarizableSimulation<GcaSummary>,
     ISaveableSimulation<GcaSave>,
-    IBoundedCellularAutomation<byte>
+    IBoundedCellularAutomation<GcaCellState>
 {
     #region Properties
     /// <summary>
     /// Gets the minimum and the maximum possible cell state.
     /// </summary>
-    Range<byte> CellStateRange { get; }
+    Range<GcaCellState> CellStateRange { get; }
     
     /// <summary>
     /// Gets or sets the possible cell state collection.
@@ -38,5 +38,5 @@ public interface IGenericCellularAutomation :
     int NextExecutingRuleSetIndex { get; }
     #endregion
 
-    IReadOnlyDictionary<byte, IEnumerable<Point>> GetAllCellPositionsByStates();
+    IReadOnlyDictionary<GcaCellState, IEnumerable<Point>> GetAllCellPositionsByStates();
 }

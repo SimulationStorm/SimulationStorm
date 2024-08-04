@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DotNext" />
+        <PackageReference Include="DotNext" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
     </ItemGroup>
     

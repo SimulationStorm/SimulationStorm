@@ -2,7 +2,7 @@
 
 namespace GenericCellularAutomation.Avalonia.Views;
 
-public partial class CellStateCollectionView : UserControl
+public sealed partial class CellStateCollectionView : UserControl
 {
     public CellStateCollectionView() => InitializeComponent();
 }

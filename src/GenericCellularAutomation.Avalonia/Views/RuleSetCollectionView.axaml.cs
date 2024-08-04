@@ -2,7 +2,7 @@
 
 namespace GenericCellularAutomation.Avalonia.Views;
 
-public partial class RuleSetCollectionView : UserControl
+public sealed partial class RuleSetCollectionView : UserControl
 {
     public RuleSetCollectionView() => InitializeComponent();
 }

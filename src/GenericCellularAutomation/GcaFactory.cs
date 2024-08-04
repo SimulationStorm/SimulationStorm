@@ -12,7 +12,7 @@ public sealed class GcaFactory : IGcaFactory
         IRuleExecutorFactory ruleExecutorFactory,
         Size worldSize,
         int maxCellNeighborhoodRadius,
-        byte maxCellState,
+        GcaCellState maxCellState,
         WorldWrapping worldWrapping,
         CellStateCollection cellStateCollection,
         RuleSetCollection ruleSetCollection)

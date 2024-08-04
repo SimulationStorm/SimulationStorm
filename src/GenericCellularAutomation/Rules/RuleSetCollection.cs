@@ -20,7 +20,7 @@ public sealed class RuleSetCollection
     /// <summary>
     /// Gets cell states used in rules in the rule sets.
     /// </summary>
-    public IReadOnlySet<byte> UsedCellStates { get; }
+    public IReadOnlySet<GcaCellState> UsedCellStates { get; }
     #endregion
     
     public RuleSetCollection(int repetitionCount, IReadOnlyList<RuleSet> ruleSets)
@@ -32,9 +32,9 @@ public sealed class RuleSetCollection
         UsedCellStates = GetCellStatesUsedInRuleSets(RuleSets);
     }
 
-    private static IReadOnlySet<byte> GetCellStatesUsedInRuleSets(IEnumerable<RuleSet> ruleSets)
+    private static IReadOnlySet<GcaCellState> GetCellStatesUsedInRuleSets(IEnumerable<RuleSet> ruleSets)
     {
-        var usedCellStates = new HashSet<byte>();
+        var usedCellStates = new HashSet<GcaCellState>();
         
         ruleSets.ForEach(ruleSet =>
             ruleSet.Rules.ForEach(rule =>

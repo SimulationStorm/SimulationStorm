@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GenericCellularAutomation;
 
 public sealed class CellStateCollection
 {
     #region Properties
-    public IReadOnlySet<byte> CellStateSet { get; }
+    public IReadOnlySet<GcaCellState> CellStateSet { get; }
     
-    public byte DefaultCellState { get; }
+    public GcaCellState DefaultCellState { get; }
     #endregion
 
-    public CellStateCollection(IReadOnlySet<byte> cellStateSet, byte defaultCellState)
+    public CellStateCollection(IReadOnlySet<GcaCellState> cellStateSet, GcaCellState defaultCellState)
     {
         if (!cellStateSet.Contains(defaultCellState))
             throw new ArgumentException(

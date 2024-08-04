@@ -6,7 +6,7 @@ namespace GenericCellularAutomation.Presentation.CellStates.Descriptors;
 public sealed class CellStateDescriptorBuilder : IFluentBuilder<CellStateDescriptor>
 {
     #region Fields
-    private byte _cellState;
+    private GcaCellState _cellState;
     
     private string _name = string.Empty;
 
@@ -14,7 +14,7 @@ public sealed class CellStateDescriptorBuilder : IFluentBuilder<CellStateDescrip
     #endregion
 
     #region Methods
-    public CellStateDescriptorBuilder HasCellState(byte cellState)
+    public CellStateDescriptorBuilder HasCellState(GcaCellState cellState)
     {
         _cellState = cellState;
         return this;

@@ -4,5 +4,5 @@ namespace GenericCellularAutomation.RuleExecution;
 
 public interface IRuleExecutor
 {
-    byte CalculateNextCellState(byte[,] world, Point cellPosition);
+    GcaCellState CalculateNextCellState(GcaCellState[,] world, Point cellPosition);
 }

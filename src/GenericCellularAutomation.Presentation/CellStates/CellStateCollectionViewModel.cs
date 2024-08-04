@@ -148,7 +148,7 @@ public sealed partial class CellStateCollectionViewModel : DisposableObservableO
     #endregion
 
     #region Helpers
-    private byte GetNewCellState()
+    private GcaCellState GetNewCellState()
     {
         var cellStateRange = _gcaManager.CellStateRange;
         

@@ -2,7 +2,7 @@
 
 namespace GenericCellularAutomation;
 
-public sealed class GcaSummary(IDictionary<byte, int> cellCountByStates)
+public sealed class GcaSummary(IDictionary<GcaCellState, int> cellCountByStates)
 {
-    public IDictionary<byte, int> CellCountByStates { get; } = cellCountByStates;
+    public IDictionary<GcaCellState, int> CellCountByStates { get; } = cellCountByStates;
 }

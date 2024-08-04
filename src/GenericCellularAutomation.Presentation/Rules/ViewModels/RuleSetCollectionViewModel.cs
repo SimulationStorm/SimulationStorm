@@ -67,6 +67,8 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         
         InitializeRuleSetCollection(gcaOptions.Configuration.RuleSetCollection);
 
+        RepetitionCount = rulesOptions.RuleSetCollectionRepetitionCountRange.Minimum;
+
         gcaManager
             .CommandCompletedObservable()
             .Where(e => e.Command is ChangeCellStateCollectionCommand)
@@ -125,7 +127,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         
         return;
 
-        CellStateModel GetCellStateModel(byte cellState) =>
+        CellStateModel GetCellStateModel(GcaCellState cellState) =>
             _cellStateModels.First(csm => csm.CellState == cellState);
     }
 
@@ -256,6 +258,7 @@ public sealed partial class RuleSetCollectionViewModel : DisposableObservableObj
         var ruleSetViewModel = CreateRuleSetViewModel();
         ruleSetViewModel.Index = RuleSetViewModels.Count;
         ruleSetViewModel.Name = GetNewRuleSetName();
+        // Todo: move this to the RuleSetViewModel ctor ?
         ruleSetViewModel.RepetitionCount = _rulesOptions.RuleSetRepetitionCountRange.Minimum;
 
         ruleSetViewModel.AddNewRuleModel();

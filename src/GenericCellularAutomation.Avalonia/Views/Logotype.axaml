@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:ti="using:TablerIcons"
+             xmlns:startup="using:GenericCellularAutomation.Avalonia.Startup"
+             x:Class="GenericCellularAutomation.Avalonia.Views.Logotype">
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+        <ti:TablerIcon Classes="size-xl"
+                       Icon="{x:Static startup:AvaloniaConfiguration.ApplicationIcon}"
+                       Margin="{actipro:ScaledThickness '0,0,1.5,0'}"
+                       VerticalAlignment="Center">
+            <ti:TablerIcon.RenderTransform>
+                <TranslateTransform Y="{actipro:ScaledDouble -0.375}"/>
+            </ti:TablerIcon.RenderTransform>
+        </ti:TablerIcon>
+
+        <TextBlock Classes="theme-text-heading size-xl"
+                   Text="{x:Static startup:AvaloniaConfiguration.ApplicationName}"/>
+    </StackPanel>
+</UserControl>

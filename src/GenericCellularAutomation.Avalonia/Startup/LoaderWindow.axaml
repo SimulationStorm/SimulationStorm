@@ -1,0 +1,10 @@
+﻿<controls:WindowExtended x:Class="GenericCellularAutomation.Avalonia.Startup.LoaderWindow"
+                         xmlns="https://github.com/avaloniaui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                         xmlns:startup="using:GenericCellularAutomation.Avalonia.Startup"
+                         Icon="{x:Static startup:AvaloniaConfiguration.ApplicationIcon}"
+                         Title="{x:Static startup:AvaloniaConfiguration.ApplicationName}"
+                         IsTitleBarVisible="False"
+                         Classes="has-minimum-size-hd"
+                         WindowStartupLocation="CenterScreen"/>

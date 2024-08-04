@@ -1,0 +1,3 @@
+﻿namespace GenericCellularAutomation.Presentation.ViewModels;
+
+public sealed class SimulationToolPanelViewModel;

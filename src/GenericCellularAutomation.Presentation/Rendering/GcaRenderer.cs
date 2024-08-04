@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
-using DotNext.Collections.Generic;
-using DynamicData;
 using DynamicData.Binding;
-using GenericCellularAutomation.Presentation.CellStates;
 using GenericCellularAutomation.Presentation.CellStates.Descriptors;
 using GenericCellularAutomation.Presentation.Management;
 using SimulationStorm.Graphics;
@@ -17,17 +14,17 @@ using SimulationStorm.Utilities.Benchmarking;
 
 namespace GenericCellularAutomation.Presentation.Rendering;
 
-public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
+public sealed class GcaRenderer : SimulationRendererBase
 {
     protected override Size SizeToRender => _gcaManager.WorldSize;
 
     #region Fields
     private readonly GcaManager _gcaManager;
 
-    private readonly IDictionary<byte, IPaint> _paintByCellStates = new Dictionary<byte, IPaint>();
+    private readonly IDictionary<GcaCellState, IPaint> _paintByCellStates = new Dictionary<GcaCellState, IPaint>();
     #endregion
     
-    public GenericCellularAutomationRenderer
+    public GcaRenderer
     (
         IGraphicsFactory graphicsFactory,
         IBenchmarker benchmarker,
@@ -66,6 +63,7 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
     }
     #endregion
 
+    #region Private methods
     private void UpdatePaintByCellStates(CellStateCollectionDescriptor cellStateCollectionDescriptor)
     {
         DisposeAndClearCellPaints();
@@ -86,4 +84,5 @@ public sealed class GenericCellularAutomationRenderer : SimulationRendererBase
         
         _paintByCellStates.Clear();
     }
+    #endregion
 }

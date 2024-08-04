@@ -215,6 +215,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCellularAutomation.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCellularAutomation.Avalonia", "src\GenericCellularAutomation.Avalonia\GenericCellularAutomation.Avalonia.csproj", "{863492C4-6D97-419B-99E7-2749E480F3D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCellularAutomation.Avalonia.Desktop", "src\GenericCellularAutomation.Avalonia.Desktop\GenericCellularAutomation.Avalonia.Desktop.csproj", "{51985FA3-0017-4857-87FF-12AC070606EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -517,6 +519,10 @@ Global
 		{863492C4-6D97-419B-99E7-2749E480F3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{863492C4-6D97-419B-99E7-2749E480F3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{863492C4-6D97-419B-99E7-2749E480F3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51985FA3-0017-4857-87FF-12AC070606EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51985FA3-0017-4857-87FF-12AC070606EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51985FA3-0017-4857-87FF-12AC070606EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51985FA3-0017-4857-87FF-12AC070606EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -620,6 +626,7 @@ Global
 		{54291361-0183-499B-BB0F-7239CEBB6596} = {9680ECF1-1C07-4BD6-BA9F-FBF403D4840F}
 		{A16D2FEA-4109-4F0E-B536-940D65324AF8} = {9680ECF1-1C07-4BD6-BA9F-FBF403D4840F}
 		{863492C4-6D97-419B-99E7-2749E480F3D3} = {9680ECF1-1C07-4BD6-BA9F-FBF403D4840F}
+		{51985FA3-0017-4857-87FF-12AC070606EC} = {9680ECF1-1C07-4BD6-BA9F-FBF403D4840F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11A86D24-FF15-465F-A47C-0BF20C478FA5}

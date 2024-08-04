@@ -1,0 +1,12 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.ToolPanels.SimulationToolPanel">Simulation</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.DrawingToolPanel">Drawing</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.RenderingToolPanel">Rendering</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.CameraToolPanel">Camera </sys:String>
+    <sys:String x:Key="Strings.ToolPanels.HistoryToolPanel">History</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.StatisticsToolPanel">Statistics</sys:String>
+    <sys:String x:Key="Strings.Gca.AlreadyRunning">Another instance of the Generic Cellular Automation simulation is already running.</sys:String>
+</ResourceDictionary>

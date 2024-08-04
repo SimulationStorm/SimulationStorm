@@ -1,0 +1,12 @@
+﻿
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Strings.ToolPanels.SimulationToolPanel">Симуляция</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.DrawingToolPanel">Рисование</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.RenderingToolPanel">Отрисовка</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.CameraToolPanel">Камера</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.HistoryToolPanel">История</sys:String>
+    <sys:String x:Key="Strings.ToolPanels.StatisticsToolPanel">Статистика</sys:String>
+    <sys:String x:Key="Strings.Gca.AlreadyRunning">Другой экземпляр симуляции Универсальный Клеточный Автомат уже запущен.</sys:String>
+</ResourceDictionary>

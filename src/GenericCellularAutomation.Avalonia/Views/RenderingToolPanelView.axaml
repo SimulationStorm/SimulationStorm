@@ -1,0 +1,35 @@
+﻿<toolPanels:ToolPanelControl x:Class="GenericCellularAutomation.Avalonia.Views.RenderingToolPanelView"
+                             xmlns="https://github.com/avaloniaui"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+                             xmlns:boundedViews="using:SimulationStorm.Simulation.Bounded.Avalonia.Views"
+                             xmlns:cellularViews="using:SimulationStorm.Simulation.Cellular.Avalonia.Views"
+                             xmlns:commonViews="using:SimulationStorm.Simulation.Avalonia.Views"
+                             xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+                             xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
+                             xmlns:viewModels="using:SimulationStorm.GameOfLife.Presentation.ViewModels"
+                             xmlns:views="using:GenericCellularAutomation.Avalonia.Views"
+                             xmlns:renderingStats="using:SimulationStorm.Simulation.Statistics.Avalonia.RenderingStats"
+                             x:DataType="viewModels:RenderingToolPanelViewModel"
+                             MinWidth="{actipro:ScaledDouble 66}"
+                             MaxWidth="{actipro:ScaledDouble 69}">
+    <ScrollViewer>
+        <DockPanel Classes="stack-items-vertically sections-container"
+                   VerticalAlignment="Top">
+            <controls:Section Title="{DynamicResource Strings.Simulation.Rendering.WorldRendering}">
+                <DockPanel Classes="stack-items-vertically">
+                    <boundedViews:WorldBackgroundColorView Classes="has-bottom-margin"/>
+                    <cellularViews:WorldGridLinesView/>
+                </DockPanel>
+            </controls:Section>
+
+            <controls:Section Title="{DynamicResource Strings.Simulation.Rendering.SimulationRendering}">
+                <DockPanel Classes="stack-items-vertically">
+                    <commonViews:SimulationRenderingSettingsView Classes="has-bottom-margin"/>
+                </DockPanel>
+            </controls:Section>
+
+            <renderingStats:RenderingStatsView/>
+        </DockPanel>
+    </ScrollViewer>
+</toolPanels:ToolPanelControl>

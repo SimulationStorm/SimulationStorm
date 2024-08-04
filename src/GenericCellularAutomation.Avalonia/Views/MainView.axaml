@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="GenericCellularAutomation.Avalonia.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+    xmlns:controls="using:SimulationStorm.Avalonia.Controls"
+    xmlns:views="using:GenericCellularAutomation.Avalonia.Views"
+    xmlns:runningViews="using:SimulationStorm.Simulation.Running.Avalonia.Views"
+    xmlns:resettingViews="using:SimulationStorm.Simulation.Resetting.Avalonia.Views"
+    xmlns:localization="using:SimulationStorm.Localization.Avalonia"
+    xmlns:historyViews="using:SimulationStorm.Simulation.History.Avalonia.Views"
+    xmlns:appStates="using:SimulationStorm.AppSaves.Avalonia.Views"
+    xmlns:toolPanels="using:SimulationStorm.ToolPanels.Avalonia"
+    xmlns:themes="using:SimulationStorm.Themes.Avalonia"
+    xmlns:startup="using:GenericCellularAutomation.Avalonia.Startup"
+    xmlns:commonViews="using:SimulationStorm.Simulation.Avalonia.Views">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!--Title bar-->
+        <controls:ChromedTitleBarExtended x:Name="TitleBar"
+                               IsFullScreenButtonAllowed="True"
+                               Icon="{x:Static startup:AvaloniaConfiguration.ApplicationIcon}"
+                               Title="{x:Static startup:AvaloniaConfiguration.ApplicationName}">
+            
+            <controls:ChromedTitleBarExtended.Content>
+                <StackPanel Orientation="Horizontal">
+                    <historyViews:GoBackInHistoryButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <historyViews:GoForwardInHistoryButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <runningViews:ToggleRunningButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <runningViews:AdvanceSimulationButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <resettingViews:ResetSimulationButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                </StackPanel>
+            </controls:ChromedTitleBarExtended.Content>
+            
+            <controls:ChromedTitleBarExtended.RightContent>
+                <StackPanel Orientation="Horizontal">
+                    <appStates:OpenAppSaveManagerButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <toolPanels:ToolPanelMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <localization:LanguageMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                    <themes:UiThemeMenuButton Theme="{DynamicResource TitleBarButtonExtended}"/>
+                </StackPanel>
+            </controls:ChromedTitleBarExtended.RightContent>
+        </controls:ChromedTitleBarExtended>
+        
+        <!--Tool panel manager-->
+        <toolPanels:ToolPanelManagerView Grid.Row="1">
+            <toolPanels:ToolPanelManagerView.WorkSpaceContent>
+                <Panel>
+                    <views:GcaWorldView/>
+                    <Border Classes="has-inset-shadow"
+                            IsHitTestVisible="False"
+                            Padding="{actipro:ScaledThickness 1}"/>
+                </Panel>
+            </toolPanels:ToolPanelManagerView.WorkSpaceContent>
+        </toolPanels:ToolPanelManagerView>
+
+        <!--Status bar-->
+        <commonViews:StatusBarView Grid.Row="2"/>
+    </Grid>
+</UserControl>

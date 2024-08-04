@@ -30,16 +30,18 @@ public sealed class CompiledRuleExecutorFactory : IRuleExecutorFactory
         
         sourceCodeBuilder.Append
         (@$"
+        using GcaCellState = byte;
+
         namespace GenericCellularAutomation.RuleExecution;
         
         public sealed class {className} : IRuleExecutor
         {{
-            public byte CalculateNextCellState(byte[,] world, Point cellPosition)
+            public GcaCellState CalculateNextCellState(GcaCellState[,] world, Point cellPosition)
             {{
                 int cellX = cellPosition.X,
                     cellY = cellPosition.Y;
             
-                byte currentCellState = world[cellX, cellY];
+                GcaCellState currentCellState = world[cellX, cellY];
                 
                 if (currentCellState != {rule.TargetCellState})
                     return currentCellState;
