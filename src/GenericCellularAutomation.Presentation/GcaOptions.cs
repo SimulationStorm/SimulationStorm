@@ -14,8 +14,9 @@ public sealed class GcaOptions : IBoundedSimulationManagerOptions
     
     public WorldWrapping WorldWrapping { get; init; }
 
-    public byte MaxCellState { get; init; }
-    
+    public GcaCellState MaxCellState { get; init; }
+ 
+    // Todo: remove it.
     public int MaxCellNeighborhoodRadius { get; init; }
     
     public Configuration Configuration { get; init; } = null!;

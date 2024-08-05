@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GenericCellularAutomation.Avalonia.Views.CellNeighborhoodView"
+             xmlns:viewModels="using:GenericCellularAutomation.Presentation.Neighborhood"
+             x:DataType="viewModels:CellNeighborhoodViewModel">
+    <DockPanel Classes="stack-items-vertically">
+        <Panel>
+            <TextBlock Classes="theme-form-control-label"
+                       Text="{DynamicResource Strings.Gca.NeighborhoodRadius}"/>
+            <TextBlock Classes="accent"
+                       HorizontalAlignment="Right">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Path="Radius"/>
+                        <DynamicResource ResourceKey="Strings.Simulation.Cellular.MeasureUnits.Cells"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Panel>
+        <Slider Classes="has-bottom-margin"
+                Maximum="{Binding RadiusRange.Maximum,
+                                  Mode=OneTime}"
+                Minimum="{Binding RadiusRange.Minimum,
+                                  Mode=OneTime}"
+                Value="{Binding Radius}"/>
+        
+        <!-- This can be made also via button with a flyout -->
+        <!-- <TextBlock Text="{DynamicResource Strings.Gca.NeighborhoodTemplate}" -->
+        <!--            /> -->
+        
+        <UniformGrid x:Name="PositionButtonContainer"
+                     Rows="{Binding Radius}"
+                     Columns="{Binding Radius}"/>
+    </DockPanel>
+</UserControl>

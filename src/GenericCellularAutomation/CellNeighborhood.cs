@@ -38,19 +38,30 @@ public sealed class CellNeighborhood
     public static int GetSideByRadius(int radius) => radius * 2 + 1;
     
     public static bool IsCenterPosition(Point position) => position.X is 0 && position.Y is 0;
+    
+    public static int GetMaxPositionCountWithinRadius(int radius)
+    {
+        var side = GetSideByRadius(radius);
+        return side * side - 1; // -1 to exclude center
+    }
 
     public static void ValidateRadius(int radius) =>
         ArgumentOutOfRangeException.ThrowIfLessThan(radius, MinRadius, nameof(radius));
 
     #region Position related methods
-    public static ISet<Point> GetAllPositionsWithinRadius(int radius)
+    public static void ForEachPositionWithinRadius(int radius, Action<Point> action)
     {
-        var positions = new HashSet<Point>();
-        ForEachPositionWithinRadius(radius, position => positions.Add(position));
-        return positions;
+        foreach (var position in GetAllPositionsWithinRadius(radius))
+            action(position);
     }
 
-    public static void ForEachPositionWithinRadius(int radius, Action<Point> action)
+    public static void ForEachPositionWithinRadiusIncludingCenter(int radius, Action<Point> action)
+    {
+        foreach (var position in GetAllPositionsWithinRadiusIncludingCenter(radius))
+            action(position);
+    }
+    
+    public static IEnumerable<Point> GetAllPositionsWithinRadius(int radius)
     {
         for (var x = -radius; x <= radius; x++)
         {
@@ -58,11 +69,23 @@ public sealed class CellNeighborhood
             {
                 var position = new Point(x, y);
                 if (!IsCenterPosition(position))
-                    action(position);
+                    yield return position;
             }
         }
     }
-
+    
+    public static IEnumerable<Point> GetAllPositionsWithinRadiusIncludingCenter(int radius)
+    {
+        for (var x = -radius; x <= radius; x++)
+        {
+            for (var y = -radius; y <= radius; y++)
+            {
+                var position = new Point(x, y);
+                yield return position;
+            }
+        }
+    }
+    
     public static void ValidatePositionsWithinRadius(int radius, IReadOnlySet<Point> positions)
     {
         foreach (var position in positions)
@@ -83,11 +106,8 @@ public sealed class CellNeighborhood
     #endregion
 
     #region Neighbor count related methods
-    public static int GetMaxNeighborCellCountWithinRadius(int radius)
-    {
-        var side = GetSideByRadius(radius);
-        return side * side - 1; // -1 to exclude center
-    }
+    public static int GetMaxNeighborCellCountWithinRadius(int radius) =>
+        GetMaxPositionCountWithinRadius(radius);
 
     public static void ForEachNeighborCellCountWithinRadius(int radius, Action<int> action)
     {

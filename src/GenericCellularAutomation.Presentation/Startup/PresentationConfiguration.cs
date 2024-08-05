@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
+using GenericCellularAutomation.Presentation.Common;
 using GenericCellularAutomation.Presentation.Configurations;
 using GenericCellularAutomation.Presentation.Drawing;
+using GenericCellularAutomation.Presentation.Rendering;
 using GenericCellularAutomation.Presentation.Rules;
 using GenericCellularAutomation.Presentation.ViewModels;
+using SimulationStorm.Graphics;
 using SimulationStorm.Primitives;
+using SimulationStorm.Simulation.Cellular.Presentation.Services;
 using SimulationStorm.Simulation.CellularAutomation;
 using SimulationStorm.Simulation.History.Presentation.ViewModels;
 using SimulationStorm.Simulation.Presentation.Camera;
@@ -70,5 +75,33 @@ public static class PresentationConfiguration
             [GcaToolPanels.StatisticsToolPanel] = typeof(ISummaryStatsViewModel),
             [GcaToolPanels.HistoryToolPanel] = typeof(IHistoryViewModel)
         }
+    };
+    
+    // Todo: how to name? Gca or Simulation renderer options?
+    public static readonly SimulationRendererOptions GcaRendererOptions = new()
+    {
+        IsRenderingEnabled = true,
+        RenderingIntervalRange = new Range<int>(0, 1_000),
+        RenderingInterval = 0,
+    };
+
+    public static readonly CellularWorldRendererOptions CellularWorldRendererOptions = new()
+    {
+        IsGridLinesVisible = true,
+        GridLinesColor = new Color(0, 0, 0, 128),
+        HoveredCellColor = new Color(134, 179, 238), // Actipro's ControlBackgroundBrushEmphasizedAccentPointerOver
+        PressedCellColor = new Color(88, 147, 166) // Actipro's ControlBackgroundBrushEmphasizedAccentPointerPressed
+    };
+    
+    public static readonly WorldCameraOptions WorldCameraOptions = new()
+    {
+        ZoomRange = new Range<float>(0.1f, 100f),
+        ZoomChangeRange = new Range<float>(0.01f, 10f),
+        DefaultZoomChange = 0.25f,
+        DefaultZoom = 10f,
+        TranslationRange = new Range<PointF>(new PointF(-100_000, -100_000), new PointF(100_000, 100_000)),
+        TranslationChangeRange = new Range<float>(1, 1_000),
+        DefaultTranslationChange = 25f,
+        DefaultTranslation = Vector2.Zero
     };
 }
